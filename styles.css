@@ -7,7 +7,7 @@ html {
   --background: #fff;
   --foreground: #3b3b3b;
   --primary: #030213;
-  --secondary: #f1f0ff;
+  --secondary: #f1f0ffz;
   --secondary-foreground: #030213;
   --muted: #ececf0;
   --muted-foreground: #717182;
@@ -28,7 +28,7 @@ html {
   --ring: #b5b5b5;
   --border: 10px;
   --green-100: #dcfce7;
-  --green-600: #16a34a;
+  --green-600: #0F4C5C;
   --green-800: #166534;
   --blue-100: #dbeafe;
   --blue-50: #eff6ff;
@@ -174,12 +174,12 @@ body {
 
 .view-a,
 .proj-btn {
-  background-color: var(--accent-foreground);
+  background-color: #0F4C5C;
   color: var(--background);
 }
 
 .contact-a {
-  border: 1px solid var(--muted-foreground);
+  border: 1px solid #0F4C5C;
   color: var(--accent-foreground);
 }
 
@@ -599,7 +599,7 @@ body {
 }
 
 .u-lang {
-  border: 1px solid var(--green-100);
+  border: 1px solid #E3B04B;
   width: fit-content;
   padding: .2rem;
   border-radius: .4rem;
@@ -982,7 +982,7 @@ footer p{
 }
 
 .btn {
-  background: #16a34a;
+  background: #0F4C5C;
   color: #fff;
   font-weight: 600;
   border: none;
@@ -994,7 +994,7 @@ footer p{
 
 .btn:hover {
   background: #fff;
-  color: #16a34a;
+  color: #0F4C5C;
 }
 
 .btn:active {
