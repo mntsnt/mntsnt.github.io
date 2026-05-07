@@ -1,791 +1,725 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mintesnot Leliso | Personal Portfolio</title>
-    <link rel="icon" type="image/png" href="profile-img.png">
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mintesnot Leliso | Portfolio</title>
+  <link rel="icon" type="image/png" href="profile-img.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
-    <!-- Nav bar with name and nav links -->
-    <header class="sticky-header">
-        <div class="nav-container">
-            <nav class="nav-navBox">
-                <div class="nav-nameBox">
-                    <h1><Span style = "font-family:Poppins; font-size:15px; font-weight: 400; color:#0F4C5C">bale</Span> <Span style = "font-size:15px; font-family:Poppins; display:inline-block; padding:0 7px 0 7px; color:#E3B04B; background-color: #0F4C5C; border-radius: 5px;">helm</Span</h1>
-                </div>
 
-                <input type="checkbox" id="nav-toggle" class="nav-checkbox" />
-                <label for="nav-toggle" class="nav-hamburger open">&#9776;</label>
-
-                <div class="nav-hidden">
-                    <label for="nav-toggle" class="nav-hamburger close">&#10005;</label>
-                    <div class="nav-sections">
-                        <p><a class="nav-a" href="#about-me">About</a></p>
-                        <p><a class="nav-a" href="#education">Education</a></p>
-                        <p><a class="nav-a" href="#projects">Projects</a></p>
-                        <p><a class="nav-a" href="#skills">Skills</a></p>
-                        <p><a class="nav-a" href="#contact">Contact</a></p>
-                    </div>
-                </div>
-            </nav>
-        </div>
-    </header>
-    <!-- about me header section div -->
-    <div class="me-container">
-        <div class="me-box">
-            <div class="desc-box gen-info">
-                <h1><Span style = "color:#0F4C5C">Mintesnot</Span> <span style = "color: #E3B04B">Leliso</span></h1>
-                <h3>Graphic Designer and Junior Programmer</h3>
-                <p>Hi there! Welcome to my portfolio. I'm a passionate graphic designer who loves crafting visually stunning and impactful designs. Explore my work and let’s create something amazing together.</p>
-            </div>
-            <div class="desc-box">
-                <a href="#projects" class="view-a">View my projects</a>
-                <a href="mailto:mintesnoh@gmail.com" class="contact-a">Get In Touch</a>
-            </div>
-            <div class="socials-conatiner">
-                <div class="socials-iconBox">
-                    <a class="icon-box" href="https://github.com/Mntsnt">
-                        <img class="contact-icon" src="img/github-sign.png" alt="github">
-                    </a>
-                    <a class="icon-box" href="https://www.linkedin.com/in/mintesnotleliso">
-                        <img class="contact-icon" src="img/linkedin.png" alt="linked in">
-                    </a>
-                    <a class="icon-box" href="mailto:mintesnoh@gmail.com">
-                        <img class="contact-icon" src="img/mail.png" alt="mail">
-                    </a>
-                </div>
-            </div>
-        </div>
+  <!-- NAVBAR -->
+  <header class="nav-header">
+    <div class="nav-inner">
+      <a class="logo" href="#">
+        <span class="logo-bale">bale</span><span class="logo-helm">helm</span>
+      </a>
+      <input type="checkbox" id="nav-toggle" class="nav-checkbox">
+      <label for="nav-toggle" class="hamburger">
+        <span></span><span></span><span></span>
+      </label>
+      <nav class="nav-links">
+        <label for="nav-toggle" class="close-nav">✕</label>
+        <a href="#about">About</a>
+        <a href="#education">Education</a>
+        <a href="#projects">Projects</a>
+        <a href="#skills">Skills</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+        <span class="theme-icon theme-icon--sun">☀️</span>
+        <span class="theme-icon theme-icon--moon">🌙</span>
+      </button>
     </div>
-    <!-- about me background explanation -->
-    <div class="me-container about-expnd" id="about-me">
-        <div class="about-me">
-            <div class="about-start-txt">
-                <p>About me</p>
-            </div>
-            <div class="abt-section">
-                <div class="me-img-box">
-                    <img class="profile-img" src="img/profile-img.png" alt="profile-photo">
-                </div>
-                <div class="me-desc-section">
-                    <p>
-                        I'm a Christian whose faith is deeply rooted in Jesus Christ. I have a strong passion for programming and graphic designing, and I draw motivation from the belief that God has blessed me with the ability to pursue these skills.
+  </header>
+  <script>
+    (function() {
+      const saved = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved === 'dark' || (!saved && prefersDark)) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
 
-Currently, I'm a medical student at St. Paul's Hospital Millennium Medical College in Addis Ababa, Ethiopia. I chose this path with a purpose: to tackle healthcare challenges in my country and across Africa by combining my medical training with my knowledge in technology.
-
-I believe, by God's grace, this vision will become a reality in the near future.
-                    </p>
-                    <div class="accomp-container">
-                        <div class="accomp-info">
-                            <h3>50+</h3>
-                            <p>Projects completed</p>
-                        </div>
-                        <div class="accomp-info">
-                            <h3>4+</h3>
-                            <p>Years Learning</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg-text">DESIGN</div>
+    <div class="hero-content">
+      <div class="hero-tag">Graphic Designer & Junior Programmer</div>
+      <h1 class="hero-name">
+        <span class="name-first">Mintesnot</span>
+        <span class="name-last">Leliso</span>
+      </h1>
+      <p class="hero-bio">Crafting visually stunning and impactful designs. A medical student with a passion for bridging healthcare and technology through the power of design.</p>
+      <div class="hero-actions">
+        <a href="#projects" class="btn-primary">View My Projects</a>
+        <a href="mailto:mintesnoh@gmail.com" class="btn-outline">Get In Touch</a>
+      </div>
+      <div class="hero-socials">
+        <a href="https://github.com/Mntsnt" class="social-link" title="GitHub">
+          <img src="img/github-sign.png" alt="GitHub">
+        </a>
+        <a href="https://www.linkedin.com/in/mintesnotleliso" class="social-link" title="LinkedIn">
+          <img src="img/linkedin.png" alt="LinkedIn">
+        </a>
+        <a href="mailto:mintesnoh@gmail.com" class="social-link" title="Email">
+          <img src="img/mail.png" alt="Email">
+        </a>
+      </div>
     </div>
-    <!-- educational background -->
-    <div class="me-container ed-background" id="education">
-        <div class="my-ed">
-            <div class="ed-start-txt">
-                <p>Educational Background</p>
-            </div>
-            <div class="sp-certification">
-                <div class="ed-cert-box">
-                    <div class="info-trail-logo">
-                        <img class="ed-icons" src="img/graduate-hat.png" alt="hat">
-                    </div>
-                    <div class="info-trail">
-                        <h3>Doctor of Medicine</h3>
-                        <p class="uni">St. Paul's Hospital Millennium Medical College</p>
-                        <div class="dates-box">
-                            <img class="calendar-icon" src="img/calendar.png" alt="calendar">
-                            <p class="uni">2024 - 2031 (Expected)</p>
-                        </div>
-                        <p class="uni-desc">Currently pursuing a Medicine degree at St. Paul's Millennium Medical College in Addis Ababa, Ethiopia, with a commitment to making a positive impact on the health sector in the future.</p>
-                    </div>
-                    
-                </div>
-<div class="ed-cert-box">
-                    <div class="info-trail-logo">
-                        <img class="ed-icons" src="img/graduate-hat.png" alt="hat">
-                    </div>
-                    <div class="info-trail">
-                        <h3>Software Engineering</h3>
-                        <p class="uni">Power Learn Project</p>
-                        <div class="dates-box">
-                            <img class="calendar-icon" src="img/calendar.png" alt="calendar">
-                            <p class="uni">July 2025 - October 2025 (Expected)</p>
-                        </div>
-                        <p class="uni-desc">Accepted into the Power Learn Project's July 2025 cohort scholarship, currently learning software engineering to build practical skills and contribute to tech innovation. </p>
-                    </div>
-                    
-                </div>
-
-                <div class="ed-cert-box">
-                    <div class="info-trail-logo">
-                        <img class="ed-icons" src="img/graduate-hat.png" alt="hat">
-                    </div>
-                    <div class="info-trail">
-                        <h3>High School Diploma</h3>
-                        <p class="uni">Hayole Education Project Furra Model Academy</p>
-                        <div class="dates-box">
-                            <img class="calendar-icon" src="img/calendar.png" alt="calendar">
-                            <p class="uni">2021 - 2024</p>
-                        </div>
-                        <p class="uni-desc">Graduated in 2024 from Hayole Project Fura Model Academy in Hawassa, Ethiopia, where I achieved strong academic performance, developed critical thinking and learning skills, and built a solid foundation for higher education and future professional growth.</p>
-                    </div>
-                    
-                </div>
-
-                <div class="ed-cert-box">
-                    <div>
-                        <img class="ed-icons" src="img/medal.png" alt="medal">
-                    </div>
-                    <div>
-                        <h3>Relevant Certifications</h3>
-                        <ul class="cert-ul">
-                            <li>SoloLearn: Web Development Bootcamp</li>
-                            <li>Udacity: Programming Fundamentals</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="resume-sec">
-                <div class="resume-box">
-                    <h3>Want to know more about my background?</h3>
-                    <p>Download my complete CV to see my full educational journey, achievements and project
-                        descriptions.</p>
-                    <!-- anchor tag to download CV -->
-                    <a href="doc/resume-mntsnt.pdf" class="view-a download-button" download>
-                        Download My CV
-                    </a>
-                </div>
-            </div>
-        </div>
+    <div class="hero-decoration">
+      <div class="deco-ring ring-1"></div>
+      <div class="deco-ring ring-2"></div>
+      <div class="deco-dot dot-1"></div>
+      <div class="deco-dot dot-2"></div>
     </div>
-    <!-- projects sections and definition -->
-    <div id="projects" class="me-container">
-        <div class="my-lang feat-container">
-            <div class="feat-txt">
-                <p>Featured Projects</p>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about section-pad" id="about">
+    <div class="container">
+      <div class="section-label">About me</div>
+      <div class="about-grid">
+        <div class="about-img-col">
+          <div class="about-img-wrap">
+            <img src="img/profile-img.png" alt="Mintesnot Leliso" class="about-img">
+            <div class="img-border-deco"></div>
+          </div>
+        </div>
+        <div class="about-text-col">
+          <h2 class="section-title">Driven by faith,<br><em>fueled by creativity.</em></h2>
+          <p class="about-body">I'm a Christian whose faith is deeply rooted in Jesus Christ. I have a strong passion for programming and graphic designing, and I draw motivation from the belief that God has blessed me with the ability to pursue these skills.</p>
+          <p class="about-body">Currently, I'm a medical student at St. Paul's Hospital Millennium Medical College in Addis Ababa, Ethiopia — pursuing this path with purpose: to tackle healthcare challenges by combining medical training with technology.</p>
+          <p class="about-body">I believe, by God's grace, this vision will become a reality in the near future.</p>
+          <div class="stats-row">
+            <div class="stat-item">
+              <span class="stat-num">50+</span>
+              <span class="stat-label">Projects Completed</span>
             </div>
-            <!-- grid to display project cards -->
-             
-            <div class="projects-grid">
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+              <span class="stat-num">4+</span>
+              <span class="stat-label">Years Learning</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section class="education section-pad" id="education">
+    <div class="container">
+      <div class="section-label">Background</div>
+      <h2 class="section-title">Educational <em>Journey</em></h2>
+      <div class="edu-timeline">
+
+        <div class="edu-card">
+          <div class="edu-icon-wrap">
+            <img src="img/graduate-hat.png" alt="degree" class="edu-icon">
+          </div>
+          <div class="edu-details">
+            <div class="edu-badge">In Progress</div>
+            <h3>Doctor of Medicine</h3>
+            <p class="edu-institution">St. Paul's Hospital Millennium Medical College</p>
+            <p class="edu-date">
+              <img src="img/calendar.png" alt="calendar" class="cal-icon"> 2024 – 2031 (Expected)
+            </p>
+            <p class="edu-desc">Pursuing a Medicine degree committed to making a positive impact on the health sector by combining medical knowledge with technology.</p>
+          </div>
+        </div>
+
+        <div class="edu-card">
+          <div class="edu-icon-wrap">
+            <img src="img/graduate-hat.png" alt="degree" class="edu-icon">
+          </div>
+          <div class="edu-details">
+            <div class="edu-badge">In Progress</div>
+            <h3>Software Engineering</h3>
+            <p class="edu-institution">Power Learn Project</p>
+            <p class="edu-date">
+              <img src="img/calendar.png" alt="calendar" class="cal-icon"> July 2025 – Oct 2025 (Expected)
+            </p>
+            <p class="edu-desc">Accepted into the Power Learn Project's July 2025 cohort scholarship, learning software engineering to build practical skills and contribute to tech innovation.</p>
+          </div>
+        </div>
+
+        <div class="edu-card">
+          <div class="edu-icon-wrap">
+            <img src="img/graduate-hat.png" alt="degree" class="edu-icon">
+          </div>
+          <div class="edu-details">
+            <div class="edu-badge edu-badge--done">Completed</div>
+            <h3>High School Diploma</h3>
+            <p class="edu-institution">Hayole Education Project Furra Model Academy</p>
+            <p class="edu-date">
+              <img src="img/calendar.png" alt="calendar" class="cal-icon"> 2021 – 2024
+            </p>
+            <p class="edu-desc">Graduated from Hayole Project Fura Model Academy in Hawassa, Ethiopia, achieving strong academic performance and building a solid foundation for future growth.</p>
+          </div>
+        </div>
+
+        <div class="edu-card edu-card--cert">
+          <div class="edu-icon-wrap">
+            <img src="img/medal.png" alt="medal" class="edu-icon">
+          </div>
+          <div class="edu-details">
+            <h3>Certifications</h3>
+            <ul class="cert-list">
+              <li>SoloLearn: Web Development Bootcamp</li>
+              <li>Udacity: Programming Fundamentals</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="cv-banner">
+        <div class="cv-text">
+          <h3>Want to know more?</h3>
+          <p>Download my complete CV for the full picture — education, achievements and projects.</p>
+        </div>
+        <a href="doc/resume-mntsnt.pdf" class="btn-primary" download>Download My CV</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section class="projects section-pad" id="projects">
+    <div class="container">
+      <div class="section-label teal-label">Work</div>
+      <h2 class="section-title">Featured <em>Projects</em></h2>
+
+      <div class="projects-grid">
 
 <div class="proj-card">
-                    <div class="item-project">
-                        <h3>Social Media Post Design – Song Lyrics Series
-                        </h3>
-                        <p class="proj-desc">A cohesive series of lyric-themed posts designed to visually enhance short song excerpts and create an engaging, music-centered aesthetic across social platforms.</p>
-                        <div class="lang-grid">
-                            <div class="u-lang">
-                                <p>Adobe Photoshop</p>
-                            </div>
-                            <div class="u-lang">
-                                <p>Adobe Illustrator</p>
-                            </div>
-                        </div>
-        <div class="portfolio-img-box">
-                    <img class="portfolio-img" src="img/sm.png" alt="profile-photo">
-                </div>
-                    </div>
-                </div>
-<div class="proj-card">
-                    <div class="item-project">
-                        <h3>YouTube Thumbnail Designs – Programming Channel
-                        </h3>
-                        <p class="proj-desc">A set of clean, high-contrast thumbnails created for a programming-focused YouTube channel, designed to highlight tutorials, coding concepts, and project walkthroughs while improving click-through appeal.</p>
-                        <div class="lang-grid">
-                            <div class="u-lang">
-                                <p>Adobe Photoshop</p>
-                            </div>
-                            <div class="u-lang">
-                                <p>Adobe Illustrator</p>
-                            </div>
-                        </div>
-        <div class="portfolio-img-box">
-                    <img class="portfolio-img" src="img/thumbs.png" alt="profile-photo">
-                </div>
-                    </div>
-                </div>
-<div class="proj-card">
-                    <div class="item-project">
-                        <h3>YouTube Thumbnail Designs – History Tapestry Channel
-                        </h3>
-                        <p class="proj-desc">Thumbnails created for History Tapestry, a YouTube channel dedicated to presenting historical events and narratives. The designs highlight key figures, timelines, and dramatic moments to enhance clarity and viewer engagement.</p>
-                        <div class="lang-grid">
-                            <div class="u-lang">
-                                <p>Adobe Photoshop</p>
-                            </div>
-                            <div class="u-lang">
-                                <p>Adobe Illustrator</p>
-                            </div>
-                        </div>
-        <div class="portfolio-img-box">
-                    <img class="portfolio-img" src="img/olga.png" alt="profile-photo">
-                </div>
-                    </div>
-                </div>
-
-<div class="proj-card">
-                    <div class="item-project">
-                        <h3>Pagumen Wallpaper Collection – Ethiopian Five Pagumen Days
-                        </h3>
-                        <p class="proj-desc">A devotional wallpaper series created for the five Pagumen days in the Ethiopian calendar. Each design incorporates prayer-centered themes, serene compositions, and spiritually uplifting elements intended to support reflection, gratitude, and personal devotion.</p>
-                        <div class="lang-grid">
-                            <div class="u-lang">
-                                <p>Adobe Photoshop</p>
-                            </div>
-                            <div class="u-lang">
-                                <p>Adobe Illustrator</p>
-                            </div>
-                        </div>
-        <div class="portfolio-img-box">
-                    <img class="portfolio-img" src="img/collection.png" alt="profile-photo">
-                </div>
-                    </div>
-                </div><div class="proj-card">
-                    <div class="item-project">
-                        <h3>YouTube Channel Banner – History Tapestry
-                        </h3>
-                        <p class="proj-desc">Channel banner created for History Tapestry, a platform dedicated to presenting global historical events and stories. The design emphasizes timeless visuals, strong thematic imagery, and a structured layout to reflect the channel’s mission of bringing history to life with clarity and depth.</p>
-                        <div class="lang-grid">
-                            <div class="u-lang">
-                                <p>Adobe Photoshop</p>
-                            </div>
-                            <div class="u-lang">
-                                <p>Adobe Illustrator</p>
-                            </div>
-                        </div>
-        <div class="portfolio-img-box">
-                    <img class="portfolio-img" src="img/YT banner.jpg" alt="profile-photo">
-                </div>
-                    </div>
-                </div><div class="proj-card">
-                    <div class="item-project">
-                        <h3>YouTube Thumbnail Design – AI Decoding Ancient Languages
-                        </h3>
-                        <p class="proj-desc">Thumbnail design for a history channel episode exploring how AI deciphers ancient scripts, combining historical imagery with futuristic digital elements to create an engaging and visually striking look.</p>
-                        <div class="lang-grid">
-                            <div class="u-lang">
-                                <p>Adobe Photoshop</p>
-                            </div>
-                            <div class="u-lang">
-                                <p>Adobe Illustrator</p>
-                            </div>
-                        </div>
-        <div class="portfolio-img-box">
-                    <img class="portfolio-img" src="img/Olgaa.png" alt="profile-photo">
-                </div>
-                    </div>
-                </div>
-
-<div class="proj-card">
-                    <div class="item-project">
-                        <h3>YouTube Banner Design – Andes Peru Voyages
-                        </h3>
-                        <p class="proj-desc">Banner design for a travel channel, Andes Peru Voyages, showing the nature and culture of Peru.</p>
-                        <div class="lang-grid">
-                            <div class="u-lang">
-                                <p>Adobe Photoshop</p>
-                            </div>
-                            <div class="u-lang">
-                                <p>Adobe Illustrator</p>
-                            </div>
-                        </div>
-        <div class="portfolio-img-box">
-                    <img class="portfolio-img" src="img/sub.png" alt="profile-photo">
-                </div>
-                    </div>
-                </div>
-
-                <div class="proj-card">
-                    <div class="item-project">
-                        <h3>YouTube Banner Design – Anaqmisk’i Miel
-                        </h3>
-                        <p class="proj-desc">Banner design for Anaqmisk’i Miel, a channel about bees and honey, with a clean and natural look.</p>
-                        <div class="lang-grid">
-                            <div class="u-lang">
-                                <p>Adobe Photoshop</p>
-                            </div>
-                            <div class="u-lang">
-                                <p>Adobe Illustrator</p>
-                            </div>
-                        </div>
-        <div class="portfolio-img-box">
-                    <img class="portfolio-img" src="img/sub2.png" alt="profile-photo">
-                </div>
-                    </div>
-                </div>
-
-                <div class="proj-card">
-                    <div class="item-project">
-                        <h3>YouTube Banner Design – Andes Peaks & Heritage
-                        </h3>
-                        <p class="proj-desc">Another design for Andes Peru Voyages highlighting the Andes mountains, Peru’s history, and its tourism.</p>
-                        <div class="lang-grid">
-                            <div class="u-lang">
-                                <p>Adobe Photoshop</p>
-                            </div>
-                            <div class="u-lang">
-                                <p>Adobe Illustrator</p>
-                            </div>
-                        </div>
-        <div class="portfolio-img-box">
-                    <img class="portfolio-img" src="img/port5.png" alt="profile-photo">
-                </div>
-                    </div>
-                </div>
-
-                <div class="proj-card">
-                    <div class="item-project">
-                        <h3>Minimal Thumbnail Design for Bale Helm YouTube Channel
-                        </h3>
-                        <p class="proj-desc">Clean, simple, and eye-catching designs made to inspire and engage. Perfect for a modern and attractive look on Bale Helm.</p>
-                        <div class="lang-grid">
-                            <div class="u-lang">
-                                <p>Adobe Photoshop</p>
-                            </div>
-                            <div class="u-lang">
-                                <p>Adobe Illustrator</p>
-                            </div>
-                        </div>
-        <div class="portfolio-img-box">
-                    <img class="portfolio-img" src="img/bale helm thumbnail.jpg" alt="profile-photo">
-                </div>
-                    </div>
-                </div>
-                <div class="proj-card">
-                    <div class="item-project">
-                        <h3>Thumbnail Design for ‘Every Controversial Way to Get Rich’</h3>
-                        <p class="proj-desc">A bold and eye-catching thumbnail created for Duke Rampoldo’s latest video, highlighting the most debated paths to wealth in a clean, engaging style.</p>
-                        <div class="lang-grid">
-                            <div class="u-lang">
-                                <p>Adobe Photoshop</p>
-                            </div>
-                            <div class="u-lang">
-                                <p>Adobe Illustrator</p>
-                            </div>
-                        </div>
-        <div class="portfolio-img-box">
-                    <img class="portfolio-img" src="img/duke thumb.jpg" alt="profile-photo">
-                </div>
-                    </div>
-                </div>
-                <div class="proj-card">
-                    <div class="item-project">
-                        <h3>Thumbnail Design for ‘Hidden History Exposed’</h3>
-                        <p class="proj-desc">A mysterious and historical-style thumbnail created for Olga’s latest video. Designed to hint at secrets from the past, inviting viewers to uncover what’s been hidden.</p>
-                        <div class="lang-grid">
-                            <div class="u-lang">
-                                <p>Adobe Photoshop</p>
-                            </div>
-                            <div class="u-lang">
-                                <p>Adobe Illustrator</p>
-                            </div>
-                        </div>
-        <div class="portfolio-img-box">
-                    <img class="portfolio-img" src="img/history thumbnail.jpg" alt="profile-photo">
-                </div>
-                    </div>
-                </div>
-
-<div class="proj-card">
-                    <div class="item-project">
-                        <h3>Python Pioneers – Innovative Tech Logo Design
-                        </h3>
-                        <p class="proj-desc">A modern logo created for Python Pioneers, a tech platform built around innovation and learning with Python. The design combines the iconic Python symbol with creative elements to reflect growth, community, and forward-thinking technology.</p>
-                        <div class="lang-grid">
-                            <div class="u-lang">
-                                <p>Adobe Photoshop</p>
-                            </div>
-                            <div class="u-lang">
-                                <p>Adobe Illustrator</p>
-                            </div>
-                        </div>
-        <div class="portfolio-img-box">
-                    <img class="portfolio-img" src="img/pp office.jpg" alt="profile-photo">
-                </div>
-                    </div>
-                </div>
-                <div class="proj-card">
-                    <div class="item-project">
-                        <h3>3000 Years of Jerusalem – Historical Thumbnail Design</h3>
-                        <p class="proj-desc">A visually striking thumbnail crafted for Olga's history project, showcasing the 3,000-year evolution of Jerusalem. The design captures the city’s timeless heritage, cultural milestones, and architectural transitions across different eras, making history both engaging and visually accessible.</p>
-                        <div class="lang-grid">
-                            <div class="u-lang">
-                                <p>Adobe Photoshop</p>
-                            </div>
-                            <div class="u-lang">
-                                <p>Adobe Illustrator</p>
-                            </div>
-                        </div>
-        <div class="portfolio-img-box">
-                    <img class="portfolio-img" src="img/Thumbnail-1.png" alt="profile-photo">
-                </div>
-                    </div>
-                </div>
-                <div class="proj-card">
-                    <div class="item-project">
-                        <h3>Python Pioneers – Logo Transformation Design</h3>
-                        <p class="proj-desc">I reimagined the Python Pioneers logo with a fresh and creative transformation, blending the classic Python icon with innovative design elements. The updated look represents evolution, creativity, and the pioneering spirit of the platform.</p>
-                        <div class="lang-grid">
-                            <div class="u-lang">
-                                <p>Adobe Photoshop</p>
-                            </div>
-                            <div class="u-lang">
-                                <p>Adobe Illustrator</p>
-                            </div>
-                        </div>
-        <div class="portfolio-img-box">
-                    <img class="portfolio-img" src="img/bb.png" alt="profile-photo">
-                </div>
-                    </div>
-                </div>
-                <div class="proj-card">
-                    <!-- project card -->
-                    <div class="item-project">
-                        <h3>Redesign Project: Dawit Getachew’s Debut Music Album Etebikhalehu</h3>
-                        <p class="proj-desc">I redesigned the cover art for Dawit Getachew’s album Etebikhalehu as part of a challenge by developer Dagmawi Esayas. My design won first place and a 1,000 ETB prize. The aim was to capture the album’s essence while giving it a fresh, modern look.</p>
-                        <div class="lang-grid">
-                            <div class="u-lang">
-                                <p>Adobe Photoshop</p>
-                            </div>
-                            <div class="u-lang">
-                                <p>Adobe Illustrator</p>
-                            </div>
-                        </div>
-                       <div class="portfolio-img-box">
-                    <img class="portfolio-img" src="img/etebikhalehu.jpg" alt="profile-photo">
-                </div>
-                    </div>
-
-                    
-                </div>
-
-
-                <div class="proj-card">
-                    <div class="item-project">
-                        <h3>YouTube Thumbnails for Medical & Doctor Content</h3>
-                        <p class="proj-desc">I designed clear, professional, and eye-catching YouTube thumbnails for doctors and medical channels. Each design grabs attention while staying trustworthy and friendly, using bold text, clean layouts, and relevant medical visuals so viewers immediately understand topics like health tips, medical myths, or patient advice.</p>
-                        <div class="lang-grid">
-                            <div class="u-lang">
-                                <p>Adobe Photoshop</p>
-                            </div>
-                            <div class="u-lang">
-                                <p>Adobe Illustrator</p>
-                            </div>
-                        </div>
-        <div class="portfolio-img-box">
-                    <img class="portfolio-img" src="img/thumbnail.jpg" alt="profile-photo">
-                </div>
-                    </div>
-                </div>
-                <div class="proj-card">
-                    <div class="item-project">
-                        <h3>Book Mockup & Poster Design for Werqama Sew by Amanuel Mebratu</h3>
-                        <p class="proj-desc">This project showcases my design of mockups and posters for Amanuel Mebratu’s book Werqama Sew. The visuals highlight the book’s theme and message, promoting and presenting Amanuel’s work and ideas in a compelling, professional, and visually engaging way to attract readers’ attention.</p>
-                        <div class="lang-grid">
-                            <div class="u-lang">
-                                <p>Adobe Photoshop</p>
-                            </div>
-                            <div class="u-lang">
-                                <p>Adobe Illustrator</p>
-                            </div>
-                        </div>
-        <div class="portfolio-img-box">
-                    <img class="portfolio-img" src="img/werqama sew.jpg" alt="profile-photo">
-                </div>
-                    </div>
-                </div>
-                <div class="proj-card">
-                    <div class="item-project">
-                        <h3>Techy & Minimal Poster Designs for Python Pioneers</h3>
-                        <p class="proj-desc">I created clean, modern designs for Python Pioneers, a platform offering beginner-friendly Python lessons. The visuals have a tech-inspired yet minimal style, with sleek layouts, balanced colors, and subtle graphics to convey innovation, clarity, and a professional, approachable learning experience.</p>
-                        <div class="lang-grid">
-                            <div class="u-lang">
-                                <p>Adobe Photoshop</p>
-                            </div>
-                            <div class="u-lang">
-                                <p>Adobe Illustrator</p>
-                            </div>
-                        </div>
-        <div class="portfolio-img-box">
-                    <img class="portfolio-img" src="img/python-pioneers.jpg" alt="profile-photo">
-                </div>
-                    </div>
-                </div>
-                <div class="proj-card">
-                    <div class="item-project">
-                        <h3>Social Media Post Designs for Hasaawu Bare Podcast</h3>
-                        <p class="proj-desc">This project features two versions of social media post designs for Hasawu Bare, a podcast on a social media platform. The designs were created in both Amharic and Sidaamu Afoo to engage a wider audience, ensuring the visuals are appealing, clear, and culturally accessible to all viewers.</p>
-                        <div class="lang-grid">
-                            <div class="u-lang">
-                                <p>Adobe Photoshop</p>
-                            </div>
-                            <div class="u-lang">
-                                <p>Adobe Illustrator</p>
-                            </div>
-                        </div>
-        <div class="portfolio-img-box">
-                    <img class="portfolio-img" src="img/hasaawubare.jpg" alt="profile-photo">
-                </div>
-                    </div>
-                </div>
-                <div class="proj-card">
-                    <div class="item-project">
-                        <h3>Phone Case Art Design for Nova</h3>
-                        <p class="proj-desc">This phone case for Nova features a traditional Ethiopian Sefed basket pattern in both day and night versions, accented with star designs. It includes a creative touch of a woman from the Ethiopian ten birr note weaving the Sefed, making it a unique, meaningful celebration of Ethiopian culture.</p>
-                        <div class="lang-grid">
-                            <div class="u-lang">
-                                <p>Adobe Photoshop</p>
-                            </div>
-                            <div class="u-lang">
-                                <p>Adobe Illustrator</p>
-                            </div>
-                        </div>
-        <div class="portfolio-img-box">
-                    <img class="portfolio-img" src="img/phone-case-art.jpg" alt="profile-photo">
-                </div>
-                    </div>
-                </div>
-                
-
-
+          <div class="proj-img-wrap">
+            <img src="img/web.png" alt="Social Media Post Design" class="proj-img">
+          </div>
+          <div class="proj-body">
+            <div class="proj-tags">
+              <span class="tag">Adobe Photoshop</span>
+              <span class="tag">Adobe Illustrator</span>
             </div>
-            <div class="full-txt-box">
-                <p class="my-full-text">These projects showcase my journey as a graphic designer and my commitment to creating
-                    quality designs. Each project taught me valuable lessons and helped me grow</p>
-                <a href="https://www.upwork.com/freelancers/~011e3d5613a4e88ee3?mp_source=share" class="more-hub">
-                    <img class="outline-github" src="img/upwork.jpg" alt="">
-                    <h3>View All Projects on Upwork</h3>
-                </a>
-            </div>
+            <h3>Digital Skills Webinar Campaign – SCOIC</h3>
+            <p>Designed a series of professional social media posts for a digital skills webinar organized by . The designs focused on clear communication, modern visuals, and audience engagement to effectively promote the event across social platforms.</p>
+          </div>
         </div>
-    </div>
-    <!-- my skills section -->
-    <div id="skills" class="me-container techie">
-        <div class="my-lang">
-            <div class="lang-start-txt interest-text">
-                <p>What excites me about tech and graphics</p>
+
+        <div class="proj-card">
+          <div class="proj-img-wrap">
+            <img src="img/tsom.png" alt="Social Media Post Design" class="proj-img">
+          </div>
+          <div class="proj-body">
+            <div class="proj-tags">
+              <span class="tag">Adobe Photoshop</span>
+              <span class="tag">Adobe Illustrator</span>
             </div>
-            <div class="techie-grid">
-                <div class="techie-card">
-                    <div class="techie-info">
-                        <div class="web-icon-box">
-                            <img class="code-icon techie-icon" src="img/code.png" alt="code">
-                        </div>
-                        <div class="">
-                            <p>Tech Innovations</p>
-                        </div>
-                    </div>
-                    <div class="techie-desc">
-                        <p>Integrating medical knowledge with technology to develop innovative solutions and improve healthcare experiences.</p>
-                    </div>
-                </div>
-                <div class="techie-card">
-                    <div class="techie-info">
-                        <div class="flash-icon-box">
-                            <img class="flash-icon techie-icon" src="img/thunder.png" alt="code">
-                        </div>
-                        <div>
-                            <p>Graphic Designing</p>
-                        </div>
-                    </div>
-                    <div class="techie-desc">
-                        <p>Staying updated with the latest design trends and applying them to create visually compelling and effective graphics.</p>
-                    </div>
-                </div>
-                <div class="techie-card">
-                    <div class="techie-info">
-                        <div class="user-icon-box">
-                            <img class="flash-icon techie-icon" src="img/group.png" alt="code">
-                        </div>
-                        <div>
-                            <p>Brand Identity</p>
-                        </div>
-                    </div>
-                    <div class="techie-desc">
-                        <p>Crafting brand identities that are memorable, consistent, and resonate deeply with audiences.</p>
-                    </div>
-                </div>
-                <div class="techie-card">
-                    <div class="techie-info">
-                        <div class="idea-icon-box">
-                            <img class="flash-icon techie-icon" src="img/idea.png" alt="code">
-                        </div>
-                        <div>
-                            <p>Logo Design</p>
-                        </div>
-                    </div>
-                    <div class="techie-desc">
-                        <p>Crafting unique and meaningful logos that transform ideas into visual identities.</p>
-                    </div>
-                </div>
-                <div class="techie-card">
-                    <div class="techie-info">
-                        <div class="net-icon-box">
-                            <img class="flash-icon techie-icon" src="img/internet.png" alt="code">
-                        </div>
-                        <div>
-                            <p>Flyers & Brochure Design</p>
-                        </div>
-                    </div>
-                    <div class="techie-desc">
-                        <p>Creating engaging flyers and brochures that communicate messages effectively while learning through collaborative design projects.</p>
-                    </div>
-                </div>
-                <div class="techie-card">
-                    <div class="techie-info">
-                        <div class="mobile-icon-box">
-                            <img class="flash-icon techie-icon" src="img/smartphone.png" alt="code">
-                        </div>
-                        <div>
-                            <p>Business Card Design</p>
-                        </div>
-                    </div>
-                    <div class="techie-desc">
-                        <p>Designing professional business cards that leave a lasting impression and effectively represent a brand.</p>
-                    </div>
-                </div>
-            </div>
+            <h3>Prayer & Fasting Week Social Media Series</h3>
+            <p>Created continuous social media post designs for my college Christian students’ fellowship during a week-long prayer and fasting program. The visuals were designed to maintain consistency throughout the campaign while reflecting a spiritual, encouraging, and community-centered theme.</p>
+          </div>
         </div>
-    </div>
-    <!-- my languages section -->
-    <div class="me-container lang-container">
-        <div class="my-lang">
-            <div class="lang-start-txt">
-                <p>My Skills</p>
+
+        <div class="proj-card">
+          <div class="proj-img-wrap">
+            <img src="img/petra.png" alt="Social Media Post Design" class="proj-img">
+          </div>
+          <div class="proj-body">
+            <div class="proj-tags">
+              <span class="tag">Adobe Photoshop</span>
+              <span class="tag">Adobe Illustrator</span>
             </div>
-            <!-- grid for languages cards -->
-            <div class="lang-dictionary">
-                <div class="lang-card">
-                    <h3>Programming languages</h3>
-                    <div class="dictionary-list">
-                        <img class="lang-icons" src="img/css-3.png" alt="css">
-                        <img class="lang-icons" src="img/html-5.png" alt="html">
-                        <img class="lang-icons" src="img/python.png" alt="python">
-                    </div>
-                </div>
-                <div class="lang-card">
-                    <h3>Graphic Design Tools</h3>
-                    <div class="dictionary-list">
-                        <img class="lang-icons" src="img/Ai.png" alt="Adobe Illustrator">
-                        <img class="lang-icons" src="img/Ps.png" alt="Adobe Photoshop">
-                        <img class="lang-icons" src="img/CapCut.png" alt="CapCut">
-                        <img class="lang-icons" src="img/Px.png" alt="PixelLab">
-                    </div>
-                </div>
-                <div class="lang-card">
-                    <h3>Tools & Technologies</h3>
-                    <div class="dictionary-list">
-                        <img class="lang-icons" src="img/sql-server.png" alt="sql">
-                        <img class="lang-icons" src="img/github-sign.png" alt="github">
-                        <img class="lang-icons" src="img/Vs.png" alt="Visual Studio Code">
-                        <img class="lang-icons" src="img/social.png" alt="social media">
-                    </div>
-                </div>
-            </div>
-            <div class="ext-info-box">
-                <p class="ext-info">
-                    I’m skilled in multiple design tools and always expanding my creative toolkit. I focus on creating clean, effective designs that make an impact, and I’m also learning programming.
-                </p>
-            </div>
+            <h3>YouTube Thumbnail Designs for History & Fairytale Content</h3>
+            <p>Designed eye-catching YouTube thumbnails for a client in the history and fairytale niche. The thumbnails were crafted to enhance storytelling, improve click-through rates, and create a visually engaging style tailored to the channel’s audience.
+
+</p>
+          </div>
         </div>
-    </div>
-    <!-- final contact form -->
 
-    
-    <div id="contact" class="me-container contact-container">
-        <div class="my-lang">
-            <section class="contact-section">
-  <h2>Get In Touch</h2>
-  <p>If you’d like to work together or just say hello, feel free to send me a message.</p>
 
-  <form class="contact-form" action="https://formspree.io/f/xzzrnwrk" method="post" data-aos="fade-up" data-aos-delay="200">
-    <div class="form-row">
-      <input type="text" name="name" placeholder="Your Name" required>
-      <input type="email" name="email" placeholder="Your Email" required>
-    </div>
-    <input type="text" name="subject" placeholder="Subject" required>
-    <textarea name="message" placeholder="Your Message" required></textarea>
-    <button type="submit" class="btn">Send Message</button>
-  </form>
-</section>
-
-            <div class="contact-start-txt">
-                <p>Let's work together</p>
+        <div class="proj-card">
+          <div class="proj-img-wrap">
+            <img src="img/sm.png" alt="Social Media Post Design" class="proj-img">
+          </div>
+          <div class="proj-body">
+            <div class="proj-tags">
+              <span class="tag">Adobe Photoshop</span>
+              <span class="tag">Adobe Illustrator</span>
             </div>
-            <div class="contact-cta">
-                <div class="small-contact">
-                    <h3>Ready to collaborate?</h3>
-                    <p>I’m always interested in new opportunities, exciting projects, and creative collaborations. Whether you need a design, are a fellow designer wanting to collaborate, or have an innovative idea, I’d love to hear from you!
-                    </p>
-                    <div class="reach-contacts">
-                        <a href="mailto:mintesnoh@gmail.com">
-                            <div class="contacts-f-b">
-                                <img class="contact-ic" src="img/email.png" alt="mail">
-                                <p>mintesnoh@gmail.com</p>
-                            </div>
-                        </a>
-                        <div class="contacts-f-b">
-                            <img class="contact-ic" src="img/location.png" alt="location">
-                            <p>Addis Ababa, Ethiopia</p>
-                        </div>
-                        <a href="https://www.linkedin.com/in/mintesnotleliso/">
-                            <div class="contacts-f-b">
-                                <img class="contact-ic" src="img/briefcase.png" alt="briefcase">
-                                <p>Available for new opportunities</p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="small-contact">
-                    <h3>What I am looking for:</h3>
-                    <ul>
-
-
-
-
-
-
-
-
-
-                        <li>Part-time design opportunities</li>
-                        <li>Freelance projects and consulting</li>
-                        <li>Collaborative creative projects</li>
-                        <li>Mentoring and sharing design knowledge</li>
-                        <li>Involvement in the design community</li>
-                    </ul>
-                </div>
-                <div class="q-nav">
-                    <h3>Quick nav</h3>
-                    <ul>
-                        <li><a href="#about-me">About</a></li>
-                        <li><a href="#education">Education</a></li>
-                        <li><a href="#projects">Projects</a></li>
-                        <li><a href="#skills">Skills</a></li>
-                        <li><a href="#contact">Contact</a></li>
-                    </ul>
-                </div>
-            </div>
+            <h3>Social Media Post Design – Song Lyrics Series</h3>
+            <p>A cohesive series of lyric-themed posts designed to visually enhance short song excerpts and create an engaging, music-centered aesthetic across social platforms.</p>
+          </div>
         </div>
+
+        <div class="proj-card">
+          <div class="proj-img-wrap">
+            <img src="img/thumbs.png" alt="YouTube Thumbnail" class="proj-img">
+          </div>
+          <div class="proj-body">
+            <div class="proj-tags">
+              <span class="tag">Adobe Photoshop</span>
+              <span class="tag">Adobe Illustrator</span>
+            </div>
+            <h3>YouTube Thumbnail Designs – Programming Channel</h3>
+            <p>Clean, high-contrast thumbnails for a programming YouTube channel, designed to highlight tutorials and improve click-through appeal.</p>
+          </div>
+        </div>
+
+        <div class="proj-card">
+          <div class="proj-img-wrap">
+            <img src="img/olga.png" alt="History Tapestry Thumbnails" class="proj-img">
+          </div>
+          <div class="proj-body">
+            <div class="proj-tags">
+              <span class="tag">Adobe Photoshop</span>
+              <span class="tag">Adobe Illustrator</span>
+            </div>
+            <h3>YouTube Thumbnail Designs – History Tapestry Channel</h3>
+            <p>Thumbnails for History Tapestry showcasing key figures, timelines, and dramatic moments to enhance clarity and viewer engagement.</p>
+          </div>
+        </div>
+
+        <div class="proj-card">
+          <div class="proj-img-wrap">
+            <img src="img/collection.png" alt="Pagumen Wallpaper" class="proj-img">
+          </div>
+          <div class="proj-body">
+            <div class="proj-tags">
+              <span class="tag">Adobe Photoshop</span>
+              <span class="tag">Adobe Illustrator</span>
+            </div>
+            <h3>Pagumen Wallpaper Collection – Ethiopian Five Pagumen Days</h3>
+            <p>A devotional wallpaper series for the five Pagumen days in the Ethiopian calendar with prayer-centered themes and spiritually uplifting elements.</p>
+          </div>
+        </div>
+
+        <div class="proj-card">
+          <div class="proj-img-wrap">
+            <img src="img/YT banner.jpg" alt="YouTube Channel Banner" class="proj-img">
+          </div>
+          <div class="proj-body">
+            <div class="proj-tags">
+              <span class="tag">Adobe Photoshop</span>
+              <span class="tag">Adobe Illustrator</span>
+            </div>
+            <h3>YouTube Channel Banner – History Tapestry</h3>
+            <p>Channel banner for History Tapestry emphasizing timeless visuals, strong thematic imagery, and a structured layout that brings history to life.</p>
+          </div>
+        </div>
+
+        <div class="proj-card">
+          <div class="proj-img-wrap">
+            <img src="img/Olgaa.png" alt="AI Decoding Ancient Languages" class="proj-img">
+          </div>
+          <div class="proj-body">
+            <div class="proj-tags">
+              <span class="tag">Adobe Photoshop</span>
+              <span class="tag">Adobe Illustrator</span>
+            </div>
+            <h3>YouTube Thumbnail – AI Decoding Ancient Languages</h3>
+            <p>Thumbnail combining historical imagery with futuristic digital elements to create an engaging, visually striking look for a history channel.</p>
+          </div>
+        </div>
+
+        <div class="proj-card">
+          <div class="proj-img-wrap">
+            <img src="img/sub.png" alt="Andes Peru Voyages" class="proj-img">
+          </div>
+          <div class="proj-body">
+            <div class="proj-tags">
+              <span class="tag">Adobe Photoshop</span>
+              <span class="tag">Adobe Illustrator</span>
+            </div>
+            <h3>YouTube Banner Design – Andes Peru Voyages</h3>
+            <p>Banner design for a travel channel showcasing the nature and culture of Peru.</p>
+          </div>
+        </div>
+
+        <div class="proj-card">
+          <div class="proj-img-wrap">
+            <img src="img/sub2.png" alt="Anaqmisk'i Miel" class="proj-img">
+          </div>
+          <div class="proj-body">
+            <div class="proj-tags">
+              <span class="tag">Adobe Photoshop</span>
+              <span class="tag">Adobe Illustrator</span>
+            </div>
+            <h3>YouTube Banner Design – Anaqmisk'i Miel</h3>
+            <p>Banner design for a channel about bees and honey, with a clean and natural look.</p>
+          </div>
+        </div>
+
+        <div class="proj-card">
+          <div class="proj-img-wrap">
+            <img src="img/port5.png" alt="Andes Peaks & Heritage" class="proj-img">
+          </div>
+          <div class="proj-body">
+            <div class="proj-tags">
+              <span class="tag">Adobe Photoshop</span>
+              <span class="tag">Adobe Illustrator</span>
+            </div>
+            <h3>YouTube Banner Design – Andes Peaks & Heritage</h3>
+            <p>Another Andes Peru Voyages design highlighting the Andes mountains, Peru's history, and tourism.</p>
+          </div>
+        </div>
+
+        <div class="proj-card">
+          <div class="proj-img-wrap">
+            <img src="img/bale helm thumbnail.jpg" alt="Bale Helm Thumbnail" class="proj-img">
+          </div>
+          <div class="proj-body">
+            <div class="proj-tags">
+              <span class="tag">Adobe Photoshop</span>
+              <span class="tag">Adobe Illustrator</span>
+            </div>
+            <h3>Minimal Thumbnail Design for Bale Helm YouTube Channel</h3>
+            <p>Clean, simple, eye-catching designs made to inspire and engage. A modern and attractive look for Bale Helm.</p>
+          </div>
+        </div>
+
+        <div class="proj-card">
+          <div class="proj-img-wrap">
+            <img src="img/duke thumb.jpg" alt="Duke Rampoldo Thumbnail" class="proj-img">
+          </div>
+          <div class="proj-body">
+            <div class="proj-tags">
+              <span class="tag">Adobe Photoshop</span>
+              <span class="tag">Adobe Illustrator</span>
+            </div>
+            <h3>Thumbnail – 'Every Controversial Way to Get Rich'</h3>
+            <p>A bold, eye-catching thumbnail for Duke Rampoldo's video highlighting debated paths to wealth in a clean, engaging style.</p>
+          </div>
+        </div>
+
+        <div class="proj-card">
+          <div class="proj-img-wrap">
+            <img src="img/history thumbnail.jpg" alt="Hidden History Exposed" class="proj-img">
+          </div>
+          <div class="proj-body">
+            <div class="proj-tags">
+              <span class="tag">Adobe Photoshop</span>
+              <span class="tag">Adobe Illustrator</span>
+            </div>
+            <h3>Thumbnail – 'Hidden History Exposed'</h3>
+            <p>A mysterious, historical-style thumbnail hinting at secrets from the past and inviting viewers to uncover what's been hidden.</p>
+          </div>
+        </div>
+
+        <div class="proj-card">
+          <div class="proj-img-wrap">
+            <img src="img/pp office.jpg" alt="Python Pioneers Logo" class="proj-img">
+          </div>
+          <div class="proj-body">
+            <div class="proj-tags">
+              <span class="tag">Adobe Photoshop</span>
+              <span class="tag">Adobe Illustrator</span>
+            </div>
+            <h3>Python Pioneers – Innovative Tech Logo Design</h3>
+            <p>A modern logo combining the iconic Python symbol with creative elements to reflect growth, community, and forward-thinking technology.</p>
+          </div>
+        </div>
+
+        <div class="proj-card">
+          <div class="proj-img-wrap">
+            <img src="img/Thumbnail-1.png" alt="3000 Years of Jerusalem" class="proj-img">
+          </div>
+          <div class="proj-body">
+            <div class="proj-tags">
+              <span class="tag">Adobe Photoshop</span>
+              <span class="tag">Adobe Illustrator</span>
+            </div>
+            <h3>3000 Years of Jerusalem – Historical Thumbnail</h3>
+            <p>A visually striking thumbnail showcasing the 3,000-year evolution of Jerusalem, capturing its timeless heritage and cultural milestones.</p>
+          </div>
+        </div>
+
+        <div class="proj-card">
+          <div class="proj-img-wrap">
+            <img src="img/bb.png" alt="Python Pioneers Logo Transformation" class="proj-img">
+          </div>
+          <div class="proj-body">
+            <div class="proj-tags">
+              <span class="tag">Adobe Photoshop</span>
+              <span class="tag">Adobe Illustrator</span>
+            </div>
+            <h3>Python Pioneers – Logo Transformation Design</h3>
+            <p>A fresh logo transformation blending the classic Python icon with innovative design elements representing evolution and the pioneering spirit.</p>
+          </div>
+        </div>
+
+        <div class="proj-card proj-card--featured">
+          <div class="proj-img-wrap">
+            <img src="img/etebikhalehu.jpg" alt="Etebikhalehu Album Cover" class="proj-img">
+          </div>
+          <div class="proj-body">
+            <div class="proj-tags">
+              <span class="tag">Adobe Photoshop</span>
+              <span class="tag">Adobe Illustrator</span>
+              <span class="tag tag--gold">🏆 1st Place</span>
+            </div>
+            <h3>Redesign: Dawit Getachew's Album 'Etebikhalehu'</h3>
+            <p>Redesigned album cover art as part of a developer challenge. Won first place and a 1,000 ETB prize. Captured the album's essence while giving it a fresh, modern look.</p>
+          </div>
+        </div>
+
+        <div class="proj-card">
+          <div class="proj-img-wrap">
+            <img src="img/thumbnail.jpg" alt="Medical Thumbnails" class="proj-img">
+          </div>
+          <div class="proj-body">
+            <div class="proj-tags">
+              <span class="tag">Adobe Photoshop</span>
+              <span class="tag">Adobe Illustrator</span>
+            </div>
+            <h3>YouTube Thumbnails for Medical & Doctor Content</h3>
+            <p>Clear, professional, eye-catching thumbnails for doctors and medical channels. Bold text, clean layouts, and relevant medical visuals for immediate topic clarity.</p>
+          </div>
+        </div>
+
+        <div class="proj-card">
+          <div class="proj-img-wrap">
+            <img src="img/werqama sew.jpg" alt="Werqama Sew" class="proj-img">
+          </div>
+          <div class="proj-body">
+            <div class="proj-tags">
+              <span class="tag">Adobe Photoshop</span>
+              <span class="tag">Adobe Illustrator</span>
+            </div>
+            <h3>Book Mockup & Poster – Werqama Sew by Amanuel Mebratu</h3>
+            <p>Mockups and posters for Amanuel Mebratu's book highlighting the book's theme and message in a compelling, professional, visually engaging way.</p>
+          </div>
+        </div>
+
+        <div class="proj-card">
+          <div class="proj-img-wrap">
+            <img src="img/python-pioneers.jpg" alt="Python Pioneers Posters" class="proj-img">
+          </div>
+          <div class="proj-body">
+            <div class="proj-tags">
+              <span class="tag">Adobe Photoshop</span>
+              <span class="tag">Adobe Illustrator</span>
+            </div>
+            <h3>Techy & Minimal Poster Designs for Python Pioneers</h3>
+            <p>Clean, modern designs for Python Pioneers with a tech-inspired minimal style, sleek layouts, and balanced colors conveying innovation and approachability.</p>
+          </div>
+        </div>
+
+        <div class="proj-card">
+          <div class="proj-img-wrap">
+            <img src="img/hasaawubare.jpg" alt="Hasaawu Bare Podcast" class="proj-img">
+          </div>
+          <div class="proj-body">
+            <div class="proj-tags">
+              <span class="tag">Adobe Photoshop</span>
+              <span class="tag">Adobe Illustrator</span>
+            </div>
+            <h3>Social Media Post Designs – Hasaawu Bare Podcast</h3>
+            <p>Post designs in both Amharic and Sidaamu Afoo for a podcast, ensuring the visuals are appealing, clear, and culturally accessible to all viewers.</p>
+          </div>
+        </div>
+
+        <div class="proj-card">
+          <div class="proj-img-wrap">
+            <img src="img/phone-case-art.jpg" alt="Phone Case Art for Nova" class="proj-img">
+          </div>
+          <div class="proj-body">
+            <div class="proj-tags">
+              <span class="tag">Adobe Photoshop</span>
+              <span class="tag">Adobe Illustrator</span>
+            </div>
+            <h3>Phone Case Art Design for Nova</h3>
+            <p>Ethiopian Sefed basket pattern in day and night versions for Nova, featuring the iconic woman from the ten birr note weaving the Sefed — a unique celebration of Ethiopian culture.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="upwork-banner">
+        <p>These projects showcase my journey and commitment to quality design. Each taught me valuable lessons.</p>
+        <a href="https://www.upwork.com/freelancers/~011e3d5613a4e88ee3?mp_source=share" class="btn-outline btn-outline--light upwork-btn">
+          <img src="img/upwork.jpg" alt="Upwork" class="upwork-logo">
+          View All Projects on Upwork
+        </a>
+      </div>
     </div>
-    <footer>
-        <p>©2026 Mintesnot Leliso. All rights reserved.</p>
-    </footer>
+  </section>
+
+  <!-- SKILLS / WHAT EXCITES ME -->
+  <section class="interests section-pad" id="skills">
+    <div class="container">
+      <div class="section-label">Passion</div>
+      <h2 class="section-title">What excites me about<br><em>tech & graphics</em></h2>
+      <div class="interests-grid">
+
+        <div class="interest-card">
+          <div class="interest-icon-box interest-icon--orange">
+            <img src="img/code.png" alt="tech" class="interest-icon">
+          </div>
+          <h3>Tech Innovations</h3>
+          <p>Integrating medical knowledge with technology to develop innovative solutions and improve healthcare experiences.</p>
+        </div>
+
+        <div class="interest-card">
+          <div class="interest-icon-box interest-icon--green">
+            <img src="img/thunder.png" alt="design" class="interest-icon">
+          </div>
+          <h3>Graphic Designing</h3>
+          <p>Staying updated with the latest design trends and applying them to create visually compelling and effective graphics.</p>
+        </div>
+
+        <div class="interest-card">
+          <div class="interest-icon-box interest-icon--pink">
+            <img src="img/group.png" alt="brand" class="interest-icon">
+          </div>
+          <h3>Brand Identity</h3>
+          <p>Crafting brand identities that are memorable, consistent, and resonate deeply with audiences.</p>
+        </div>
+
+        <div class="interest-card">
+          <div class="interest-icon-box interest-icon--red">
+            <img src="img/idea.png" alt="logo" class="interest-icon">
+          </div>
+          <h3>Logo Design</h3>
+          <p>Crafting unique and meaningful logos that transform ideas into visual identities.</p>
+        </div>
+
+        <div class="interest-card">
+          <div class="interest-icon-box interest-icon--blue">
+            <img src="img/internet.png" alt="flyers" class="interest-icon">
+          </div>
+          <h3>Flyers & Brochures</h3>
+          <p>Creating engaging flyers and brochures that communicate messages effectively through collaborative design projects.</p>
+        </div>
+
+        <div class="interest-card">
+          <div class="interest-icon-box interest-icon--purple">
+            <img src="img/smartphone.png" alt="business card" class="interest-icon">
+          </div>
+          <h3>Business Card Design</h3>
+          <p>Designing professional business cards that leave a lasting impression and effectively represent a brand.</p>
+        </div>
+
+      </div>
+
+      <!-- Skills / tools -->
+      <div class="tools-section">
+        <div class="section-label">Toolkit</div>
+        <h2 class="section-title">My <em>Skills</em></h2>
+        <div class="tools-grid">
+          <div class="tools-card">
+            <h3>Programming Languages</h3>
+            <div class="tools-icons">
+              <img src="img/css-3.png" alt="CSS" class="tool-icon">
+              <img src="img/html-5.png" alt="HTML" class="tool-icon">
+              <img src="img/python.png" alt="Python" class="tool-icon">
+            </div>
+          </div>
+          <div class="tools-card">
+            <h3>Graphic Design Tools</h3>
+            <div class="tools-icons">
+              <img src="img/Ai.png" alt="Adobe Illustrator" class="tool-icon">
+              <img src="img/Ps.png" alt="Adobe Photoshop" class="tool-icon">
+              <img src="img/CapCut.png" alt="CapCut" class="tool-icon">
+              <img src="img/Px.png" alt="PixelLab" class="tool-icon">
+            </div>
+          </div>
+          <div class="tools-card">
+            <h3>Tools & Technologies</h3>
+            <div class="tools-icons">
+              <img src="img/sql-server.png" alt="SQL" class="tool-icon">
+              <img src="img/github-sign.png" alt="GitHub" class="tool-icon">
+              <img src="img/Vs.png" alt="VS Code" class="tool-icon">
+              <img src="img/social.png" alt="Social Media" class="tool-icon">
+            </div>
+          </div>
+        </div>
+        <p class="tools-note">Skilled in multiple design tools and always expanding my creative toolkit. I focus on creating clean, effective designs that make an impact.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact section-pad" id="contact">
+    <div class="container">
+      <div class="contact-grid">
+        <div class="contact-info">
+          <div class="section-label section-label--light">Connect</div>
+          <h2 class="section-title section-title--light">Let's work<br><em>together</em></h2>
+          <p class="contact-intro">I'm always interested in new opportunities, exciting projects, and creative collaborations. Whether you need a design, want to collaborate, or have an innovative idea — I'd love to hear from you.</p>
+          <div class="contact-details">
+            <a href="mailto:mintesnoh@gmail.com" class="contact-item">
+              <img src="img/email.png" alt="email" class="contact-ic">
+              <span>mintesnoh@gmail.com</span>
+            </a>
+            <div class="contact-item">
+              <img src="img/location.png" alt="location" class="contact-ic">
+              <span>Addis Ababa, Ethiopia</span>
+            </div>
+            <a href="https://www.linkedin.com/in/mintesnotleliso/" class="contact-item">
+              <img src="img/briefcase.png" alt="work" class="contact-ic">
+              <span>Available for new opportunities</span>
+            </a>
+          </div>
+          <div class="looking-for">
+            <h3>What I'm looking for:</h3>
+            <ul>
+              <li>Part-time design opportunities</li>
+              <li>Freelance projects and consulting</li>
+              <li>Collaborative creative projects</li>
+              <li>Mentoring and sharing design knowledge</li>
+              <li>Involvement in the design community</li>
+            </ul>
+          </div>
+        </div>
+        <div class="contact-form-col">
+          <h2 class="form-title">Get In Touch</h2>
+          <p class="form-subtitle">Send me a message and I'll get back to you.</p>
+          <form class="contact-form" action="https://formspree.io/f/xzzrnwrk" method="post">
+            <div class="form-row">
+              <input type="text" name="name" placeholder="Your Name" required>
+              <input type="email" name="email" placeholder="Your Email" required>
+            </div>
+            <input type="text" name="subject" placeholder="Subject" required>
+            <textarea name="message" placeholder="Your Message" required></textarea>
+            <button type="submit" class="btn-primary btn-full">Send Message</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="footer-nav">
+        <div class="footer-logo">
+          <span style="color:#fff; font-size:.9rem; font-weight:600;">Mintesnot Leliso &copy; 2026</span>
+        </div>
+        <nav class="footer-links">
+          <a href="#about">About</a>
+          <a href="#education">Education</a>
+          <a href="#projects">Projects</a>
+          <a href="#skills">Skills</a>
+          <a href="#contact">Contact</a>
+        </nav>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <p>©2026 Mintesnot Leliso. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const btn = document.getElementById('themeToggle');
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('theme', theme);
+    }
+    btn.addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme');
+      applyTheme(current === 'dark' ? 'light' : 'dark');
+    });
+  </script>
 </body>
-
 </html>
