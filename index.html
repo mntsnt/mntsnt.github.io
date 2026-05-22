@@ -31,16 +31,19 @@
         <a href="#contact">Contact</a>
       </nav>
       <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
-        <span class="theme-icon theme-icon--sun">☀️</span>
-        <span class="theme-icon theme-icon--moon">🌙</span>
+        <span class="theme-icon theme-icon--sun">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </span>
+        <span class="theme-icon theme-icon--moon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </span>
       </button>
     </div>
   </header>
   <script>
     (function() {
       const saved = localStorage.getItem('theme');
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      if (saved === 'dark' || (!saved && prefersDark)) {
+      if (saved === 'dark') {
         document.documentElement.setAttribute('data-theme', 'dark');
       }
     })();
@@ -62,13 +65,13 @@
       </div>
       <div class="hero-socials">
         <a href="https://github.com/Mntsnt" class="social-link" title="GitHub">
-          <img src="img/github-sign.png" alt="GitHub">
+          <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
         </a>
         <a href="https://www.linkedin.com/in/mintesnotleliso" class="social-link" title="LinkedIn">
-          <img src="img/linkedin.png" alt="LinkedIn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
         </a>
         <a href="mailto:mintesnoh@gmail.com" class="social-link" title="Email">
-          <img src="img/mail.png" alt="Email">
+          <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
         </a>
       </div>
     </div>
@@ -710,6 +713,10 @@
     <p>©2026 Mintesnot Leliso. All rights reserved.</p>
   </footer>
 
+  <!-- CUSTOM CURSOR -->
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
   <script>
     const btn = document.getElementById('themeToggle');
     function applyTheme(theme) {
@@ -720,6 +727,88 @@
       const current = document.documentElement.getAttribute('data-theme');
       applyTheme(current === 'dark' ? 'light' : 'dark');
     });
+  </script>
+
+  <script>
+    /* ── Custom Cursor ── */
+    const dot  = document.getElementById('cursorDot');
+    const ring = document.getElementById('cursorRing');
+    let mouseX = 0, mouseY = 0;
+    let ringX  = 0, ringY  = 0;
+    let raf;
+
+    document.addEventListener('mousemove', e => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      dot.style.transform = `translate(${mouseX}px, ${mouseY}px) translate(-50%,-50%)`;
+    });
+
+    (function animateRing() {
+      ringX += (mouseX - ringX) * 0.12;
+      ringY += (mouseY - ringY) * 0.12;
+      ring.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%,-50%)`;
+      requestAnimationFrame(animateRing);
+    })();
+
+    /* Grow ring on interactive elements */
+    const hoverTargets = 'a, button, .proj-card, .interest-card, .edu-card, .social-link, .tool-icon';
+    document.querySelectorAll(hoverTargets).forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        ring.classList.add('cursor-ring--hover');
+        dot.classList.add('cursor-dot--hover');
+      });
+      el.addEventListener('mouseleave', () => {
+        ring.classList.remove('cursor-ring--hover');
+        dot.classList.remove('cursor-dot--hover');
+      });
+    });
+
+    /* Hide on leave, show on enter */
+    document.addEventListener('mouseleave', () => {
+      dot.style.opacity  = '0';
+      ring.style.opacity = '0';
+    });
+    document.addEventListener('mouseenter', () => {
+      dot.style.opacity  = '1';
+      ring.style.opacity = '1';
+    });
+
+    /* ── Scroll Reveal ── */
+    const revealEls = document.querySelectorAll(
+      '.edu-card, .proj-card, .interest-card, .tools-card, .about-grid, .stat-item'
+    );
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    revealEls.forEach(el => {
+      el.classList.add('reveal-on-scroll');
+      observer.observe(el);
+    });
+
+    /* ── Animated stat counters ── */
+    const statNums = document.querySelectorAll('.stat-num');
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const el  = entry.target;
+        const end = parseInt(el.textContent);
+        const suffix = el.textContent.replace(/[0-9]/g, '');
+        let start = 0;
+        const step = Math.ceil(end / 40);
+        const tick = setInterval(() => {
+          start = Math.min(start + step, end);
+          el.textContent = start + suffix;
+          if (start >= end) clearInterval(tick);
+        }, 35);
+        counterObserver.unobserve(el);
+      });
+    }, { threshold: 0.5 });
+    statNums.forEach(el => counterObserver.observe(el));
   </script>
 </body>
 </html>
