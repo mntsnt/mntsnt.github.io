@@ -1,842 +1,805 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Mintesnot Leliso — medical student, graphic designer, and developer. Medicine × Design × Technology.">
-  <title>Mintesnot Leliso — Medicine × Design × Technology</title>
-  <link rel="icon" type="image/png" href="img/folder.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="Mintesnot Leliso — medical student, graphic designer, and developer. Medicine × Design × Technology." name="description"/>
+<title>Mintesnot Leliso — Medicine × Design × Technology</title>
+<link href="img/folder.png" rel="icon" type="image/png"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="styles.css" rel="stylesheet"/>
 </head>
 <body>
-  <a class="skip-link" href="#main">Skip to content</a>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+<div class="header-inner">
+<a class="brand" href="#top">
+<span class="brand-name">MINTESNOT</span>
+</a>
+<button aria-controls="site-nav" aria-expanded="false" class="nav-toggle" id="navToggle" type="button">
+<span class="nav-toggle-label">Menu</span>
+<span aria-hidden="true" class="nav-toggle-bars">
+<span></span><span></span>
+</span>
+</button>
+<nav aria-label="Primary" class="site-nav" id="site-nav">
+<a href="#about">About</a>
+<a href="#work">Work</a>
+<a href="#certificates">Certificates</a>
+<a href="#contact">Contact</a>
+<button aria-label="Toggle color mode" class="theme-toggle" title="Toggle color mode" type="button">
+<span aria-hidden="true" class="theme-toggle__icon">◐</span>
+<span class="theme-toggle__label">Light</span>
+</button>
+</nav>
+</div>
+</header>
+<main id="main">
+<!-- HERO -->
+<section aria-labelledby="hero-name" class="hero" id="top">
+<div aria-hidden="true" class="hero-grid"></div>
+<div class="hero-frame">
+<div class="hero-meta-row">
+<span>Addis Ababa, ET</span>
+<span aria-hidden="true" class="hero-dot"></span>
+<span>Portfolio / 2026</span>
+<span aria-hidden="true" class="hero-dot"></span>
+<span class="hero-index">01 — Identity</span>
+</div>
+<p class="eyebrow">Medical Student · Graphic Designer · Developer</p>
+<h1 class="hero-name" id="hero-name">MINTESNOT</h1>
+<p class="hero-discipline">Medicine <span aria-hidden="true">×</span> Design <span aria-hidden="true">×</span> Technology</p>
+<p class="hero-lead">I am a medical student who loves to design and code. I learn software development by building real projects.</p>
+<div class="hero-actions">
+<a class="btn btn-primary" href="#work">Explore my work</a>
+<a class="btn btn-ghost" href="#contact">Let’s work together</a>
+</div>
+<div class="hero-foot">
+<p class="hero-status"><span aria-hidden="true" class="status-pulse"></span> Open for design projects &amp; collaboration</p>
+<div class="hero-socials">
+<a class="text-link" href="https://github.com/Mntsnt" rel="noopener noreferrer" target="_blank">GitHub</a>
+<a class="text-link" href="https://www.linkedin.com/in/mintesnotleliso" rel="noopener noreferrer" target="_blank">LinkedIn</a>
+<a class="text-link" href="mailto:mintesnoh@gmail.com">Email</a>
+</div>
+</div>
+</div>
+</section>
+<!-- ABOUT -->
+<section aria-labelledby="about-title" class="section about" id="about">
+<div class="container">
+<div class="section-head">
+<p class="section-index">02</p>
+<p class="section-label">About</p>
+</div>
+<div class="about-layout">
+<figure class="about-portrait">
+<img alt="Portrait of Mintesnot Leliso" height="800" src="img/profile-img.png" width="640"/>
+<figcaption>Mintesnot Leliso — Addis Ababa</figcaption>
+</figure>
+<div class="about-copy">
+<h2 class="section-title" id="about-title">Medical student.<br/>Designer.<br/>Developer.</h2>
+<p class="about-body">I am a medical student exploring graphic design and software development. My work connects visual design with digital tools.</p>
+<p class="about-body">I study medicine, create designs, and build simple digital tools. I aim to make complex ideas clear and easy to use.</p>
+<blockquote class="pull-quote">
+<p>And whatever you do, in word or deed, do everything in the name of the Lord Jesus, giving thanks to God the Father through him.</p>
+<cite>Colossians 3:17</cite>
+</blockquote>
+<dl class="stat-row">
+<div>
+<dt class="stat-num">50+</dt>
+<dd>Projects completed</dd>
+</div>
+<div>
+<dt class="stat-num">4+</dt>
+<dd>Years learning</dd>
+</div>
+</dl>
+</div>
+</div>
+</div>
+</section>
+<!-- WHAT I DO -->
+<section aria-labelledby="practice-title" class="section practice" id="practice">
+<div class="container">
+<div class="section-head">
+<p class="section-index">03</p>
+<p class="section-label">Practice</p>
+</div>
+<h2 class="section-title" id="practice-title">What I do</h2>
+<p class="section-lede">Three parts of my work — how I see problems, how I share them, and how I build solutions.</p>
+<div class="practice-list">
+<article class="practice-row">
+<p class="practice-num">01</p>
+<h3>Design</h3>
+<p>I create visual identities, thumbnails, posters, campaigns, and digital designs. My work grabs attention quickly and looks great.</p>
+</article>
+<article class="practice-row">
+<p class="practice-num">02</p>
+<h3>Build</h3>
+<p>I build web pages and tools using HTML, CSS, Python, and SQL. I make things that are useful and look good.</p>
+</article>
+<article class="practice-row">
+<p class="practice-num">03</p>
+<h3>Medicine</h3>
+<p>I study medicine at St. Paul’s. I also learn about medical education, clinical communication, and health technology.</p>
+</article>
+</div>
+</div>
+</section>
+<!-- NOW -->
+<section aria-labelledby="now-title" class="section now" id="now">
+<div class="container">
+<div class="now-bar">
+<div class="section-head">
+<p class="section-index">04</p>
+<p class="section-label">Currently</p>
+</div>
+<h2 class="now-title" id="now-title">A living snapshot</h2>
+</div>
+<div class="now-grid">
+<article>
+<p class="now-kicker">Studying</p>
+<p>Medicine at St. Paul’s Hospital Millennium Medical College</p>
+</article>
+<article>
+<p class="now-kicker">Building</p>
+<p>Toward healthcare and education technology</p>
+</article>
+<article>
+<p class="now-kicker">Designing</p>
+<p>Digital experiences and visual identities</p>
+</article>
+<article>
+<p class="now-kicker">Learning</p>
+<p>Software engineering and modern web development</p>
+</article>
+</div>
+</div>
+</section>
+<!-- WORK -->
+<section aria-labelledby="work-title" class="section work" id="work">
+<div class="container">
+<div class="section-head">
+<p class="section-index">05</p>
+<p class="section-label">Selected work</p>
+</div>
+<div class="work-intro">
+<h2 class="section-title" id="work-title">Projects built to communicate.</h2>
+<p class="section-lede">Campaigns, identities, thumbnails, and print work. I design each piece to be clear and engaging.</p>
+</div>
+<div aria-label="Filter projects" class="filter-bar" role="toolbar"><button aria-pressed="true" class="filter-btn is-active" data-filter="all" type="button">All</button><button aria-pressed="false" class="filter-btn" data-filter="youtube-thumbnails" type="button">YouTube Thumbnails</button><button aria-pressed="false" class="filter-btn" data-filter="posters" type="button">Posters</button><button aria-pressed="false" class="filter-btn" data-filter="banners" type="button">Banners</button><button aria-pressed="false" class="filter-btn" data-filter="branding" type="button">Branding</button><button aria-pressed="false" class="filter-btn" data-filter="event-design" type="button">Event Design</button><button aria-pressed="false" class="filter-btn" data-filter="exhibition-design" type="button">Exhibition / Booth Design</button><button aria-pressed="false" class="filter-btn" data-filter="product-designs" type="button">Product Designs</button></div>
+<p aria-live="polite" class="filter-status" id="filterStatus"></p>
+<div class="work-grid" id="workGrid">
+<article class="work-item" data-category="event-design exhibition-design healthcare branding">
+<button class="work-link" data-modal-cat="Event Branding · Exhibition Design" data-modal-desc="I worked on the visual design and booth sticker graphics for the East Africa Healthcare Federation (EAHF) 2026 event. The project involved creating large-format visual materials designed to communicate the organization's identity and health-related mission in a professional exhibition environment." data-modal-img="img/EAHF.jpg" data-modal-role="Role: Booth Graphic &amp; Sticker Design" data-modal-title="EAHF — East Africa Healthcare Federation Booth" type="button">
+<div class="work-visual">
+<img alt="EAHF — East Africa Healthcare Federation Booth" height="450" loading="lazy" src="img/EAHF.jpg" width="800"/>
+<div class="work-overlay"><span class="work-no">NEW</span><span aria-hidden="true" class="work-arrow">→</span></div>
+</div>
+<div class="work-meta">
+<p class="work-cat">2026 · Event Branding</p>
+<h3>EAHF Booth Design</h3>
+<p style="display: none;">I worked on the visual design and booth sticker graphics for the East Africa Healthcare Federation (EAHF) 2026 event.</p>
+<p class="work-role">Role: Booth Graphic &amp; Sticker Design</p>
+</div>
+</button>
+</article>
 
-  <header class="site-header">
-    <div class="header-inner">
-      <a class="brand" href="#top">
-        <span class="brand-name">MINTESNOT</span>
-      </a>
+<article class="work-item" data-category="event-design posters banners branding">
+<button class="work-link" data-modal-cat="Event Branding · Promotional Materials" data-modal-desc="I created a range of visual materials for the SPHMMC Summer Camp 2026, including banners, posters, and framed promotional designs. The work focused on creating a consistent visual identity across different physical and promotional materials." data-modal-img="img/summer camp.png" data-modal-role="Role: Graphic Designer" data-modal-title="SPHMMC Summer Camp 2026" type="button">
+<div class="work-visual">
+<img alt="SPHMMC Summer Camp 2026" height="450" loading="lazy" src="img/summer camp.png" width="800"/>
+<div class="work-overlay"><span class="work-no">NEW</span><span aria-hidden="true" class="work-arrow">→</span></div>
+</div>
+<div class="work-meta">
+<p class="work-cat">2026 · Event Branding</p>
+<h3>SPHMMC Summer Camp</h3>
+<p style="display: none;">I created a range of visual materials for the SPHMMC Summer Camp 2026, including banners, posters, and framed promotional designs.</p>
+<p class="work-role">Role: Graphic Designer</p>
+</div>
+</button>
+</article>
 
-      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" id="navToggle">
-        <span class="nav-toggle-label">Menu</span>
-        <span class="nav-toggle-bars" aria-hidden="true">
-          <span></span><span></span>
-        </span>
-      </button>
-
-      <nav class="site-nav" id="site-nav" aria-label="Primary">
-        <a href="#about">About</a>
-        <a href="#work">Work</a>
-        <a href="#certificates">Certificates</a>
-        <a href="#contact">Contact</a>
-        <button class="theme-toggle" type="button" aria-label="Toggle color mode" title="Toggle color mode">
-          <span class="theme-toggle__icon" aria-hidden="true">◐</span>
-          <span class="theme-toggle__label">Light</span>
-        </button>
-      </nav>
-    </div>
-  </header>
-
-  <main id="main">
-    <!-- HERO -->
-    <section class="hero" id="top" aria-labelledby="hero-name">
-      <div class="hero-grid" aria-hidden="true"></div>
-      <div class="hero-frame">
-        <div class="hero-meta-row">
-          <span>Addis Ababa, ET</span>
-          <span class="hero-dot" aria-hidden="true"></span>
-          <span>Portfolio / 2026</span>
-          <span class="hero-dot" aria-hidden="true"></span>
-          <span class="hero-index">01 — Identity</span>
-        </div>
-
-        <p class="eyebrow">Medical Student · Graphic Designer · Developer</p>
-        <h1 id="hero-name" class="hero-name">MINTESNOT</h1>
-        <p class="hero-discipline">Medicine <span aria-hidden="true">×</span> Design <span aria-hidden="true">×</span> Technology</p>
-        <p class="hero-lead">I'm a medical student who also designs and codes. I'm learning software development through small, hands-on projects.</p>
-
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="#work">Explore my work</a>
-          <a class="btn btn-ghost" href="#contact">Let’s work together</a>
-        </div>
-
-        <div class="hero-foot">
-          <p class="hero-status"><span class="status-pulse" aria-hidden="true"></span> Open for design projects &amp; collaboration</p>
-          <div class="hero-socials">
-            <a href="https://github.com/Mntsnt" class="text-link" target="_blank" rel="noopener noreferrer">GitHub</a>
-            <a href="https://www.linkedin.com/in/mintesnotleliso" class="text-link" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-            <a href="mailto:mintesnoh@gmail.com" class="text-link">Email</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ABOUT -->
-    <section class="section about" id="about" aria-labelledby="about-title">
-      <div class="container">
-        <div class="section-head">
-          <p class="section-index">02</p>
-          <p class="section-label">About</p>
-        </div>
-
-        <div class="about-layout">
-          <figure class="about-portrait">
-            <img src="img/profile-img.png" alt="Portrait of Mintesnot Leliso" width="640" height="800">
-            <figcaption>Mintesnot Leliso — Addis Ababa</figcaption>
-          </figure>
-
-          <div class="about-copy">
-            <h2 id="about-title" class="section-title">Medical student.<br>Designer.<br>Developer in progress.</h2>
-            <p class="about-body">I'm a medical student with a growing interest in graphic design and steady progress in software development. My work blends visual communication with digital experiments.</p>
-            <p class="about-body">I study medicine while doing design work and learning to build simple digital tools and interfaces — things that make ideas clearer and easier to use.</p>
-
-            <blockquote class="pull-quote">
-              <p>And whatever you do, in word or deed, do everything in the name of the Lord Jesus, giving thanks to God the Father through him.</p>
-              <cite>Colossians 3:17</cite>
-            </blockquote>
-
-            <dl class="stat-row">
-              <div>
-                <dt class="stat-num">50+</dt>
-                <dd>Projects completed</dd>
-              </div>
-              <div>
-                <dt class="stat-num">4+</dt>
-                <dd>Years learning</dd>
-              </div>
-            </dl>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- WHAT I DO -->
-    <section class="section practice" id="practice" aria-labelledby="practice-title">
-      <div class="container">
-        <div class="section-head">
-          <p class="section-index">03</p>
-          <p class="section-label">Practice</p>
-        </div>
-        <h2 id="practice-title" class="section-title">What I do</h2>
-        <p class="section-lede">Three parts of one identity — how I look at problems, how I communicate them, and how I build.</p>
-
-        <div class="practice-list">
-          <article class="practice-row">
-            <p class="practice-num">01</p>
-            <h3>Design</h3>
-            <p>Visual identities, thumbnails, posters, campaigns, and digital experiences. Work that grabs attention fast and still holds up on a closer look.</p>
-          </article>
-          <article class="practice-row">
-            <p class="practice-num">02</p>
-            <h3>Build</h3>
-            <p>Web pages, tools, and interactive experiences, built with HTML, CSS, Python, and SQL — made to be useful, not just to look good.</p>
-          </article>
-          <article class="practice-row">
-            <p class="practice-num">03</p>
-            <h3>Medicine</h3>
-            <p>Studying medicine at St. Paul’s while learning about medical education, clinical communication, and how technology can help patients and students.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- NOW -->
-    <section class="section now" id="now" aria-labelledby="now-title">
-      <div class="container">
-        <div class="now-bar">
-          <div class="section-head">
-            <p class="section-index">04</p>
-            <p class="section-label">Currently</p>
-          </div>
-          <h2 id="now-title" class="now-title">A living snapshot</h2>
-        </div>
-        <div class="now-grid">
-          <article>
-            <p class="now-kicker">Studying</p>
-            <p>Medicine at St. Paul’s Hospital Millennium Medical College</p>
-          </article>
-          <article>
-            <p class="now-kicker">Building</p>
-            <p>Toward healthcare and education technology</p>
-          </article>
-          <article>
-            <p class="now-kicker">Designing</p>
-            <p>Digital experiences and visual identities</p>
-          </article>
-          <article>
-            <p class="now-kicker">Learning</p>
-            <p>Software engineering and modern web development</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- WORK -->
-    <section class="section work" id="work" aria-labelledby="work-title">
-      <div class="container">
-        <div class="section-head">
-          <p class="section-index">05</p>
-          <p class="section-label">Selected work</p>
-        </div>
-        <div class="work-intro">
-          <h2 id="work-title" class="section-title">Projects made to communicate.</h2>
-          <p class="section-lede">Campaigns, identities, thumbnails, and print work. Each piece is designed to be clear at a glance and still hold up on a closer look.</p>
-        </div>
-
-        <div class="filter-bar" role="toolbar" aria-label="Filter projects">
-          <button type="button" class="filter-btn is-active" data-filter="all" aria-pressed="true">All</button>
-          <button type="button" class="filter-btn" data-filter="youtube-thumbnails" aria-pressed="false">YouTube Thumbnails</button>
-          <button type="button" class="filter-btn" data-filter="posters" aria-pressed="false">Posters</button>
-          <button type="button" class="filter-btn" data-filter="product-designs" aria-pressed="false">Product Designs</button>
-          <button type="button" class="filter-btn" data-filter="banners" aria-pressed="false">Banners</button>
-          <button type="button" class="filter-btn" data-filter="branding" aria-pressed="false">Branding</button>
-        </div>
-        <p class="filter-status" id="filterStatus" aria-live="polite"></p>
-
-        <div class="work-grid" id="workGrid">
-
-          <article class="work-item" data-category="branding youtube-thumbnails design">
-            <a class="work-link" href="img/etebikhalehu.jpg">
-              <div class="work-visual">
-                <img src="img/etebikhalehu.jpg" alt="Redesigned album cover for Dawit Getachew’s Etebikhalehu" width="1200" height="675">
-                <div class="work-overlay">
-                  <span class="work-no">01</span>
-                  <span class="work-arrow" aria-hidden="true">→</span>
-                </div>
-              </div>
-              <div class="work-meta">
-                <p class="work-cat">Branding · Design <span class="work-award">1st place</span></p>
-                <h3>Redesign: Dawit Getachew’s album ‘Etebikhalehu’</h3>
-                <p>Album cover redesigned for a developer challenge. Won first place and a 1,000 ETB prize. A modern take on the album's mood that keeps its original character.</p>
-                <p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
-              </div>
-            </a>
-          </article>
-
-          <article class="work-item" data-category="design">
-            <a class="work-link" href="img/web.png">
-              <div class="work-visual">
-                <img src="img/web.png" alt="Social posts for the SCOIC digital skills webinar campaign" width="800" height="450" loading="lazy">
-                <div class="work-overlay"><span class="work-no">02</span><span class="work-arrow" aria-hidden="true">→</span></div>
-              </div>
-              <div class="work-meta">
-                <p class="work-cat">Design · Campaign</p>
-                <h3>Digital Skills Webinar Campaign — SCOIC</h3>
-                <p>A series of social posts for a digital skills webinar, with a clear layout, modern visuals, and consistent promotion across platforms.</p>
-                <p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
-              </div>
-            </a>
-          </article>
-
-          <article class="work-item" data-category="youtube-thumbnails design">
-            <a class="work-link" href="img/thumbnail.jpg">
-              <div class="work-visual">
-                <img src="img/thumbnail.jpg" alt="YouTube thumbnails for medical and doctor channels" width="800" height="450" loading="lazy">
-                <div class="work-overlay"><span class="work-no">03</span><span class="work-arrow" aria-hidden="true">→</span></div>
-              </div>
-              <div class="work-meta">
-                <p class="work-cat">Medical · Design</p>
-                <h3>YouTube thumbnails for medical &amp; doctor content</h3>
-                <p>Professional thumbnails for medical channels, using bold type, clean layouts, and clear visuals that make the topic obvious in a feed.</p>
-                <p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
-              </div>
-            </a>
-          </article>
-
-          <article class="work-item" data-category="branding design">
-            <a class="work-link" href="img/pp office.jpg">
-              <div class="work-visual">
-                <img src="img/pp office.jpg" alt="Python Pioneers logo design" width="800" height="450" loading="lazy">
-                <div class="work-overlay"><span class="work-no">04</span><span class="work-arrow" aria-hidden="true">→</span></div>
-              </div>
-              <div class="work-meta">
-                <p class="work-cat">Branding</p>
-                <h3>Python Pioneers — tech logo</h3>
-                <p>A modern logo that combines the Python symbol with shapes suggesting growth, community, and forward-thinking technology.</p>
-                <p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
-              </div>
-            </a>
-          </article>
-
-          <article class="work-item" data-category="posters design">
-            <a class="work-link" href="img/tsom.png">
-              <div class="work-visual">
-                <img src="img/tsom.png" alt="Prayer and fasting week social media series" width="800" height="450" loading="lazy">
-                <div class="work-overlay"><span class="work-no">05</span><span class="work-arrow" aria-hidden="true">→</span></div>
-              </div>
-              <div class="work-meta">
-                <p class="work-cat">Design · Campaign</p>
-                <h3>Prayer &amp; Fasting Week social series</h3>
-                <p>A week-long series for my college Christian fellowship — consistent, encouraging, and focused on community.</p>
-                <p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
-              </div>
-            </a>
-          </article>
-
-          <article class="work-item" data-category="youtube-thumbnails design">
-            <a class="work-link" href="img/petra.png">
-              <div class="work-visual">
-                <img src="img/petra.png" alt="YouTube thumbnails for history and fairytale content" width="800" height="450" loading="lazy">
-                <div class="work-overlay"><span class="work-no">06</span><span class="work-arrow" aria-hidden="true">→</span></div>
-              </div>
-              <div class="work-meta">
-                <p class="work-cat">Design</p>
-                <h3>Thumbnails — history &amp; fairytale</h3>
-                <p>Client thumbnails made to support storytelling, boost click-through, and stay true to the channel's style.</p>
-                <p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
-              </div>
-            </a>
-          </article>
-
-          <article class="work-item" data-category="posters design">
-            <a class="work-link" href="img/sm.png">
-              <div class="work-visual">
-                <img src="img/sm.png" alt="Lyric-themed social media post series" width="800" height="450" loading="lazy">
-                <div class="work-overlay"><span class="work-no">07</span><span class="work-arrow" aria-hidden="true">→</span></div>
-              </div>
-              <div class="work-meta">
-                <p class="work-cat">Design</p>
-                <h3>Social posts — song lyrics series</h3>
-                <p>A consistent lyric series designed to show short excerpts, with a music-focused look across platforms.</p>
-                <p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
-              </div>
-            </a>
-          </article>
-
-          <article class="work-item" data-category="youtube-thumbnails design">
-            <a class="work-link" href="img/thumbs.png">
-              <div class="work-visual">
-                <img src="img/thumbs.png" alt="YouTube thumbnails for a programming channel" width="800" height="450" loading="lazy">
-                <div class="work-overlay"><span class="work-no">08</span><span class="work-arrow" aria-hidden="true">→</span></div>
-              </div>
-              <div class="work-meta">
-                <p class="work-cat">Design</p>
-                <h3>Thumbnails — programming channel</h3>
-                <p>High-contrast tutorial thumbnails made to stand out and get clicks in a crowded tech feed.</p>
-                <p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
-              </div>
-            </a>
-          </article>
-
-          <article class="work-item" data-category="youtube-thumbnails design">
-            <a class="work-link" href="img/olga.png">
-              <div class="work-visual">
-                <img src="img/olga.png" alt="History Tapestry channel thumbnail designs" width="800" height="450" loading="lazy">
-                <div class="work-overlay"><span class="work-no">09</span><span class="work-arrow" aria-hidden="true">→</span></div>
-              </div>
-              <div class="work-meta">
-                <p class="work-cat">Design</p>
-                <h3>Thumbnails — History Tapestry</h3>
-                <p>Figures, timelines, and key moments, laid out clearly to pull viewers in.</p>
-                <p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
-              </div>
-            </a>
-          </article>
-
-          <article class="work-item" data-category="posters design">
-            <a class="work-link" href="img/collection.png">
-              <div class="work-visual">
-                <img src="img/collection.png" alt="Pagumen wallpaper collection for five Ethiopian Pagumen days" width="800" height="450" loading="lazy">
-                <div class="work-overlay"><span class="work-no">10</span><span class="work-arrow" aria-hidden="true">→</span></div>
-              </div>
-              <div class="work-meta">
-                <p class="work-cat">Design</p>
-                <h3>Pagumen wallpaper collection</h3>
-                <p>Devotional wallpapers for the five Pagumen days in the Ethiopian calendar — simple and prayer-focused.</p>
-                <p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
-              </div>
-            </a>
-          </article>
-
-          <article class="work-item" data-category="banners design branding">
-            <a class="work-link" href="img/YT banner.jpg">
-              <div class="work-visual">
-                <img src="img/YT banner.jpg" alt="YouTube channel banner for History Tapestry" width="800" height="450" loading="lazy">
-                <div class="work-overlay"><span class="work-no">11</span><span class="work-arrow" aria-hidden="true">→</span></div>
-              </div>
-              <div class="work-meta">
-                <p class="work-cat">Design · Branding</p>
-                <h3>Channel banner — History Tapestry</h3>
-                <p>A structured banner with themed imagery that makes history feel present, not like an old archive.</p>
-                <p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
-              </div>
-            </a>
-          </article>
-
-          <article class="work-item" data-category="youtube-thumbnails design">
-            <a class="work-link" href="img/Olgaa.png">
-              <div class="work-visual">
-                <img src="img/Olgaa.png" alt="Thumbnail combining historical and digital imagery for AI decoding ancient languages" width="800" height="450" loading="lazy">
-                <div class="work-overlay"><span class="work-no">12</span><span class="work-arrow" aria-hidden="true">→</span></div>
-              </div>
-              <div class="work-meta">
-                <p class="work-cat">Design</p>
-                <h3>Thumbnail — AI decoding ancient languages</h3>
-                <p>Historical imagery mixed with digital elements for a history-channel thumbnail that feels both old and new.</p>
-                <p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
-              </div>
-            </a>
-          </article>
-
-          <article class="work-item" data-category="banners design">
-            <a class="work-link" href="img/sub.png">
-              <div class="work-visual">
-                <img src="img/sub.png" alt="YouTube banner for Andes Peru Voyages" width="800" height="450" loading="lazy">
-                <div class="work-overlay"><span class="work-no">13</span><span class="work-arrow" aria-hidden="true">→</span></div>
-              </div>
-              <div class="work-meta">
-                <p class="work-cat">Design</p>
-                <h3>Banner — Andes Peru Voyages</h3>
-                <p>Travel-channel banner for the landscapes and culture of Peru.</p>
-                <p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
-              </div>
-            </a>
-          </article>
-
-          <article class="work-item" data-category="banners design">
-            <a class="work-link" href="img/sub2.png">
-              <div class="work-visual">
-                <img src="img/sub2.png" alt="YouTube banner for Anaqmisk'i Miel" width="800" height="450" loading="lazy">
-                <div class="work-overlay"><span class="work-no">14</span><span class="work-arrow" aria-hidden="true">→</span></div>
-              </div>
-              <div class="work-meta">
-                <p class="work-cat">Design</p>
-                <h3>Banner — Anaqmisk'i Miel</h3>
-                <p>A clean, natural banner for a channel about bees and honey.</p>
-                <p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
-              </div>
-            </a>
-          </article>
-
-          <article class="work-item" data-category="banners design">
-            <a class="work-link" href="img/port5.png">
-              <div class="work-visual">
-                <img src="img/port5.png" alt="YouTube banner Andes Peaks and Heritage" width="800" height="450" loading="lazy">
-                <div class="work-overlay"><span class="work-no">15</span><span class="work-arrow" aria-hidden="true">→</span></div>
-              </div>
-              <div class="work-meta">
-                <p class="work-cat">Design</p>
-                <h3>Banner — Andes Peaks &amp; Heritage</h3>
-                <p>A second Andes Peru Voyages piece highlighting mountains, history, and travel.</p>
-                <p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
-              </div>
-            </a>
-          </article>
-
-          <article class="work-item" data-category="youtube-thumbnails design">
-            <a class="work-link" href="img/bale helm thumbnail.jpg">
-              <div class="work-visual">
-                <img src="img/bale helm thumbnail.jpg" alt="Minimal thumbnail for the Bale Helm YouTube channel" width="800" height="450" loading="lazy">
-                <div class="work-overlay"><span class="work-no">16</span><span class="work-arrow" aria-hidden="true">→</span></div>
-              </div>
-              <div class="work-meta">
-                <p class="work-cat">Design</p>
-                <h3>Minimal thumbnails — Bale Helm</h3>
-                <p>Quiet, modern thumbnails for Bale Helm — simple layouts that hold attention without feeling busy.</p>
-                <p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
-              </div>
-            </a>
-          </article>
-
-          <article class="work-item" data-category="youtube-thumbnails design">
-            <a class="work-link" href="img/duke thumb.jpg">
-              <div class="work-visual">
-                <img src="img/duke thumb.jpg" alt="Thumbnail for Every Controversial Way to Get Rich" width="800" height="450" loading="lazy">
-                <div class="work-overlay"><span class="work-no">17</span><span class="work-arrow" aria-hidden="true">→</span></div>
-              </div>
-              <div class="work-meta">
-                <p class="work-cat">Design</p>
-                <h3>Thumbnail — ‘Every Controversial Way to Get Rich’</h3>
-                <p>A bold thumbnail for Duke Rampoldo, covering controversial ways to get rich — kept graphic and easy to read.</p>
-                <p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
-              </div>
-            </a>
-          </article>
-
-          <article class="work-item" data-category="youtube-thumbnails design">
-            <a class="work-link" href="img/history thumbnail.jpg">
-              <div class="work-visual">
-                <img src="img/history thumbnail.jpg" alt="Thumbnail titled Hidden History Exposed" width="800" height="450" loading="lazy">
-                <div class="work-overlay"><span class="work-no">18</span><span class="work-arrow" aria-hidden="true">→</span></div>
-              </div>
-              <div class="work-meta">
-                <p class="work-cat">Design</p>
-                <h3>Thumbnail — ‘Hidden History Exposed’</h3>
-                <p>A historical, slightly mysterious thumbnail that invites viewers to find out what's been left unsaid.</p>
-                <p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
-              </div>
-            </a>
-          </article>
-
-          <article class="work-item" data-category="youtube-thumbnails design">
-            <a class="work-link" href="img/Thumbnail-1.png">
-              <div class="work-visual">
-                <img src="img/Thumbnail-1.png" alt="Historical thumbnail for 3000 Years of Jerusalem" width="800" height="450" loading="lazy">
-                <div class="work-overlay"><span class="work-no">19</span><span class="work-arrow" aria-hidden="true">→</span></div>
-              </div>
-              <div class="work-meta">
-                <p class="work-cat">Design</p>
-                <h3>3000 Years of Jerusalem</h3>
-                <p>A thumbnail built around Jerusalem's long history — heritage that feels immediate, not just decorative.</p>
-                <p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
-              </div>
-            </a>
-          </article>
-
-          <article class="work-item" data-category="branding design">
-            <a class="work-link" href="img/bb.png">
-              <div class="work-visual">
-                <img src="img/bb.png" alt="Python Pioneers logo transformation" width="800" height="450" loading="lazy">
-                <div class="work-overlay"><span class="work-no">20</span><span class="work-arrow" aria-hidden="true">→</span></div>
-              </div>
-              <div class="work-meta">
-                <p class="work-cat">Branding</p>
-                <h3>Python Pioneers — logo transformation</h3>
-                <p>A refreshed logo that keeps the Python icon while pushing the brand toward growth and experimentation.</p>
-                <p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
-              </div>
-            </a>
-          </article>
-
-          <article class="work-item" data-category="product-designs design">
-            <a class="work-link" href="img/werqama sew.jpg">
-              <div class="work-visual">
-                <img src="img/werqama sew.jpg" alt="Book mockup and poster for Werqama Sew by Amanuel Mebratu" width="800" height="450" loading="lazy">
-                <div class="work-overlay"><span class="work-no">21</span><span class="work-arrow" aria-hidden="true">→</span></div>
-              </div>
-              <div class="work-meta">
-                <p class="work-cat">Design</p>
-                <h3>Book mockup &amp; poster — Werqama Sew</h3>
-                <p>Mockups and posters for Amanuel Mebratu's book, built around its theme rather than just decoration.</p>
-                <p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
-              </div>
-            </a>
-          </article>
-
-          <article class="work-item" data-category="branding design">
-            <a class="work-link" href="img/python-pioneers.jpg">
-              <div class="work-visual">
-                <img src="img/python-pioneers.jpg" alt="Minimal tech posters for Python Pioneers" width="800" height="450" loading="lazy">
-                <div class="work-overlay"><span class="work-no">22</span><span class="work-arrow" aria-hidden="true">→</span></div>
-              </div>
-              <div class="work-meta">
-                <p class="work-cat">Branding · Design</p>
-                <h3>Posters — Python Pioneers</h3>
-                <p>Minimal, tech-forward posters with tight layouts and simple color, made for a community that wants to feel approachable.</p>
-                <p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
-              </div>
-            </a>
-          </article>
-
-          <article class="work-item" data-category="posters design">
-            <a class="work-link" href="img/hasaawubare.jpg">
-              <div class="work-visual">
-                <img src="img/hasaawubare.jpg" alt="Social posts for Hasaawu Bare podcast in Amharic and Sidaamu Afoo" width="800" height="450" loading="lazy">
-                <div class="work-overlay"><span class="work-no">23</span><span class="work-arrow" aria-hidden="true">→</span></div>
-              </div>
-              <div class="work-meta">
-                <p class="work-cat">Design</p>
-                <h3>Social posts — Hasaawu Bare podcast</h3>
-                <p>Posts in Amharic and Sidaamu Afoo, designed to be visually clear and easy for every viewer to understand.</p>
-                <p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
-              </div>
-            </a>
-          </article>
-
-          <article class="work-item" data-category="product-designs branding design">
-            <a class="work-link" href="img/phone-case-art.jpg">
-              <div class="work-visual">
-                <img src="img/phone-case-art.jpg" alt="Phone case art for Nova featuring Ethiopian Sefed basket pattern" width="800" height="450" loading="lazy">
-                <div class="work-overlay"><span class="work-no">24</span><span class="work-arrow" aria-hidden="true">→</span></div>
-              </div>
-              <div class="work-meta">
-                <p class="work-cat">Branding · Design</p>
-                <h3>Phone case art for Nova</h3>
-                <p>Ethiopian Sefed basket pattern in day and night versions, featuring the weaving woman from the ten-birr note. Culture shown as a real object, not just a decorative pattern.</p>
-                <p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
-              </div>
-            </a>
-          </article>
-        </div>
-
-        <div class="work-cta">
-          <p>More client work is on my Upwork profile — same quality, just more of it.</p>
-          <a class="btn btn-ghost" href="https://www.upwork.com/freelancers/~011e3d5613a4e88ee3?mp_source=share" target="_blank" rel="noopener noreferrer">View projects on Upwork</a>
-        </div>
-      </div>
-    </section>
-
-    <section class="section certificates" id="certificates" aria-labelledby="certificates-title">
-      <div class="container">
-        <div class="section-head">
-          <p class="section-index">06</p>
-          <p class="section-label">Certificates</p>
-        </div>
-        <div class="work-intro">
-          <h2 id="certificates-title" class="section-title">Certificates</h2>
-          <p class="section-lede">A simple place to keep track of my certificates as I earn more. This section is easy to update over time.</p>
-        </div>
-
-        <div class="cert-grid">
-          <article class="cert-item">
-            <a href="img/folder.png" class="cert-link" data-lightbox="certificate" data-title="Certificate title" data-alt="Certificate placeholder image">
-              <img src="img/folder.png" alt="Certificate placeholder" loading="lazy" width="700" height="500">
-              <div class="cert-copy">
-                <h3>Certificate title</h3>
-                <p>Issuing organization</p>
-                <time>Date</time>
-              </div>
-            </a>
-          </article>
-
-          <article class="cert-item">
-            <a href="img/folder.png" class="cert-link" data-lightbox="certificate" data-title="Certificate title" data-alt="Certificate placeholder image">
-              <img src="img/folder.png" alt="Certificate placeholder" loading="lazy" width="700" height="500">
-              <div class="cert-copy">
-                <h3>Certificate title</h3>
-                <p>Issuing organization</p>
-                <time>Date</time>
-              </div>
-            </a>
-          </article>
-
-          <article class="cert-item">
-            <a href="img/folder.png" class="cert-link" data-lightbox="certificate" data-title="Certificate title" data-alt="Certificate placeholder image">
-              <img src="img/folder.png" alt="Certificate placeholder" loading="lazy" width="700" height="500">
-              <div class="cert-copy">
-                <h3>Certificate title</h3>
-                <p>Issuing organization</p>
-                <time>Date</time>
-              </div>
-            </a>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- LAB -->
-    <section class="section lab" id="lab" aria-labelledby="lab-title">
-      <div class="container">
-        <div class="section-head">
-          <p class="section-index">07</p>
-          <p class="section-label">Lab</p>
-        </div>
-        <h2 id="lab-title" class="section-title">Where curiosity stays in public.</h2>
-        <p class="section-lede">Not a list of finished products — a record of what I'm testing at the edge of medicine, design, and code.</p>
-
-        <div class="lab-list">
-          <article class="lab-item">
-            <p class="lab-kicker">Med × Tech</p>
-            <h3>Healthcare &amp; education</h3>
-            <p>Looking at how design and software could support medical learning and clinical communication. Still in the research stage, not a finished product.</p>
-          </article>
-          <article class="lab-item">
-            <p class="lab-kicker">Visual</p>
-            <h3>Campaigns &amp; identities</h3>
-            <p>Thumbnails, posters, and logos as experiments in attention — what someone understands in one second, and what they remember after ten.</p>
-          </article>
-          <article class="lab-item">
-            <p class="lab-kicker">Code</p>
-            <h3>Software practice</h3>
-            <p>HTML, CSS, Python, and SQL, learned through coursework and independent study — building the skill to finish projects, not just sketch ideas.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- EDUCATION -->
-    <section class="section education" id="education" aria-labelledby="edu-title">
-      <div class="container">
-        <div class="section-head">
-          <p class="section-index">08</p>
-          <p class="section-label">Background</p>
-        </div>
-        <h2 id="edu-title" class="section-title">Education</h2>
-
-        <ol class="edu-list">
-          <li class="edu-item">
-            <div class="edu-when">
-              <span class="edu-badge">In progress</span>
-              <time>2024 — 2031</time>
-            </div>
-            <div class="edu-body">
-              <h3>Doctor of Medicine</h3>
-              <p class="edu-place">St. Paul’s Hospital Millennium Medical College</p>
-              <p>A medical degree aimed at solving health-sector problems by combining clinical knowledge with technology.</p>
-            </div>
-          </li>
-          <li class="edu-item">
-            <div class="edu-when">
-              <span class="edu-badge edu-badge--done">Completed</span>
-              <time>Jul 2025 — Oct 2025</time>
-            </div>
-            <div class="edu-body">
-              <h3>Software Engineering</h3>
-              <p class="edu-place">Power Learn Project</p>
-              <p>July 2025 scholarship cohort. Software engineering training focused on practical skills for real tech work.</p>
-            </div>
-          </li>
-          <li class="edu-item">
-            <div class="edu-when">
-              <span class="edu-badge edu-badge--done">Completed</span>
-              <time>2021 — 2024</time>
-            </div>
-            <div class="edu-body">
-              <h3>High School Diploma</h3>
-              <p class="edu-place">Hayole Education Project Furra Model Academy</p>
-              <p>Graduated in Hawassa, Ethiopia, with a strong academic foundation for what came next.</p>
-            </div>
-          </li>
-          <li class="edu-item">
-            <div class="edu-when">
-              <span class="edu-badge edu-badge--done">Completed</span>
-            </div>
-            <div class="edu-body">
-              <h3>Certifications</h3>
-              <ul class="cert-list">
-                <li>SoloLearn: Web Development Bootcamp</li>
-                <li>Udacity: Programming Fundamentals</li>
-              </ul>
-            </div>
-          </li>
-        </ol>
-
-        <div class="cv-row">
-          <div>
-            <h3>Full record</h3>
-            <p>Education, projects, and the full version of this story, in one file.</p>
-          </div>
-          <a class="btn btn-primary" href="doc/resume-mntsnt.pdf" download>Download CV</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- SKILLS -->
-    <section class="section skills" id="skills" aria-labelledby="skills-title">
-      <div class="container">
-        <div class="section-head">
-          <p class="section-index">09</p>
-          <p class="section-label">Toolkit</p>
-        </div>
-        <h2 id="skills-title" class="section-title">Skills</h2>
-        <p class="section-lede">Tools I actually use. This list grows over time — nothing here is filler.</p>
-
-        <div class="skills-stack">
-          <div class="skill-group">
-            <h3>Design</h3>
-            <p>Photoshop · Illustrator · Canva</p>
-          </div>
-          <div class="skill-group">
-            <h3>Development</h3>
-            <p>HTML · CSS · Python · SQL</p>
-          </div>
-          <div class="skill-group">
-            <h3>Workflow</h3>
-            <p>GitHub · VS Code</p>
-          </div>
-          <div class="skill-group">
-            <h3>Learning</h3>
-            <p>Web design · UI experiments · Front-end learning</p>
-          </div>
-        </div>
-        <p class="skills-note">I'm always adding to this toolkit. The goal stays the same: clean work that does its job.</p>
-      </div>
-    </section>
-
-    <!-- CONTACT -->
-    <section class="section contact" id="contact" aria-labelledby="contact-title">
-      <div class="container">
-        <div class="section-head">
-          <p class="section-index">10</p>
-          <p class="section-label">Contact</p>
-        </div>
-        <h2 id="contact-title" class="contact-title">Have a project in mind?<br>Let’s build something.</h2>
-
-        <div class="contact-layout">
-          <div class="contact-aside">
-            <p class="contact-intro">Got new work, a collaboration, or a specific design problem? Send a message — I read everything I get.</p>
-            <ul class="contact-channels">
-              <li>
-                <a href="mailto:mintesnoh@gmail.com">
-                  <span class="channel-label">Email</span>
-                  <span>mintesnoh@gmail.com</span>
-                </a>
-              </li>
-              <li>
-                <p>
-                  <span class="channel-label">Location</span>
-                  <span>Addis Ababa, Ethiopia</span>
-                </p>
-              </li>
-              <li>
-                <a href="https://www.linkedin.com/in/mintesnotleliso/" target="_blank" rel="noopener noreferrer">
-                  <span class="channel-label">LinkedIn</span>
-                  <span>Available for new work</span>
-                </a>
-              </li>
-            </ul>
-            <div class="looking-for">
-              <h3>What I’m looking for</h3>
-              <ul>
-                <li>Part-time design opportunities</li>
-                <li>Freelance projects and consulting</li>
-                <li>Collaborative creative projects</li>
-                <li>Mentoring and sharing design knowledge</li>
-                <li>Involvement in the design community</li>
-              </ul>
-            </div>
-          </div>
-
-          <form class="contact-form" action="https://formspree.io/f/xzzrnwrk" method="post">
-            <div class="form-row">
-              <label>
+<article class="work-item" data-category="branding youtube-thumbnails design">
+<button class="work-link" data-modal-cat="Branding · Design1st place" data-modal-desc="Album cover redesigned for a developer challenge. Won first place and a 1,000 ETB prize. A modern take on the album's mood that keeps its original character." data-modal-img="img/etebikhalehu.jpg" data-modal-role="Role: Graphic designer · Photoshop · Illustrator" data-modal-title="Redesign: Dawit Getachew’s album ‘Etebikhalehu’" type="button">
+<div class="work-visual">
+<img alt="Redesigned album cover for Dawit Getachew’s Etebikhalehu" height="675" src="img/etebikhalehu.jpg" width="1200"/>
+<div class="work-overlay">
+<span class="work-no">01</span>
+<span aria-hidden="true" class="work-arrow">→</span>
+</div>
+</div>
+<div class="work-meta">
+<p class="work-cat">Branding · Design <span class="work-award">1st place</span></p>
+<h3>Redesign: Dawit Getachew’s album ‘Etebikhalehu’</h3>
+<p>Album cover redesigned for a developer challenge. Won first place and a 1,000 ETB prize. A modern take on the album's mood that keeps its original character.</p>
+<p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
+</div>
+</button>
+</article>
+<article class="work-item" data-category="design">
+<button class="work-link" data-modal-cat="Design · Campaign" data-modal-desc="A series of social posts for a digital skills webinar, with a clear layout, modern visuals, and consistent promotion across platforms." data-modal-img="img/web.png" data-modal-role="Role: Graphic designer · Photoshop · Illustrator" data-modal-title="Digital Skills Webinar Campaign — SCOIC" type="button">
+<div class="work-visual">
+<img alt="Social posts for the SCOIC digital skills webinar campaign" height="450" loading="lazy" src="img/web.png" width="800"/>
+<div class="work-overlay"><span class="work-no">02</span><span aria-hidden="true" class="work-arrow">→</span></div>
+</div>
+<div class="work-meta">
+<p class="work-cat">Design · Campaign</p>
+<h3>Digital Skills Webinar Campaign — SCOIC</h3>
+<p>A series of social posts for a digital skills webinar, with a clear layout, modern visuals, and consistent promotion across platforms.</p>
+<p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
+</div>
+</button>
+</article>
+<article class="work-item" data-category="youtube-thumbnails design">
+<button class="work-link" data-modal-cat="Medical · Design" data-modal-desc="Professional thumbnails for medical channels, using bold type, clean layouts, and clear visuals that make the topic obvious in a feed." data-modal-img="img/thumbnail.jpg" data-modal-role="Role: Graphic designer · Photoshop · Illustrator" data-modal-title="YouTube thumbnails for medical &amp; doctor content" type="button">
+<div class="work-visual">
+<img alt="YouTube thumbnails for medical and doctor channels" height="450" loading="lazy" src="img/thumbnail.jpg" width="800"/>
+<div class="work-overlay"><span class="work-no">03</span><span aria-hidden="true" class="work-arrow">→</span></div>
+</div>
+<div class="work-meta">
+<p class="work-cat">Medical · Design</p>
+<h3>YouTube thumbnails for medical &amp; doctor content</h3>
+<p>Professional thumbnails for medical channels, using bold type, clean layouts, and clear visuals that make the topic obvious in a feed.</p>
+<p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
+</div>
+</button>
+</article>
+<article class="work-item" data-category="branding design">
+<button class="work-link" data-modal-cat="Branding" data-modal-desc="A modern logo that combines the Python symbol with shapes suggesting growth, community, and forward-thinking technology." data-modal-img="img/pp office.jpg" data-modal-role="Role: Graphic designer · Photoshop · Illustrator" data-modal-title="Python Pioneers — tech logo" type="button">
+<div class="work-visual">
+<img alt="Python Pioneers logo design" height="450" loading="lazy" src="img/pp office.jpg" width="800"/>
+<div class="work-overlay"><span class="work-no">04</span><span aria-hidden="true" class="work-arrow">→</span></div>
+</div>
+<div class="work-meta">
+<p class="work-cat">Branding</p>
+<h3>Python Pioneers — tech logo</h3>
+<p>A modern logo that combines the Python symbol with shapes suggesting growth, community, and forward-thinking technology.</p>
+<p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
+</div>
+</button>
+</article>
+<article class="work-item" data-category="posters design">
+<button class="work-link" data-modal-cat="Design · Campaign" data-modal-desc="A week-long series for my college Christian fellowship — consistent, encouraging, and focused on community." data-modal-img="img/tsom.png" data-modal-role="Role: Graphic designer · Photoshop · Illustrator" data-modal-title="Prayer &amp; Fasting Week social series" type="button">
+<div class="work-visual">
+<img alt="Prayer and fasting week social media series" height="450" loading="lazy" src="img/tsom.png" width="800"/>
+<div class="work-overlay"><span class="work-no">05</span><span aria-hidden="true" class="work-arrow">→</span></div>
+</div>
+<div class="work-meta">
+<p class="work-cat">Design · Campaign</p>
+<h3>Prayer &amp; Fasting Week social series</h3>
+<p>A week-long series for my college Christian fellowship — consistent, encouraging, and focused on community.</p>
+<p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
+</div>
+</button>
+</article>
+<article class="work-item" data-category="youtube-thumbnails design">
+<button class="work-link" data-modal-cat="Design" data-modal-desc="Client thumbnails made to support storytelling, boost click-through, and stay true to the channel's style." data-modal-img="img/petra.png" data-modal-role="Role: Graphic designer · Photoshop · Illustrator" data-modal-title="Thumbnails — history &amp; fairytale" type="button">
+<div class="work-visual">
+<img alt="YouTube thumbnails for history and fairytale content" height="450" loading="lazy" src="img/petra.png" width="800"/>
+<div class="work-overlay"><span class="work-no">06</span><span aria-hidden="true" class="work-arrow">→</span></div>
+</div>
+<div class="work-meta">
+<p class="work-cat">Design</p>
+<h3>Thumbnails — history &amp; fairytale</h3>
+<p>Client thumbnails made to support storytelling, boost click-through, and stay true to the channel's style.</p>
+<p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
+</div>
+</button>
+</article>
+<article class="work-item" data-category="posters design">
+<button class="work-link" data-modal-cat="Design" data-modal-desc="A consistent lyric series designed to show short excerpts, with a music-focused look across platforms." data-modal-img="img/sm.png" data-modal-role="Role: Graphic designer · Photoshop · Illustrator" data-modal-title="Social posts — song lyrics series" type="button">
+<div class="work-visual">
+<img alt="Lyric-themed social media post series" height="450" loading="lazy" src="img/sm.png" width="800"/>
+<div class="work-overlay"><span class="work-no">07</span><span aria-hidden="true" class="work-arrow">→</span></div>
+</div>
+<div class="work-meta">
+<p class="work-cat">Design</p>
+<h3>Social posts — song lyrics series</h3>
+<p>A consistent lyric series designed to show short excerpts, with a music-focused look across platforms.</p>
+<p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
+</div>
+</button>
+</article>
+<article class="work-item" data-category="youtube-thumbnails design">
+<button class="work-link" data-modal-cat="Design" data-modal-desc="High-contrast tutorial thumbnails made to stand out and get clicks in a crowded tech feed." data-modal-img="img/thumbs.png" data-modal-role="Role: Graphic designer · Photoshop · Illustrator" data-modal-title="Thumbnails — programming channel" type="button">
+<div class="work-visual">
+<img alt="YouTube thumbnails for a programming channel" height="450" loading="lazy" src="img/thumbs.png" width="800"/>
+<div class="work-overlay"><span class="work-no">08</span><span aria-hidden="true" class="work-arrow">→</span></div>
+</div>
+<div class="work-meta">
+<p class="work-cat">Design</p>
+<h3>Thumbnails — programming channel</h3>
+<p>High-contrast tutorial thumbnails made to stand out and get clicks in a crowded tech feed.</p>
+<p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
+</div>
+</button>
+</article>
+<article class="work-item" data-category="youtube-thumbnails design">
+<button class="work-link" data-modal-cat="Design" data-modal-desc="Figures, timelines, and key moments, laid out clearly to pull viewers in." data-modal-img="img/olga.png" data-modal-role="Role: Graphic designer · Photoshop · Illustrator" data-modal-title="Thumbnails — History Tapestry" type="button">
+<div class="work-visual">
+<img alt="History Tapestry channel thumbnail designs" height="450" loading="lazy" src="img/olga.png" width="800"/>
+<div class="work-overlay"><span class="work-no">09</span><span aria-hidden="true" class="work-arrow">→</span></div>
+</div>
+<div class="work-meta">
+<p class="work-cat">Design</p>
+<h3>Thumbnails — History Tapestry</h3>
+<p>Figures, timelines, and key moments, laid out clearly to pull viewers in.</p>
+<p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
+</div>
+</button>
+</article>
+<article class="work-item" data-category="posters design">
+<button class="work-link" data-modal-cat="Design" data-modal-desc="Devotional wallpapers for the five Pagumen days in the Ethiopian calendar — simple and prayer-focused." data-modal-img="img/collection.png" data-modal-role="Role: Graphic designer · Photoshop · Illustrator" data-modal-title="Pagumen wallpaper collection" type="button">
+<div class="work-visual">
+<img alt="Pagumen wallpaper collection for five Ethiopian Pagumen days" height="450" loading="lazy" src="img/collection.png" width="800"/>
+<div class="work-overlay"><span class="work-no">10</span><span aria-hidden="true" class="work-arrow">→</span></div>
+</div>
+<div class="work-meta">
+<p class="work-cat">Design</p>
+<h3>Pagumen wallpaper collection</h3>
+<p>Devotional wallpapers for the five Pagumen days in the Ethiopian calendar — simple and prayer-focused.</p>
+<p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
+</div>
+</button>
+</article>
+<article class="work-item" data-category="banners design branding">
+<button class="work-link" data-modal-cat="Design · Branding" data-modal-desc="A structured banner with themed imagery that makes history feel present, not like an old archive." data-modal-img="img/YT banner.jpg" data-modal-role="Role: Graphic designer · Photoshop · Illustrator" data-modal-title="Channel banner — History Tapestry" type="button">
+<div class="work-visual">
+<img alt="YouTube channel banner for History Tapestry" height="450" loading="lazy" src="img/YT banner.jpg" width="800"/>
+<div class="work-overlay"><span class="work-no">11</span><span aria-hidden="true" class="work-arrow">→</span></div>
+</div>
+<div class="work-meta">
+<p class="work-cat">Design · Branding</p>
+<h3>Channel banner — History Tapestry</h3>
+<p>A structured banner with themed imagery that makes history feel present, not like an old archive.</p>
+<p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
+</div>
+</button>
+</article>
+<article class="work-item" data-category="youtube-thumbnails design">
+<button class="work-link" data-modal-cat="Design" data-modal-desc="Historical imagery mixed with digital elements for a history-channel thumbnail that feels both old and new." data-modal-img="img/Olgaa.png" data-modal-role="Role: Graphic designer · Photoshop · Illustrator" data-modal-title="Thumbnail — AI decoding ancient languages" type="button">
+<div class="work-visual">
+<img alt="Thumbnail combining historical and digital imagery for AI decoding ancient languages" height="450" loading="lazy" src="img/Olgaa.png" width="800"/>
+<div class="work-overlay"><span class="work-no">12</span><span aria-hidden="true" class="work-arrow">→</span></div>
+</div>
+<div class="work-meta">
+<p class="work-cat">Design</p>
+<h3>Thumbnail — AI decoding ancient languages</h3>
+<p>Historical imagery mixed with digital elements for a history-channel thumbnail that feels both old and new.</p>
+<p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
+</div>
+</button>
+</article>
+<article class="work-item" data-category="banners design">
+<button class="work-link" data-modal-cat="Design" data-modal-desc="Travel-channel banner for the landscapes and culture of Peru." data-modal-img="img/sub.png" data-modal-role="Role: Graphic designer · Photoshop · Illustrator" data-modal-title="Banner — Andes Peru Voyages" type="button">
+<div class="work-visual">
+<img alt="YouTube banner for Andes Peru Voyages" height="450" loading="lazy" src="img/sub.png" width="800"/>
+<div class="work-overlay"><span class="work-no">13</span><span aria-hidden="true" class="work-arrow">→</span></div>
+</div>
+<div class="work-meta">
+<p class="work-cat">Design</p>
+<h3>Banner — Andes Peru Voyages</h3>
+<p>Travel-channel banner for the landscapes and culture of Peru.</p>
+<p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
+</div>
+</button>
+</article>
+<article class="work-item" data-category="banners design">
+<button class="work-link" data-modal-cat="Design" data-modal-desc="A clean, natural banner for a channel about bees and honey." data-modal-img="img/sub2.png" data-modal-role="Role: Graphic designer · Photoshop · Illustrator" data-modal-title="Banner — Anaqmisk'i Miel" type="button">
+<div class="work-visual">
+<img alt="YouTube banner for Anaqmisk'i Miel" height="450" loading="lazy" src="img/sub2.png" width="800"/>
+<div class="work-overlay"><span class="work-no">14</span><span aria-hidden="true" class="work-arrow">→</span></div>
+</div>
+<div class="work-meta">
+<p class="work-cat">Design</p>
+<h3>Banner — Anaqmisk'i Miel</h3>
+<p>A clean, natural banner for a channel about bees and honey.</p>
+<p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
+</div>
+</button>
+</article>
+<article class="work-item" data-category="banners design">
+<button class="work-link" data-modal-cat="Design" data-modal-desc="A second Andes Peru Voyages piece highlighting mountains, history, and travel." data-modal-img="img/port5.png" data-modal-role="Role: Graphic designer · Photoshop · Illustrator" data-modal-title="Banner — Andes Peaks &amp; Heritage" type="button">
+<div class="work-visual">
+<img alt="YouTube banner Andes Peaks and Heritage" height="450" loading="lazy" src="img/port5.png" width="800"/>
+<div class="work-overlay"><span class="work-no">15</span><span aria-hidden="true" class="work-arrow">→</span></div>
+</div>
+<div class="work-meta">
+<p class="work-cat">Design</p>
+<h3>Banner — Andes Peaks &amp; Heritage</h3>
+<p>A second Andes Peru Voyages piece highlighting mountains, history, and travel.</p>
+<p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
+</div>
+</button>
+</article>
+<article class="work-item" data-category="youtube-thumbnails design">
+<button class="work-link" data-modal-cat="Design" data-modal-desc="Quiet, modern thumbnails for Bale Helm — simple layouts that hold attention without feeling busy." data-modal-img="img/bale helm thumbnail.jpg" data-modal-role="Role: Graphic designer · Photoshop · Illustrator" data-modal-title="Minimal thumbnails — Bale Helm" type="button">
+<div class="work-visual">
+<img alt="Minimal thumbnail for the Bale Helm YouTube channel" height="450" loading="lazy" src="img/bale helm thumbnail.jpg" width="800"/>
+<div class="work-overlay"><span class="work-no">16</span><span aria-hidden="true" class="work-arrow">→</span></div>
+</div>
+<div class="work-meta">
+<p class="work-cat">Design</p>
+<h3>Minimal thumbnails — Bale Helm</h3>
+<p>Quiet, modern thumbnails for Bale Helm — simple layouts that hold attention without feeling busy.</p>
+<p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
+</div>
+</button>
+</article>
+<article class="work-item" data-category="youtube-thumbnails design">
+<button class="work-link" data-modal-cat="Design" data-modal-desc="A bold thumbnail for Duke Rampoldo, covering controversial ways to get rich — kept graphic and easy to read." data-modal-img="img/duke thumb.jpg" data-modal-role="Role: Graphic designer · Photoshop · Illustrator" data-modal-title="Thumbnail — ‘Every Controversial Way to Get Rich’" type="button">
+<div class="work-visual">
+<img alt="Thumbnail for Every Controversial Way to Get Rich" height="450" loading="lazy" src="img/duke thumb.jpg" width="800"/>
+<div class="work-overlay"><span class="work-no">17</span><span aria-hidden="true" class="work-arrow">→</span></div>
+</div>
+<div class="work-meta">
+<p class="work-cat">Design</p>
+<h3>Thumbnail — ‘Every Controversial Way to Get Rich’</h3>
+<p>A bold thumbnail for Duke Rampoldo, covering controversial ways to get rich — kept graphic and easy to read.</p>
+<p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
+</div>
+</button>
+</article>
+<article class="work-item" data-category="youtube-thumbnails design">
+<button class="work-link" data-modal-cat="Design" data-modal-desc="A historical, slightly mysterious thumbnail that invites viewers to find out what's been left unsaid." data-modal-img="img/history thumbnail.jpg" data-modal-role="Role: Graphic designer · Photoshop · Illustrator" data-modal-title="Thumbnail — ‘Hidden History Exposed’" type="button">
+<div class="work-visual">
+<img alt="Thumbnail titled Hidden History Exposed" height="450" loading="lazy" src="img/history thumbnail.jpg" width="800"/>
+<div class="work-overlay"><span class="work-no">18</span><span aria-hidden="true" class="work-arrow">→</span></div>
+</div>
+<div class="work-meta">
+<p class="work-cat">Design</p>
+<h3>Thumbnail — ‘Hidden History Exposed’</h3>
+<p>A historical, slightly mysterious thumbnail that invites viewers to find out what's been left unsaid.</p>
+<p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
+</div>
+</button>
+</article>
+<article class="work-item" data-category="youtube-thumbnails design">
+<button class="work-link" data-modal-cat="Design" data-modal-desc="A thumbnail built around Jerusalem's long history — heritage that feels immediate, not just decorative." data-modal-img="img/Thumbnail-1.png" data-modal-role="Role: Graphic designer · Photoshop · Illustrator" data-modal-title="3000 Years of Jerusalem" type="button">
+<div class="work-visual">
+<img alt="Historical thumbnail for 3000 Years of Jerusalem" height="450" loading="lazy" src="img/Thumbnail-1.png" width="800"/>
+<div class="work-overlay"><span class="work-no">19</span><span aria-hidden="true" class="work-arrow">→</span></div>
+</div>
+<div class="work-meta">
+<p class="work-cat">Design</p>
+<h3>3000 Years of Jerusalem</h3>
+<p>A thumbnail built around Jerusalem's long history — heritage that feels immediate, not just decorative.</p>
+<p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
+</div>
+</button>
+</article>
+<article class="work-item" data-category="branding design">
+<button class="work-link" data-modal-cat="Branding" data-modal-desc="A refreshed logo that keeps the Python icon while pushing the brand toward growth and experimentation." data-modal-img="img/bb.png" data-modal-role="Role: Graphic designer · Photoshop · Illustrator" data-modal-title="Python Pioneers — logo transformation" type="button">
+<div class="work-visual">
+<img alt="Python Pioneers logo transformation" height="450" loading="lazy" src="img/bb.png" width="800"/>
+<div class="work-overlay"><span class="work-no">20</span><span aria-hidden="true" class="work-arrow">→</span></div>
+</div>
+<div class="work-meta">
+<p class="work-cat">Branding</p>
+<h3>Python Pioneers — logo transformation</h3>
+<p>A refreshed logo that keeps the Python icon while pushing the brand toward growth and experimentation.</p>
+<p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
+</div>
+</button>
+</article>
+<article class="work-item" data-category="product-designs design">
+<button class="work-link" data-modal-cat="Design" data-modal-desc="Mockups and posters for Amanuel Mebratu's book, built around its theme rather than just decoration." data-modal-img="img/werqama sew.jpg" data-modal-role="Role: Graphic designer · Photoshop · Illustrator" data-modal-title="Book mockup &amp; poster — Werqama Sew" type="button">
+<div class="work-visual">
+<img alt="Book mockup and poster for Werqama Sew by Amanuel Mebratu" height="450" loading="lazy" src="img/werqama sew.jpg" width="800"/>
+<div class="work-overlay"><span class="work-no">21</span><span aria-hidden="true" class="work-arrow">→</span></div>
+</div>
+<div class="work-meta">
+<p class="work-cat">Design</p>
+<h3>Book mockup &amp; poster — Werqama Sew</h3>
+<p>Mockups and posters for Amanuel Mebratu's book, built around its theme rather than just decoration.</p>
+<p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
+</div>
+</button>
+</article>
+<article class="work-item" data-category="branding design">
+<button class="work-link" data-modal-cat="Branding · Design" data-modal-desc="Minimal, tech-forward posters with tight layouts and simple color, made for a community that wants to feel approachable." data-modal-img="img/python-pioneers.jpg" data-modal-role="Role: Graphic designer · Photoshop · Illustrator" data-modal-title="Posters — Python Pioneers" type="button">
+<div class="work-visual">
+<img alt="Minimal tech posters for Python Pioneers" height="450" loading="lazy" src="img/python-pioneers.jpg" width="800"/>
+<div class="work-overlay"><span class="work-no">22</span><span aria-hidden="true" class="work-arrow">→</span></div>
+</div>
+<div class="work-meta">
+<p class="work-cat">Branding · Design</p>
+<h3>Posters — Python Pioneers</h3>
+<p>Minimal, tech-forward posters with tight layouts and simple color, made for a community that wants to feel approachable.</p>
+<p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
+</div>
+</button>
+</article>
+<article class="work-item" data-category="posters design">
+<button class="work-link" data-modal-cat="Design" data-modal-desc="Posts in Amharic and Sidaamu Afoo, designed to be visually clear and easy for every viewer to understand." data-modal-img="img/hasaawubare.jpg" data-modal-role="Role: Graphic designer · Photoshop · Illustrator" data-modal-title="Social posts — Hasaawu Bare podcast" type="button">
+<div class="work-visual">
+<img alt="Social posts for Hasaawu Bare podcast in Amharic and Sidaamu Afoo" height="450" loading="lazy" src="img/hasaawubare.jpg" width="800"/>
+<div class="work-overlay"><span class="work-no">23</span><span aria-hidden="true" class="work-arrow">→</span></div>
+</div>
+<div class="work-meta">
+<p class="work-cat">Design</p>
+<h3>Social posts — Hasaawu Bare podcast</h3>
+<p>Posts in Amharic and Sidaamu Afoo, designed to be visually clear and easy for every viewer to understand.</p>
+<p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
+</div>
+</button>
+</article>
+<article class="work-item" data-category="product-designs branding design">
+<button class="work-link" data-modal-cat="Branding · Design" data-modal-desc="Ethiopian Sefed basket pattern in day and night versions, featuring the weaving woman from the ten-birr note. Culture shown as a real object, not just a decorative pattern." data-modal-img="img/phone-case-art.jpg" data-modal-role="Role: Graphic designer · Photoshop · Illustrator" data-modal-title="Phone case art for Nova" type="button">
+<div class="work-visual">
+<img alt="Phone case art for Nova featuring Ethiopian Sefed basket pattern" height="450" loading="lazy" src="img/phone-case-art.jpg" width="800"/>
+<div class="work-overlay"><span class="work-no">24</span><span aria-hidden="true" class="work-arrow">→</span></div>
+</div>
+<div class="work-meta">
+<p class="work-cat">Branding · Design</p>
+<h3>Phone case art for Nova</h3>
+<p>Ethiopian Sefed basket pattern in day and night versions, featuring the weaving woman from the ten-birr note. Culture shown as a real object, not just a decorative pattern.</p>
+<p class="work-role">Role: Graphic designer · Photoshop · Illustrator</p>
+</div>
+</button>
+</article>
+</div>
+<div class="work-cta">
+<p>More client work is on my Upwork profile — same quality, just more of it.</p>
+<a class="btn btn-ghost" href="https://www.upwork.com/freelancers/~011e3d5613a4e88ee3?mp_source=share" rel="noopener noreferrer" target="_blank">View projects on Upwork</a>
+</div>
+</div>
+</section>
+<section aria-labelledby="certificates-title" class="section certificates" id="certificates">
+<div class="container">
+<div class="section-head">
+<p class="section-index">06</p>
+<p class="section-label">Certificates</p>
+</div>
+<div class="work-intro">
+<h2 class="section-title" id="certificates-title">Certificates</h2>
+<p class="section-lede">A simple place to track my certificates as I learn more.</p>
+</div>
+<div class="cert-grid"><article class="cert-item"><button class="cert-link" data-pdf="img/Certificates/MINTESNOT LELISO.pdf" data-title="Medical Volunteer Service" type="button"><div class="cert-preview"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" x2="8" y1="13" y2="13"></line><line x1="16" x2="8" y1="17" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg><span class="cert-preview-label">Document .PDF</span></div><div class="cert-copy"><h3>Medical Volunteer Service</h3><p>St. Paul Hospital Millennium Medical College</p><time>2025</time></div></button></article><article class="cert-item"><button class="cert-link" data-pdf="img/Certificates/mintesnot Full-Stack Development MERN Stack certificate.pdf" data-title="Full-Stack Development (MERN)" type="button"><div class="cert-preview"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" x2="8" y1="13" y2="13"></line><line x1="16" x2="8" y1="17" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg><span class="cert-preview-label">Document .PDF</span></div><div class="cert-copy"><h3>Full-Stack Development (MERN)</h3><p>Power Learn Project</p><time>2025</time></div></button></article><article class="cert-item"><button class="cert-link" data-pdf="img/Certificates/Learn the Latest Tech Skills; Advance Your Career _ Udacity.pdf" data-title="Programming Fundamentals" type="button"><div class="cert-preview"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" x2="8" y1="13" y2="13"></line><line x1="16" x2="8" y1="17" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg><span class="cert-preview-label">Document .PDF</span></div><div class="cert-copy"><h3>Programming Fundamentals</h3><p>Udacity</p><time>2025</time></div></button></article></div>
+</div>
+</section>
+<!-- LAB -->
+<section aria-labelledby="lab-title" class="section lab" id="lab">
+<div class="container">
+<div class="section-head">
+<p class="section-index">07</p>
+<p class="section-label">Lab</p>
+</div>
+<h2 class="section-title" id="lab-title">Where I share my experiments.</h2>
+<p class="section-lede">This is not a list of finished products. It is a record of my tests in medicine, design, and code.</p>
+<div class="lab-list">
+<article class="lab-item">
+<p class="lab-kicker">Med × Tech</p>
+<h3>Healthcare &amp; education</h3>
+<p>Exploring how design and software can support medical learning and clinical communication.</p>
+</article>
+<article class="lab-item">
+<p class="lab-kicker">Visual</p>
+<h3>Campaigns &amp; identities</h3>
+<p>Thumbnails, posters, and logos as experiments in capturing attention.</p>
+</article>
+<article class="lab-item">
+<p class="lab-kicker">Code</p>
+<h3>Software practice</h3>
+<p>Learning HTML, CSS, Python, and SQL through coursework and self-study.</p>
+</article>
+</div>
+</div>
+</section>
+<!-- EDUCATION -->
+<section aria-labelledby="edu-title" class="section education" id="education">
+<div class="container">
+<div class="section-head">
+<p class="section-index">08</p>
+<p class="section-label">Background</p>
+</div>
+<h2 class="section-title" id="edu-title">Education</h2>
+<ol class="edu-list">
+<li class="edu-item">
+<div class="edu-when">
+<span class="edu-badge">In progress</span>
+<time>2024 — 2031</time>
+</div>
+<div class="edu-body">
+<h3>Doctor of Medicine</h3>
+<p class="edu-place">St. Paul’s Hospital Millennium Medical College</p>
+<p>A medical degree focused on solving health problems by combining clinical knowledge with technology.</p>
+</div>
+</li>
+<li class="edu-item">
+<div class="edu-when">
+<span class="edu-badge edu-badge--done">Completed</span>
+<time>Jul 2025 — Oct 2025</time>
+</div>
+<div class="edu-body">
+<h3>Software Engineering</h3>
+<p class="edu-place">Power Learn Project</p>
+<p>Software engineering training focused on practical skills for real-world work.</p>
+</div>
+</li>
+<li class="edu-item">
+<div class="edu-when">
+<span class="edu-badge edu-badge--done">Completed</span>
+<time>2021 — 2024</time>
+</div>
+<div class="edu-body">
+<h3>High School Diploma</h3>
+<p class="edu-place">Hayole Education Project Furra Model Academy</p>
+<p>Graduated in Hawassa, Ethiopia, with a strong academic foundation.</p>
+</div>
+</li>
+<li class="edu-item">
+<div class="edu-when">
+<span class="edu-badge edu-badge--done">Completed</span>
+</div>
+<div class="edu-body">
+<h3>Certifications</h3>
+<ul class="cert-list">
+<li>SoloLearn: Web Development Bootcamp</li>
+<li>Udacity: Programming Fundamentals</li>
+</ul>
+</div>
+</li>
+</ol>
+<div class="cv-row">
+<div>
+<h3>Full record</h3>
+<p>Education, projects, and the full version of this story, in one file.</p>
+</div>
+<a class="btn btn-primary" download="" href="doc/resume-mntsnt.pdf">Download CV</a>
+</div>
+</div>
+</section>
+<!-- SKILLS -->
+<section aria-labelledby="skills-title" class="section skills" id="skills">
+<div class="container">
+<div class="section-head">
+<p class="section-index">09</p>
+<p class="section-label">Toolkit</p>
+</div>
+<h2 class="section-title" id="skills-title">Skills</h2>
+<p class="section-lede">Tools I use regularly. This list grows as I learn.</p>
+<div class="skills-stack">
+<div class="skill-group">
+<h3>Design</h3>
+<p>Photoshop · Illustrator · Canva</p>
+</div>
+<div class="skill-group">
+<h3>Development</h3>
+<p>HTML · CSS · Python · SQL</p>
+</div>
+<div class="skill-group">
+<h3>Workflow</h3>
+<p>GitHub · VS Code</p>
+</div>
+<div class="skill-group">
+<h3>Learning</h3>
+<p>Web design · UI experiments · Front-end learning</p>
+</div>
+</div>
+<p class="skills-note">I am always adding to this toolkit to create clean and useful work.</p>
+</div>
+</section>
+<!-- CONTACT -->
+<section aria-labelledby="contact-title" class="section contact" id="contact">
+<div class="container">
+<div class="section-head">
+<p class="section-index">10</p>
+<p class="section-label">Contact</p>
+</div>
+<h2 class="contact-title" id="contact-title">Have a project in mind?<br/>Let's build it.</h2>
+<div class="contact-layout">
+<div class="contact-aside">
+<p class="contact-intro">Looking for a collaboration or have a design problem? Send me a message.</p>
+<ul class="contact-channels">
+<li>
+<a href="mailto:mintesnoh@gmail.com">
+<span class="channel-label">Email</span>
+<span>mintesnoh@gmail.com</span>
+</a>
+</li>
+<li>
+<p>
+<span class="channel-label">Location</span>
+<span>Addis Ababa, Ethiopia</span>
+</p>
+</li>
+<li>
+<a href="https://www.linkedin.com/in/mintesnotleliso/" rel="noopener noreferrer" target="_blank">
+<span class="channel-label">LinkedIn</span>
+<span>Available for new work</span>
+</a>
+</li>
+</ul>
+<div class="looking-for">
+<h3>What I’m looking for</h3>
+<ul>
+<li>Part-time design opportunities</li>
+<li>Freelance projects and consulting</li>
+<li>Collaborative creative projects</li>
+<li>Mentoring and sharing design knowledge</li>
+<li>Involvement in the design community</li>
+</ul>
+</div>
+</div>
+<form action="https://formspree.io/f/xzzrnwrk" class="contact-form" method="post">
+<div class="form-row">
+<label>
                 Name
-                <input type="text" name="name" autocomplete="name" required>
-              </label>
-              <label>
+                <input autocomplete="name" name="name" required="" type="text"/>
+</label>
+<label>
                 Email
-                <input type="email" name="email" autocomplete="email" required>
-              </label>
-            </div>
-            <label>
+                <input autocomplete="email" name="email" required="" type="email"/>
+</label>
+</div>
+<label>
               Subject
-              <input type="text" name="subject" required>
-            </label>
-            <label>
+              <input name="subject" required="" type="text"/>
+</label>
+<label>
               Message
-              <textarea name="message" rows="6" required></textarea>
-            </label>
-            <button type="submit" class="btn btn-primary btn-full">Send message</button>
-          </form>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <div class="footer-brand">
-        <p class="footer-name">Mintesnot Leliso</p>
-        <p class="footer-desc">Medical student. Designer. Developer.</p>
-        <p class="footer-sig">Medicine × Design × Technology</p>
-      </div>
-      <nav class="footer-nav" aria-label="Footer">
-        <a href="#about">About</a>
-        <a href="#work">Work</a>
-        <a href="#certificates">Certificates</a>
-        <a href="#contact">Contact</a>
-        <a href="https://github.com/Mntsnt" target="_blank" rel="noopener noreferrer">GitHub</a>
-        <a href="https://www.linkedin.com/in/mintesnotleliso" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-        <a href="https://t.me/bale_helm" target="_blank" rel="noopener noreferrer">Bale Helm</a>
-      </nav>
-      <p class="footer-copy">© 2026 Mintesnot Leliso. All rights reserved.</p>
-    </div>
-  </footer>
-
-  <script>
+              <textarea name="message" required="" rows="6"></textarea>
+</label>
+<button class="btn btn-primary btn-full" type="submit">Send message</button>
+</form>
+</div>
+</div>
+</section>
+<!-- Modals -->
+<div aria-hidden="true" class="modal-overlay" id="work-modal">
+<div aria-labelledby="work-modal-title" aria-modal="true" class="modal-dialog" role="dialog">
+<div class="modal-header">
+<h3 class="modal-title" id="work-modal-title">Project Title</h3>
+<button aria-label="Close modal" class="modal-close" type="button">Close</button>
+</div>
+<div class="modal-body">
+<img alt="" class="modal-image" id="work-modal-img" src=""/>
+<div class="modal-meta-bar">
+<span id="work-modal-cat">Category</span>
+<span aria-hidden="true">·</span>
+<span id="work-modal-role">Role</span>
+</div>
+<p class="modal-desc" id="work-modal-desc">Description</p>
+</div>
+</div>
+</div>
+<div aria-hidden="true" class="modal-overlay" id="pdf-modal">
+<div aria-labelledby="pdf-modal-title" aria-modal="true" class="modal-dialog modal-dialog--pdf" role="dialog">
+<div class="modal-header">
+<h3 class="modal-title" id="pdf-modal-title">Certificate</h3>
+<button aria-label="Close modal" class="modal-close" type="button">Close</button>
+</div>
+<div class="modal-body">
+<iframe class="modal-iframe" id="pdf-modal-iframe" src="" title="PDF viewer"></iframe>
+</div>
+</div>
+</div>
+</main>
+<footer class="site-footer">
+<div class="container footer-inner">
+<div class="footer-brand">
+<p class="footer-name">Mintesnot Leliso</p>
+<p class="footer-desc">Medical student. Designer. Developer.</p>
+<p class="footer-sig">Medicine × Design × Technology</p>
+</div>
+<nav aria-label="Footer" class="footer-nav">
+<a href="#about">About</a>
+<a href="#work">Work</a>
+<a href="#certificates">Certificates</a>
+<a href="#contact">Contact</a>
+<a href="https://github.com/Mntsnt" rel="noopener noreferrer" target="_blank">GitHub</a>
+<a href="https://www.linkedin.com/in/mintesnotleliso" rel="noopener noreferrer" target="_blank">LinkedIn</a>
+<a href="https://t.me/bale_helm" rel="noopener noreferrer" target="_blank">Bale Helm</a>
+</nav>
+<p class="footer-copy">© 2026 Mintesnot Leliso. All rights reserved.</p>
+</div>
+</footer>
+<script>
     (function () {
       const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const navToggle = document.getElementById('navToggle');
@@ -922,64 +885,61 @@
       });
       applyFilter('all');
 
-      if (window.matchMedia('(hover: none)').matches) {
-        items.forEach(function (item) {
-          const link = item.querySelector('.work-link');
-          if (!link) return;
-          link.addEventListener('click', function (event) {
-            const alreadyOpen = item.classList.contains('is-active');
-            items.forEach(function (card) {
-              card.classList.remove('is-active');
-            });
-            if (!alreadyOpen) {
-              event.preventDefault();
-              item.classList.add('is-active');
-            }
-          });
-        });
+/* Modals */
+      const workModal = document.getElementById('work-modal');
+      const pdfModal = document.getElementById('pdf-modal');
+      const workLinks = document.querySelectorAll('.work-link');
+      const certLinks = document.querySelectorAll('.cert-link');
+
+      function openModal(modal) {
+        modal.classList.add('is-open');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('modal-open');
       }
 
-      const certificateLinks = document.querySelectorAll('.cert-link');
-      const modal = document.createElement('div');
-      modal.className = 'lightbox';
-      modal.setAttribute('aria-hidden', 'true');
-      modal.innerHTML = '<div class="lightbox__backdrop"></div><div class="lightbox__dialog" role="dialog" aria-modal="true"><button class="lightbox__close" type="button" aria-label="Close lightbox">Close</button><img class="lightbox__image" src="" alt=""><p class="lightbox__title"></p></div>';
-      document.body.appendChild(modal);
-
-      const lightboxImage = modal.querySelector('.lightbox__image');
-      const lightboxTitle = modal.querySelector('.lightbox__title');
-      const lightboxClose = modal.querySelector('.lightbox__close');
-
-      function closeLightbox() {
+      function closeModal(modal) {
         modal.classList.remove('is-open');
         modal.setAttribute('aria-hidden', 'true');
-        document.body.classList.remove('lightbox-open');
+        document.body.classList.remove('modal-open');
+        if (modal.id === 'pdf-modal') {
+          document.getElementById('pdf-modal-iframe').src = '';
+        }
       }
 
-      certificateLinks.forEach(function (link) {
-        link.addEventListener('click', function (event) {
-          event.preventDefault();
-          const imageSrc = link.getAttribute('href');
-          const title = link.getAttribute('data-title') || 'Certificate';
-          lightboxImage.src = imageSrc;
-          lightboxImage.alt = link.getAttribute('data-alt') || title;
-          lightboxTitle.textContent = title;
-          modal.classList.add('is-open');
-          modal.setAttribute('aria-hidden', 'false');
-          document.body.classList.add('lightbox-open');
+      workLinks.forEach(function (link) {
+        link.addEventListener('click', function (e) {
+          e.preventDefault();
+          document.getElementById('work-modal-img').src = link.getAttribute('data-modal-img');
+          document.getElementById('work-modal-img').alt = link.getAttribute('data-modal-title');
+          document.getElementById('work-modal-title').textContent = link.getAttribute('data-modal-title');
+          document.getElementById('work-modal-desc').textContent = link.getAttribute('data-modal-desc');
+          document.getElementById('work-modal-cat').textContent = link.getAttribute('data-modal-cat');
+          document.getElementById('work-modal-role').textContent = link.getAttribute('data-modal-role');
+          openModal(workModal);
         });
       });
 
-      modal.addEventListener('click', function (event) {
-        if (event.target === modal || event.target.classList.contains('lightbox__backdrop')) {
-          closeLightbox();
-        }
+      certLinks.forEach(function (link) {
+        link.addEventListener('click', function (e) {
+          e.preventDefault();
+          document.getElementById('pdf-modal-iframe').src = link.getAttribute('data-pdf');
+          document.getElementById('pdf-modal-title').textContent = link.getAttribute('data-title');
+          openModal(pdfModal);
+        });
       });
 
-      lightboxClose.addEventListener('click', closeLightbox);
-      document.addEventListener('keydown', function (event) {
-        if (event.key === 'Escape' && modal.classList.contains('is-open')) {
-          closeLightbox();
+      document.querySelectorAll('.modal-overlay').forEach(function(modal) {
+        modal.addEventListener('click', function (e) {
+          if (e.target === modal || e.target.classList.contains('modal-close')) {
+            closeModal(modal);
+          }
+        });
+      });
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+          if (workModal.classList.contains('is-open')) closeModal(workModal);
+          if (pdfModal.classList.contains('is-open')) closeModal(pdfModal);
         }
       });
 
