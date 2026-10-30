@@ -1,0 +1,164 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-canvas: #F8F9FA;
+  --bg-surface: #FFFFFF;
+  --bg-surface-elevated: #F1F3F6;
+  --text-primary: #0C0F14;
+  --text-secondary: #475569;
+  --text-muted: #94A3B8;
+  --border-hairline: rgba(12, 15, 20, 0.09);
+  --border-strong: rgba(12, 15, 20, 0.22);
+  --accent: #0052FF;
+  --accent-cyan: #0284C7;
+  --accent-amber: #D97706;
+  --accent-muted: rgba(0, 82, 255, 0.08);
+}
+
+[data-theme='dark'] {
+  --bg-canvas: #080A0D;
+  --bg-surface: #0E1218;
+  --bg-surface-elevated: #151B24;
+  --text-primary: #F1F5F9;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+  --border-hairline: rgba(241, 245, 249, 0.08);
+  --border-strong: rgba(241, 245, 249, 0.22);
+  --accent: #3B82F6;
+  --accent-cyan: #38BDF8;
+  --accent-amber: #F59E0B;
+  --accent-muted: rgba(59, 130, 246, 0.14);
+}
+
+* {
+  border-color: var(--border-hairline);
+}
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: light dark;
+}
+
+body {
+  background-color: var(--bg-canvas);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Geist', 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-image: radial-gradient(var(--border-hairline) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Subtle architectural crosshair markings */
+.crosshair-corner {
+  position: relative;
+}
+.crosshair-corner::before {
+  content: '+';
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  font-family: ui-monospace, monospace;
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1;
+  pointer-events: none;
+}
+.crosshair-corner::after {
+  content: '+';
+  position: absolute;
+  bottom: -8px;
+  right: -8px;
+  font-family: ui-monospace, monospace;
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1;
+  pointer-events: none;
+}
+
+/* Fluid Clinical Typography */
+.display-hero {
+  font-size: clamp(3.2rem, 9.5vw, 8rem);
+  line-height: 0.9;
+  letter-spacing: -0.045em;
+  font-weight: 850;
+}
+
+.specimen-title {
+  font-size: clamp(1.85rem, 4.5vw, 3.25rem);
+  line-height: 1.1;
+  letter-spacing: -0.035em;
+  font-weight: 750;
+}
+
+.mono-tag {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.body-reading {
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  max-width: 65ch;
+  color: var(--text-secondary);
+}
+
+/* Custom scroll progress bar */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2.5px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-cyan));
+  z-index: 100;
+  transform-origin: 0%;
+}
+
+/* Skip to content accessibility */
+.skip-to-content {
+  position: absolute;
+  top: -100px;
+  left: 1.5rem;
+  background: var(--text-primary);
+  color: var(--bg-canvas);
+  padding: 0.75rem 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  z-index: 9999;
+  transition: top 0.2s ease;
+}
+
+.skip-to-content:focus {
+  top: 1rem;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+body.modal-open {
+  overflow: hidden;
+}
+
+/* Hide custom cursor on touch screens */
+@media (hover: none) and (pointer: coarse) {
+  .custom-cursor {
+    display: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
