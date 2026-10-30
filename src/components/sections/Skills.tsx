@@ -2,79 +2,65 @@
 
 import React from 'react';
 import { PortfolioData } from '@/types/portfolio';
-import { motion } from 'framer-motion';
-import { Layers, Terminal, Sparkles, Wrench } from 'lucide-react';
 
 interface SkillsProps {
   data: PortfolioData['skills'];
 }
 
 export function Skills({ data }: SkillsProps) {
-  const icons = [Sparkles, Terminal, Wrench, Layers];
-
   return (
-    <section aria-labelledby="skills-title" className="py-24 md:py-36 border-b border-hairline" id="skills">
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Specimen Index Header */}
-        <div className="flex items-center space-x-3 mb-10 text-xs font-mono">
-          <span className="text-accent font-bold">[{data.index_meta}]</span>
-          <span className="uppercase tracking-widest text-foreground-muted">{data.label}</span>
-          <span className="h-[1px] flex-1 bg-hairline" />
-          <span className="text-foreground-muted uppercase">CAPABILITY INVENTORY</span>
-        </div>
-
-        <div className="max-w-3xl mb-16">
-          <h2 id="skills-title" className="specimen-title text-foreground mb-4">
-            {data.title}
-          </h2>
-          <p className="body-reading text-foreground-muted">
+    <section aria-labelledby="skills-title" id="skills" className="py-16 sm:py-20 border-t border-border">
+      <div className="max-w-site mx-auto px-6">
+        <p className="text-xs uppercase tracking-wider text-foreground-muted font-medium mb-2">
+          {data.label}
+        </p>
+        <h2 id="skills-title" className="text-2xl sm:text-3xl font-semibold tracking-tight text-foreground">
+          {data.title}
+        </h2>
+        {data.lede && (
+          <p className="mt-3 text-base text-foreground-muted max-w-[65ch]">
             {data.lede}
           </p>
-        </div>
+        )}
 
-        {/* 4 Grouped Pods in Diagnostic Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-          {data.groups.map((group, idx) => {
-            const Icon = icons[idx] || Wrench;
-            const skillTokens = group.skills.split('·').map((s) => s.trim());
+        {/* Four grouped plain lists */}
+        <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {data.groups.map((group) => {
+            const skillItems = group.skills
+              .split(/·|,/)
+              .map((s) => s.trim())
+              .filter(Boolean);
 
             return (
-              <motion.div
+              <div
                 key={group.id}
-                whileHover={{ y: -4, transition: { duration: 0.15 } }}
-                className="p-8 border border-hairline bg-background crosshair-corner flex flex-col justify-between space-y-6 shadow-sm"
+                className="p-6 rounded-md border border-border bg-surface/30 flex flex-col justify-between"
               >
                 <div>
-                  <div className="flex items-center justify-between text-xs font-mono text-foreground-muted mb-6">
-                    <span className="text-accent font-bold">POD 0{idx + 1}</span>
-                    <Icon className="w-4 h-4 text-foreground-muted" />
-                  </div>
-
-                  <h3 className="text-lg font-bold tracking-tight text-foreground mb-4">
+                  <h3 className="text-base font-semibold text-foreground tracking-tight mb-4 pb-2 border-b border-border">
                     {group.name}
                   </h3>
 
-                  <div className="flex flex-wrap gap-2">
-                    {skillTokens.map((token, sIdx) => (
-                      <span
-                        key={sIdx}
-                        className="px-3 py-1.5 text-xs font-mono border border-hairline bg-background-alt text-foreground hover:border-accent hover:text-accent transition-colors cursor-default"
-                      >
-                        {token}
-                      </span>
+                  <ul className="space-y-2 text-sm text-foreground">
+                    {skillItems.map((skill, idx) => (
+                      <li key={idx} className="flex items-center space-x-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-foreground-muted" aria-hidden="true" />
+                        <span>{skill}</span>
+                      </li>
                     ))}
-                  </div>
+                  </ul>
                 </div>
-              </motion.div>
+              </div>
             );
           })}
         </div>
 
-        <div className="p-4 border border-hairline bg-background-alt inline-block">
-          <p className="text-xs font-mono text-foreground-muted">
+        {/* Note */}
+        {data.note && (
+          <p className="mt-8 text-xs text-foreground-muted">
             {data.note}
           </p>
-        </div>
+        )}
       </div>
     </section>
   );

@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { ThemeProvider } from '@/components/ThemeProvider';
-import { CustomCursor } from '@/components/CustomCursor';
 
 export const metadata: Metadata = {
   title: 'Mintesnot Leliso — Medicine × Design × Technology',
@@ -44,8 +43,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#FAFAF9' },
-    { media: '(prefers-color-scheme: dark)', color: '#0B0B0C' },
+    { media: '(prefers-color-scheme: light)', color: '#FFFFFF' },
+    { media: '(prefers-color-scheme: dark)', color: '#0A0A0A' },
   ],
   width: 'device-width',
   initialScale: 1,
@@ -81,7 +80,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* Anti-flash inline script */}
+        {/* Anti-flash theme inline script */}
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var s=localStorage.getItem('portfolio-theme');var d=window.matchMedia('(prefers-color-scheme: dark)').matches;var t=s||(d?'dark':'light');document.documentElement.setAttribute('data-theme',t);}catch(e){}})();`,
@@ -92,12 +91,11 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="min-h-screen bg-background text-foreground antialiased selection:bg-accent selection:text-white">
+      <body className="min-h-screen bg-background text-foreground antialiased selection:bg-foreground selection:text-background">
         <a href="#main" className="skip-to-content">
           Skip to content
         </a>
         <ThemeProvider>
-          <CustomCursor />
           {children}
         </ThemeProvider>
       </body>

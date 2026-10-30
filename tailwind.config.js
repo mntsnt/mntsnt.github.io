@@ -9,19 +9,12 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        background: 'var(--bg-primary)',
-        'background-alt': 'var(--bg-secondary)',
-        'background-subtle': 'var(--bg-tertiary)',
-        foreground: 'var(--text-primary)',
+        background: 'var(--bg-canvas)',
+        surface: 'var(--bg-surface)',
+        foreground: 'var(--text-main)',
         'foreground-muted': 'var(--text-secondary)',
-        'foreground-subtle': 'var(--text-muted)',
-        hairline: 'var(--border-hairline)',
-        'hairline-strong': 'var(--border-strong)',
-        accent: {
-          DEFAULT: 'var(--accent)',
-          hover: 'var(--accent-hover)',
-          muted: 'var(--accent-muted)',
-        },
+        border: 'var(--border-color)',
+        'border-strong': 'var(--border-strong)',
       },
       fontFamily: {
         sans: [
@@ -32,18 +25,17 @@ module.exports = {
           'Roboto',
           'sans-serif',
         ],
-        display: [
-          'Inter',
-          '-apple-system',
-          'BlinkMacSystemFont',
-          'sans-serif',
-        ],
       },
       maxWidth: {
-        container: '1100px',
+        site: '960px',
+      },
+      borderRadius: {
+        DEFAULT: '6px',
+        md: '6px',
+        lg: '8px',
       },
       transitionDuration: {
-        DEFAULT: '200ms',
+        DEFAULT: '150ms',
       },
     },
   },

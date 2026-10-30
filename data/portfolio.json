@@ -613,7 +613,8 @@
         "issuer": "St. Paul Hospital Millennium Medical College",
         "year": "2025",
         "pdf_url": "/img/Certificates/MINTESNOT LELISO.pdf",
-        "visible": true
+        "visible": true,
+        "image_url": "/img/Certificates/cert-sphmmc.jpg"
       },
       {
         "id": "cert-2",

@@ -1,167 +1,119 @@
 'use client';
 
-import React, { useState, useTransition } from 'react';
+import React, { useState } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import {
   PortfolioData,
   ProjectItem,
   CertificateItem,
-  EducationItem,
+  SkillGroup,
   MessageItem,
-  CustomSection,
 } from '@/types/portfolio';
 import { ThemeToggle } from '@/components/ThemeToggle';
-import { SmartCollage } from '@/components/SmartCollage';
 import {
   LayoutDashboard,
   FolderKanban,
   Award,
   Wrench,
-  GraduationCap,
-  FlaskConical,
-  UserCheck,
   Mail,
+  LogOut,
+  ExternalLink,
   Plus,
   Trash2,
-  ExternalLink,
-  Save,
-  LogOut,
+  Check,
+  Upload,
+  ArrowUp,
+  ArrowDown,
   Eye,
   EyeOff,
-  MoveUp,
-  MoveDown,
-  Upload,
+  FileText,
+  Search,
   CheckCircle2,
   AlertCircle,
   Loader2,
-  Layers,
-  BarChart3,
-  TrendingUp,
-  Image as ImageIcon,
-  Sparkles,
+  X,
 } from 'lucide-react';
 
-interface Props {
+interface AdminDashboardClientProps {
   initialData: PortfolioData;
   initialMessages: MessageItem[];
   userEmail: string;
 }
 
-export function AdminDashboardClient({ initialData, initialMessages, userEmail }: Props) {
+export function AdminDashboardClient({
+  initialData,
+  initialMessages,
+  userEmail,
+}: AdminDashboardClientProps) {
   const router = useRouter();
   const [data, setData] = useState<PortfolioData>(initialData);
   const [messages, setMessages] = useState<MessageItem[]>(initialMessages);
-  const [activeTab, setActiveTab] = useState<
-    | 'overview'
-    | 'projects'
-    | 'certificates'
-    | 'skills'
-    | 'education'
-    | 'lab-currently'
-    | 'profile'
-    | 'messages'
-    | 'custom'
-  >('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'projects' | 'certificates' | 'content' | 'messages'>('overview');
+  const [saveStatus, setSaveStatus] = useState<'saved' | 'saving' | 'error'>('saved');
+  const [statusMessage, setStatusMessage] = useState<string>('');
 
-  const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
-  const [toastMessage, setToastMessage] = useState('');
+  // Project Editor state
   const [editingProject, setEditingProject] = useState<ProjectItem | null>(null);
+  const [projectSearch, setProjectSearch] = useState('');
   const [newImageUrl, setNewImageUrl] = useState('');
+  const [newCategoryInput, setNewCategoryInput] = useState('');
   const [uploading, setUploading] = useState(false);
 
-  // Show Toast
-  const triggerToast = (msg: string, status: 'saved' | 'error' = 'saved') => {
-    setToastMessage(msg);
-    setSaveStatus(status);
-    setTimeout(() => {
-      setSaveStatus('idle');
-    }, 3500);
-  };
+  // Certificate Editor state
+  const [editingCert, setEditingCert] = useState<CertificateItem | null>(null);
 
-  // Save changes to API
-  const handleSaveAll = async (overrideData?: PortfolioData) => {
-    setSaveStatus('saving');
-    const dataToSave = overrideData || data;
-
-    try {
-      const res = await fetch('/api/admin/portfolio', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(dataToSave),
-      });
-
-      if (!res.ok) throw new Error('Failed to save data');
-
-      triggerToast('All modifications secured and live site revalidated.');
-      router.refresh();
-    } catch {
-      triggerToast('Error saving changes. Please try again.', 'error');
-    }
-  };
-
-  // Logout
-  const handleLogout = async () => {
-    await fetch('/api/admin/auth/logout', { method: 'POST' });
-    router.push('/admin/login');
-    router.refresh();
-  };
-
-  // Upload file helper
+  // File upload helper
   const handleFileUpload = async (file: File): Promise<string | null> => {
     setUploading(true);
-    const formData = new FormData();
-    formData.append('file', file);
-
     try {
+      const formData = new FormData();
+      formData.append('file', file);
       const res = await fetch('/api/admin/upload', {
         method: 'POST',
         body: formData,
       });
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.error || 'Upload failed');
-      return json.url;
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.error || 'Upload failed');
+      return result.url;
     } catch (err) {
-      alert('File upload failed: ' + (err instanceof Error ? err.message : 'Error'));
+      alert(err instanceof Error ? err.message : 'Upload failed');
       return null;
     } finally {
       setUploading(false);
     }
   };
 
-  // Project handlers
-  const handleToggleProjectVisibility = (id: string) => {
-    const updated = data.projects.map((p) =>
-      p.id === id ? { ...p, visible: p.visible === false ? true : false } : p
-    );
-    const nextData = { ...data, projects: updated };
-    setData(nextData);
-    handleSaveAll(nextData);
+  // Save all portfolio data
+  const handleSaveData = async (newData: PortfolioData) => {
+    setSaveStatus('saving');
+    setStatusMessage('Saving changes...');
+    try {
+      const res = await fetch('/api/admin/portfolio', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newData),
+      });
+      if (!res.ok) throw new Error('Failed to save');
+      setData(newData);
+      setSaveStatus('saved');
+      setStatusMessage('All changes saved and live.');
+      setTimeout(() => setStatusMessage(''), 3000);
+    } catch {
+      setSaveStatus('error');
+      setStatusMessage('Error saving changes.');
+    }
   };
 
-  const handleMoveProject = (index: number, direction: 'up' | 'down') => {
-    const targetIdx = direction === 'up' ? index - 1 : index + 1;
-    if (targetIdx < 0 || targetIdx >= data.projects.length) return;
-
-    const list = [...data.projects];
-    const [moved] = list.splice(index, 1);
-    list.splice(targetIdx, 0, moved);
-
-    const reordered = list.map((item, i) => ({ ...item, order: i + 1 }));
-    const nextData = { ...data, projects: reordered };
-    setData(nextData);
-    handleSaveAll(nextData);
+  // Sign out
+  const handleSignOut = async () => {
+    await fetch('/api/admin/auth/logout', { method: 'POST' });
+    router.push('/admin/login');
+    router.refresh();
   };
 
-  const handleDeleteProject = (id: string) => {
-    if (!confirm('Are you sure you want to delete this project?')) return;
-    const nextProjects = data.projects.filter((p) => p.id !== id);
-    const nextData = { ...data, projects: nextProjects };
-    setData(nextData);
-    handleSaveAll(nextData);
-  };
-
-  const handleSaveProjectForm = (project: ProjectItem) => {
-    // Ensure primary image_url matches first image of collage if present
+  // Save Project
+  const handleSaveProject = (project: ProjectItem) => {
     const validImages = project.images && project.images.length > 0
       ? project.images
       : [project.image_url];
@@ -172,1513 +124,1173 @@ export function AdminDashboardClient({ initialData, initialMessages, userEmail }
       images: validImages,
     };
 
-    let nextProjects: ProjectItem[];
     const exists = data.projects.some((p) => p.id === projectToSave.id);
+    const updatedProjects = exists
+      ? data.projects.map((p) => (p.id === projectToSave.id ? projectToSave : p))
+      : [projectToSave, ...data.projects];
 
-    if (exists) {
-      nextProjects = data.projects.map((p) => (p.id === projectToSave.id ? projectToSave : p));
-    } else {
-      nextProjects = [
-        { ...projectToSave, order: data.projects.length + 1 },
-        ...data.projects,
-      ];
-    }
-
-    const nextData = { ...data, projects: nextProjects };
-    setData(nextData);
+    const nextData = { ...data, projects: updatedProjects };
+    handleSaveData(nextData);
     setEditingProject(null);
-    handleSaveAll(nextData);
   };
 
+  // Delete Project
+  const handleDeleteProject = (id: string) => {
+    if (!confirm('Are you sure you want to delete this project?')) return;
+    const nextData = {
+      ...data,
+      projects: data.projects.filter((p) => p.id !== id),
+    };
+    handleSaveData(nextData);
+  };
+
+  // Toggle Project Visibility
+  const handleToggleProjectVisibility = (id: string) => {
+    const nextProjects = data.projects.map((p) =>
+      p.id === id ? { ...p, visible: p.visible === false } : p
+    );
+    handleSaveData({ ...data, projects: nextProjects });
+  };
+
+  // Reorder Projects
+  const handleMoveProject = (index: number, direction: 'up' | 'down') => {
+    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+    if (targetIndex < 0 || targetIndex >= data.projects.length) return;
+    const items = [...data.projects];
+    const temp = items[index];
+    items[index] = items[targetIndex];
+    items[targetIndex] = temp;
+    handleSaveData({ ...data, projects: items });
+  };
+
+  // Save Certificate
+  const handleSaveCert = (cert: CertificateItem) => {
+    const exists = data.certificates.items.some((c) => c.id === cert.id);
+    const updatedItems = exists
+      ? data.certificates.items.map((c) => (c.id === cert.id ? cert : c))
+      : [...data.certificates.items, cert];
+
+    const nextData = {
+      ...data,
+      certificates: { ...data.certificates, items: updatedItems },
+    };
+    handleSaveData(nextData);
+    setEditingCert(null);
+  };
+
+  // Delete Certificate
+  const handleDeleteCert = (id: string) => {
+    if (!confirm('Are you sure you want to delete this certificate?')) return;
+    const nextData = {
+      ...data,
+      certificates: {
+        ...data.certificates,
+        items: data.certificates.items.filter((c) => c.id !== id),
+      },
+    };
+    handleSaveData(nextData);
+  };
+
+  // Reorder Certificate
+  const handleMoveCert = (index: number, direction: 'up' | 'down') => {
+    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+    if (targetIndex < 0 || targetIndex >= data.certificates.items.length) return;
+    const items = [...data.certificates.items];
+    const temp = items[index];
+    items[index] = items[targetIndex];
+    items[targetIndex] = temp;
+    handleSaveData({
+      ...data,
+      certificates: { ...data.certificates, items: items },
+    });
+  };
+
+  // Message Actions
+  const handleMarkMessageRead = async (id: string) => {
+    await fetch('/api/admin/messages', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, read: true }),
+    });
+    setMessages(messages.map((m) => (m.id === id ? { ...m, read: true } : m)));
+  };
+
+  const handleDeleteMessage = async (id: string) => {
+    if (!confirm('Delete this message?')) return;
+    await fetch('/api/admin/messages', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id }),
+    });
+    setMessages(messages.filter((m) => m.id !== id));
+  };
+
+  // Unread count
   const unreadCount = messages.filter((m) => !m.read).length;
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col font-sans">
-      {/* Top Bar */}
-      <header className="sticky top-0 z-40 bg-background/95 backdrop-blur-md border-b border-hairline px-6 py-4">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
+    <div className="min-h-screen bg-background text-foreground">
+      {/* Top Admin Navbar */}
+      <header className="sticky top-0 z-40 bg-background border-b border-border">
+        <div className="max-w-site mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <span className="text-sm font-extrabold tracking-widest font-mono">[ML] PORTFOLIO</span>
-            <span className="text-[11px] font-mono uppercase tracking-widest text-accent px-2 py-0.5 border border-accent/30 bg-accent/5">
-              ADMIN CHAMBER
+            <span className="font-semibold text-sm tracking-tight text-foreground">
+              Admin Dashboard
+            </span>
+            <span className="text-xs text-foreground-muted hidden sm:inline">
+              · {userEmail}
             </span>
           </div>
 
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2">
+            {statusMessage && (
+              <span className="text-xs text-foreground-muted hidden md:inline">
+                {statusMessage}
+              </span>
+            )}
             <a
               href="/"
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden sm:inline-flex items-center space-x-1.5 text-xs font-mono uppercase tracking-wider text-foreground-muted hover:text-foreground transition-colors"
+              className="min-h-[44px] px-3 inline-flex items-center space-x-1.5 rounded-md border border-border text-xs font-medium hover:border-foreground transition-colors"
             >
-              <span>Live Site</span>
-              <ExternalLink className="w-3.5 h-3.5" />
+              <span>View Site</span>
+              <ExternalLink className="w-3.5 h-3.5" strokeWidth={1.5} />
             </a>
-
-            <button
-              type="button"
-              onClick={() => handleSaveAll()}
-              disabled={saveStatus === 'saving'}
-              className="inline-flex items-center space-x-1.5 px-4 py-2 text-xs font-mono uppercase tracking-wider text-background bg-foreground hover:bg-accent disabled:opacity-50 transition-all"
-            >
-              {saveStatus === 'saving' ? (
-                <>
-                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                  <span>Saving...</span>
-                </>
-              ) : (
-                <>
-                  <Save className="w-3.5 h-3.5" />
-                  <span>Save All</span>
-                </>
-              )}
-            </button>
-
             <ThemeToggle />
-
             <button
               type="button"
-              onClick={handleLogout}
-              title="Sign out"
-              className="p-2 text-foreground-muted hover:text-foreground border border-hairline"
+              onClick={handleSignOut}
+              aria-label="Sign out"
+              className="min-h-[44px] px-3 inline-flex items-center space-x-1.5 rounded-md border border-border hover:border-foreground text-xs font-medium transition-colors"
             >
-              <LogOut className="w-4 h-4" />
+              <LogOut className="w-3.5 h-3.5" strokeWidth={1.5} />
+              <span className="hidden sm:inline">Sign Out</span>
             </button>
+          </div>
+        </div>
+
+        {/* Tab Navigation */}
+        <div className="border-t border-border bg-surface/50">
+          <div className="max-w-site mx-auto px-6 flex items-center space-x-2 overflow-x-auto scrollbar-none py-2">
+            {[
+              { key: 'overview', label: 'Overview', icon: LayoutDashboard },
+              { key: 'projects', label: `Projects (${data.projects.length})`, icon: FolderKanban },
+              { key: 'certificates', label: `Certificates (${data.certificates.items.length})`, icon: Award },
+              { key: 'content', label: 'Skills & Education', icon: Wrench },
+              { key: 'messages', label: `Messages (${unreadCount})`, icon: Mail },
+            ].map((tab) => {
+              const Icon = tab.icon;
+              const isActive = activeTab === tab.key;
+              return (
+                <button
+                  key={tab.key}
+                  type="button"
+                  onClick={() => setActiveTab(tab.key as any)}
+                  className={`min-h-[44px] px-3.5 py-1.5 rounded-md text-xs font-medium inline-flex items-center space-x-2 whitespace-nowrap transition-colors border ${
+                    isActive
+                      ? 'bg-foreground text-background border-foreground font-semibold'
+                      : 'border-transparent text-foreground-muted hover:text-foreground hover:bg-surface'
+                  }`}
+                >
+                  <Icon className="w-4 h-4" strokeWidth={1.5} />
+                  <span>{tab.label}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
       </header>
 
-      {/* Toast Notification */}
-      {saveStatus === 'saved' && (
-        <div className="fixed bottom-6 right-6 z-50 p-4 border border-emerald-500/30 bg-background shadow-xl flex items-center space-x-3 text-xs font-mono text-foreground">
-          <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-          <span>{toastMessage}</span>
-        </div>
-      )}
-      {saveStatus === 'error' && (
-        <div className="fixed bottom-6 right-6 z-50 p-4 border border-rose-500/30 bg-background shadow-xl flex items-center space-x-3 text-xs font-mono text-rose-500">
-          <AlertCircle className="w-4 h-4" />
-          <span>{toastMessage}</span>
-        </div>
-      )}
+      {/* Main Content Area */}
+      <main className="max-w-site mx-auto px-6 py-8">
+        {/* OVERVIEW TAB */}
+        {activeTab === 'overview' && (
+          <div className="space-y-8">
+            <div>
+              <h1 className="text-2xl font-semibold tracking-tight text-foreground">
+                Overview
+              </h1>
+              <p className="text-sm text-foreground-muted mt-1">
+                Portfolio performance summary and quick management shortcuts.
+              </p>
+            </div>
 
-      {/* Main Container */}
-      <div className="flex-1 max-w-7xl w-full mx-auto px-6 py-8 flex flex-col md:flex-row gap-8">
-        {/* Navigation Sidebar */}
-        <aside className="w-full md:w-56 shrink-0">
-          <nav className="flex md:flex-col gap-1 overflow-x-auto pb-4 md:pb-0 text-xs font-mono uppercase tracking-wider">
-            <button
-              type="button"
-              onClick={() => setActiveTab('overview')}
-              className={`flex items-center space-x-2.5 px-3 py-2.5 text-left border ${
-                activeTab === 'overview'
-                  ? 'border-accent bg-accent/5 text-accent font-bold'
-                  : 'border-transparent text-foreground-muted hover:text-foreground'
-              }`}
-            >
-              <LayoutDashboard className="w-4 h-4" />
-              <span>Overview</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab('projects')}
-              className={`flex items-center justify-between px-3 py-2.5 text-left border ${
-                activeTab === 'projects'
-                  ? 'border-accent bg-accent/5 text-accent font-bold'
-                  : 'border-transparent text-foreground-muted hover:text-foreground'
-              }`}
-            >
-              <div className="flex items-center space-x-2.5">
-                <FolderKanban className="w-4 h-4" />
-                <span>Projects</span>
-              </div>
-              <span className="text-[10px]">{data.projects.length}</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab('certificates')}
-              className={`flex items-center space-x-2.5 px-3 py-2.5 text-left border ${
-                activeTab === 'certificates'
-                  ? 'border-accent bg-accent/5 text-accent font-bold'
-                  : 'border-transparent text-foreground-muted hover:text-foreground'
-              }`}
-            >
-              <Award className="w-4 h-4" />
-              <span>Certificates</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab('skills')}
-              className={`flex items-center space-x-2.5 px-3 py-2.5 text-left border ${
-                activeTab === 'skills'
-                  ? 'border-accent bg-accent/5 text-accent font-bold'
-                  : 'border-transparent text-foreground-muted hover:text-foreground'
-              }`}
-            >
-              <Wrench className="w-4 h-4" />
-              <span>Skills</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab('education')}
-              className={`flex items-center space-x-2.5 px-3 py-2.5 text-left border ${
-                activeTab === 'education'
-                  ? 'border-accent bg-accent/5 text-accent font-bold'
-                  : 'border-transparent text-foreground-muted hover:text-foreground'
-              }`}
-            >
-              <GraduationCap className="w-4 h-4" />
-              <span>Education &amp; CV</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab('lab-currently')}
-              className={`flex items-center space-x-2.5 px-3 py-2.5 text-left border ${
-                activeTab === 'lab-currently'
-                  ? 'border-accent bg-accent/5 text-accent font-bold'
-                  : 'border-transparent text-foreground-muted hover:text-foreground'
-              }`}
-            >
-              <FlaskConical className="w-4 h-4" />
-              <span>Lab &amp; Now</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab('profile')}
-              className={`flex items-center space-x-2.5 px-3 py-2.5 text-left border ${
-                activeTab === 'profile'
-                  ? 'border-accent bg-accent/5 text-accent font-bold'
-                  : 'border-transparent text-foreground-muted hover:text-foreground'
-              }`}
-            >
-              <UserCheck className="w-4 h-4" />
-              <span>Profile &amp; SEO</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab('messages')}
-              className={`flex items-center justify-between px-3 py-2.5 text-left border ${
-                activeTab === 'messages'
-                  ? 'border-accent bg-accent/5 text-accent font-bold'
-                  : 'border-transparent text-foreground-muted hover:text-foreground'
-              }`}
-            >
-              <div className="flex items-center space-x-2.5">
-                <Mail className="w-4 h-4" />
-                <span>Inquiries</span>
-              </div>
-              {unreadCount > 0 && (
-                <span className="px-1.5 py-0.2 text-[10px] bg-accent text-white font-bold rounded-full">
-                  {unreadCount}
-                </span>
-              )}
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab('custom')}
-              className={`flex items-center space-x-2.5 px-3 py-2.5 text-left border ${
-                activeTab === 'custom'
-                  ? 'border-accent bg-accent/5 text-accent font-bold'
-                  : 'border-transparent text-foreground-muted hover:text-foreground'
-              }`}
-            >
-              <Layers className="w-4 h-4" />
-              <span>Custom Sections</span>
-            </button>
-          </nav>
-        </aside>
-
-        {/* Tab Views */}
-        <main className="flex-1 min-w-0">
-          {/* TAB 1: OVERVIEW + PRIVACY-FRIENDLY ANALYTICS */}
-          {activeTab === 'overview' && (
-            <div className="space-y-8">
-              <div>
-                <h1 className="text-2xl font-bold tracking-tight text-foreground">
-                  Operational Telemetry
-                </h1>
-                <p className="text-xs font-mono text-foreground-muted mt-1">
-                  Single-owner session verified: {userEmail}
+            {/* Counts Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <div className="p-5 rounded-md border border-border bg-surface/30">
+                <p className="text-xs text-foreground-muted">Projects</p>
+                <p className="text-2xl font-semibold text-foreground mt-2">
+                  {data.projects.length}
                 </p>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('projects')}
+                  className="mt-3 text-xs text-foreground hover:underline inline-flex items-center space-x-1"
+                >
+                  <span>Manage</span>
+                  <ExternalLink className="w-3 h-3" />
+                </button>
               </div>
 
-              {/* Metric Counts */}
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="p-6 border border-hairline bg-background crosshair-corner">
-                  <p className="text-xs font-mono uppercase text-foreground-muted">Total Projects</p>
-                  <p className="text-3xl font-extrabold font-mono mt-2 text-foreground">
-                    {data.projects.length}
-                  </p>
-                  <p className="text-xs text-foreground-muted mt-1">
-                    {data.projects.filter((p) => p.visible !== false).length} active specimens
-                  </p>
-                </div>
-
-                <div className="p-6 border border-hairline bg-background crosshair-corner">
-                  <p className="text-xs font-mono uppercase text-foreground-muted">Certificates</p>
-                  <p className="text-3xl font-extrabold font-mono mt-2 text-foreground">
-                    {data.certificates.items.length}
-                  </p>
-                  <p className="text-xs text-foreground-muted mt-1">Verified credentials</p>
-                </div>
-
-                <div className="p-6 border border-hairline bg-background crosshair-corner">
-                  <p className="text-xs font-mono uppercase text-foreground-muted">Skill Pods</p>
-                  <p className="text-3xl font-extrabold font-mono mt-2 text-foreground">
-                    {data.skills.groups.length}
-                  </p>
-                  <p className="text-xs text-foreground-muted mt-1">Active categories</p>
-                </div>
-
-                <div className="p-6 border border-hairline bg-background crosshair-corner">
-                  <p className="text-xs font-mono uppercase text-foreground-muted">Inbound Messages</p>
-                  <p className="text-3xl font-extrabold font-mono mt-2 text-accent">
-                    {unreadCount}
-                  </p>
-                  <p className="text-xs text-foreground-muted mt-1">Unread inquiries</p>
-                </div>
+              <div className="p-5 rounded-md border border-border bg-surface/30">
+                <p className="text-xs text-foreground-muted">Certificates</p>
+                <p className="text-2xl font-semibold text-foreground mt-2">
+                  {data.certificates.items.length}
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('certificates')}
+                  className="mt-3 text-xs text-foreground hover:underline inline-flex items-center space-x-1"
+                >
+                  <span>Manage</span>
+                  <ExternalLink className="w-3 h-3" />
+                </button>
               </div>
 
-              {/* Privacy-Friendly Visitor Telemetry Panel */}
-              <div className="p-6 border border-hairline bg-background-alt space-y-6 crosshair-corner">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <BarChart3 className="w-4 h-4 text-accent" />
-                    <h2 className="text-sm font-bold uppercase tracking-wider font-mono text-foreground">
-                      Visitor Telemetry &amp; Referrers
-                    </h2>
-                  </div>
-                  <span className="text-[10px] font-mono text-emerald-500 bg-emerald-500/10 px-2 py-0.5 border border-emerald-500/20">
-                    LIVE LOGGING
-                  </span>
-                </div>
+              <div className="p-5 rounded-md border border-border bg-surface/30">
+                <p className="text-xs text-foreground-muted">Skill Pods</p>
+                <p className="text-2xl font-semibold text-foreground mt-2">
+                  {data.skills.groups.length}
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('content')}
+                  className="mt-3 text-xs text-foreground hover:underline inline-flex items-center space-x-1"
+                >
+                  <span>Edit</span>
+                  <ExternalLink className="w-3 h-3" />
+                </button>
+              </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-                  <div className="space-y-3">
-                    <p className="text-xs font-mono uppercase text-foreground-muted">Top Specimen Impressions</p>
-                    <div className="space-y-2">
-                      {[
-                        { name: 'EAHF — Healthcare Federation Booth', views: '1,420' },
-                        { name: 'SPHMMC Summer Camp 2026', views: '984' },
-                        { name: 'Dawit Getachew ‘Etebikhalehu’ Redesign', views: '870' },
-                        { name: 'Python Pioneers Branding', views: '752' },
-                      ].map((item, idx) => (
-                        <div key={idx} className="flex justify-between items-center text-xs p-2 bg-background border border-hairline font-mono">
-                          <span className="truncate max-w-[240px] text-foreground">{item.name}</span>
-                          <span className="text-accent font-bold">{item.views} views</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="space-y-3">
-                    <p className="text-xs font-mono uppercase text-foreground-muted">Traffic Channels</p>
-                    <div className="space-y-2">
-                      {[
-                        { source: 'Direct / Portfolio Link', pct: '42%' },
-                        { source: 'LinkedIn Inquiries', pct: '28%' },
-                        { source: 'Upwork Profile Referral', pct: '18%' },
-                        { source: 'GitHub Repositories', pct: '12%' },
-                      ].map((item, idx) => (
-                        <div key={idx} className="flex justify-between items-center text-xs p-2 bg-background border border-hairline font-mono">
-                          <span className="text-foreground">{item.source}</span>
-                          <span className="text-foreground-muted">{item.pct}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
+              <div className="p-5 rounded-md border border-border bg-surface/30">
+                <p className="text-xs text-foreground-muted">Unread Messages</p>
+                <p className="text-2xl font-semibold text-foreground mt-2">
+                  {unreadCount}
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('messages')}
+                  className="mt-3 text-xs text-foreground hover:underline inline-flex items-center space-x-1"
+                >
+                  <span>View Inbox</span>
+                  <ExternalLink className="w-3 h-3" />
+                </button>
               </div>
             </div>
-          )}
 
-          {/* TAB 2: PROJECTS & COLLAGE COMPOSER */}
-          {activeTab === 'projects' && (
-            <div className="space-y-6">
-              <div className="flex items-center justify-between pb-4 border-b border-hairline">
-                <div>
-                  <h1 className="text-2xl font-bold tracking-tight text-foreground">
-                    Project Archive ({data.projects.length})
-                  </h1>
-                  <p className="text-xs text-foreground-muted mt-1 font-mono">
-                    Compose single or multi-image collages with instant preview.
-                  </p>
-                </div>
-
+            {/* Quick Actions */}
+            <div className="pt-6 border-t border-border">
+              <h2 className="text-base font-semibold text-foreground mb-4">
+                Quick Actions
+              </h2>
+              <div className="flex flex-wrap gap-3">
                 <button
                   type="button"
                   onClick={() => {
+                    setActiveTab('projects');
                     setEditingProject({
                       id: 'proj-' + Date.now(),
                       order: 1,
-                      title: '',
-                      card_title: '',
+                      title: 'New Project',
+                      card_title: 'New Project',
                       categories: ['branding'],
                       category_label: 'Branding',
                       role: 'Role: Graphic Designer',
                       year: '2026',
-                      description: '',
+                      description: 'Project description here...',
                       card_desc: '',
                       image_url: '/img/cover.jpg',
                       images: ['/img/cover.jpg'],
-                      collage_layout: 'auto',
                       badge: 'NEW',
-                      award: '',
                       visible: true,
                     });
                   }}
-                  className="inline-flex items-center space-x-1.5 px-4 py-2 text-xs font-mono uppercase tracking-wider text-background bg-foreground hover:bg-accent transition-colors"
+                  className="min-h-[44px] px-4 py-2 rounded-md bg-foreground text-background text-xs font-medium inline-flex items-center space-x-1.5 hover:opacity-90 transition-opacity"
                 >
-                  <Plus className="w-3.5 h-3.5" />
-                  <span>Add Project</span>
+                  <Plus className="w-4 h-4" strokeWidth={1.5} />
+                  <span>Add New Project</span>
                 </button>
-              </div>
-
-              {/* Slide-over / Modal Project Editor */}
-              {editingProject && (
-                <div className="p-8 border border-accent bg-background space-y-6 crosshair-corner shadow-2xl">
-                  <div className="flex justify-between items-center pb-4 border-b border-hairline">
-                    <h3 className="text-lg font-bold text-foreground">
-                      {editingProject.title ? `Edit Specimen: ${editingProject.title}` : 'Create New Portfolio Specimen'}
-                    </h3>
-                    <button
-                      type="button"
-                      onClick={() => setEditingProject(null)}
-                      className="text-xs font-mono uppercase tracking-wider text-foreground-muted hover:text-foreground"
-                    >
-                      Cancel
-                    </button>
-                  </div>
-
-                  {/* Live Smart Collage Preview in Admin */}
-                  <div className="p-4 border border-hairline bg-background-alt space-y-2">
-                    <div className="flex justify-between items-center text-xs font-mono text-foreground-muted">
-                      <span>LIVE COLLAGE TILE PREVIEW</span>
-                      <span className="text-accent uppercase">
-                        LAYOUT: {editingProject.collage_layout || 'auto'} ({editingProject.images?.length || 1} images)
-                      </span>
-                    </div>
-
-                    <div className="max-w-md mx-auto border border-hairline">
-                      <SmartCollage
-                        images={editingProject.images && editingProject.images.length > 0 ? editingProject.images : [editingProject.image_url]}
-                        title={editingProject.title || 'Preview'}
-                        layout={editingProject.collage_layout || 'auto'}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Collage Images Multi-Manager */}
-                  <div className="p-4 border border-hairline bg-background space-y-3">
-                    <label className="block text-xs font-mono uppercase text-foreground-muted">
-                      Specimen Images Gallery (Multi-Image Collage)
-                    </label>
-
-                    {/* Image chips list */}
-                    <div className="flex flex-wrap gap-2">
-                      {(editingProject.images || [editingProject.image_url]).map((img, iIdx) => (
-                        <div key={iIdx} className="flex items-center space-x-2 p-2 border border-hairline bg-background-alt text-xs font-mono">
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img src={img} alt="thumb" className="w-8 h-8 object-cover border border-hairline" />
-                          <span className="truncate max-w-[120px]">{img}</span>
-                          {iIdx === 0 && <span className="text-[10px] bg-accent text-white px-1">COVER</span>}
-                          <button
-                            type="button"
-                            onClick={() => {
-                              const curr = [...(editingProject.images || [editingProject.image_url])];
-                              curr.splice(iIdx, 1);
-                              setEditingProject({
-                                ...editingProject,
-                                images: curr,
-                                image_url: curr[0] || '/img/cover.jpg',
-                              });
-                            }}
-                            className="text-rose-500 hover:font-bold ml-1"
-                          >
-                            ×
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Add Image input & Upload button */}
-                    <div className="flex gap-2 pt-2">
-                      <input
-                        type="text"
-                        placeholder="Paste image URL (e.g. /img/filename.jpg)"
-                        value={newImageUrl}
-                        onChange={(e) => setNewImageUrl(e.target.value)}
-                        className="flex-1 px-3 py-2 bg-background-alt border border-hairline text-foreground text-xs font-mono"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (!newImageUrl.trim()) return;
-                          const curr = editingProject.images ? [...editingProject.images] : [editingProject.image_url];
-                          setEditingProject({
-                            ...editingProject,
-                            images: [...curr, newImageUrl.trim()],
-                          });
-                          setNewImageUrl('');
-                        }}
-                        className="px-4 py-2 border border-hairline text-xs font-mono uppercase bg-background hover:bg-background-subtle"
-                      >
-                        Add URL
-                      </button>
-
-                      <label className="px-4 py-2 border border-hairline text-xs font-mono uppercase bg-foreground text-background hover:bg-accent cursor-pointer flex items-center space-x-1.5">
-                        <Upload className="w-3.5 h-3.5" />
-                        <span>{uploading ? 'Uploading...' : 'Upload File'}</span>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          className="hidden"
-                          onChange={async (e) => {
-                            const f = e.target.files?.[0];
-                            if (f) {
-                              const url = await handleFileUpload(f);
-                              if (url) {
-                                const curr = editingProject.images ? [...editingProject.images] : [editingProject.image_url];
-                                setEditingProject({
-                                  ...editingProject,
-                                  images: [...curr, url],
-                                  image_url: curr[0] || url,
-                                });
-                              }
-                            }
-                          }}
-                        />
-                      </label>
-                    </div>
-
-                    {/* Collage Layout Selector Override */}
-                    <div className="pt-2 flex items-center space-x-4 text-xs font-mono">
-                      <span className="text-foreground-muted">Layout Mode:</span>
-                      {(['auto', 'split', 'grid', 'bento', 'mosaic'] as const).map((mode) => (
-                        <button
-                          key={mode}
-                          type="button"
-                          onClick={() => setEditingProject({ ...editingProject, collage_layout: mode })}
-                          className={`px-2.5 py-1 uppercase border ${
-                            (editingProject.collage_layout || 'auto') === mode
-                              ? 'border-accent bg-accent text-white font-bold'
-                              : 'border-hairline bg-background text-foreground-muted'
-                          }`}
-                        >
-                          {mode}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Standard Fields */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
-                    <div>
-                      <label className="block text-xs font-mono uppercase text-foreground-muted mb-1.5">
-                        Project Full Title (Lightbox Modal)
-                      </label>
-                      <input
-                        type="text"
-                        value={editingProject.title}
-                        onChange={(e) => setEditingProject({ ...editingProject, title: e.target.value })}
-                        className="w-full px-3 py-2 bg-background-alt border border-hairline text-foreground text-sm"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-mono uppercase text-foreground-muted mb-1.5">
-                        Card Display Title
-                      </label>
-                      <input
-                        type="text"
-                        value={editingProject.card_title}
-                        onChange={(e) =>
-                          setEditingProject({ ...editingProject, card_title: e.target.value })
-                        }
-                        className="w-full px-3 py-2 bg-background-alt border border-hairline text-foreground text-sm"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-mono uppercase text-foreground-muted mb-1.5">
-                        Category Display Label
-                      </label>
-                      <input
-                        type="text"
-                        value={editingProject.category_label}
-                        onChange={(e) =>
-                          setEditingProject({ ...editingProject, category_label: e.target.value })
-                        }
-                        className="w-full px-3 py-2 bg-background-alt border border-hairline text-foreground text-sm"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-mono uppercase text-foreground-muted mb-1.5">
-                        Filter Category Keys (comma-separated)
-                      </label>
-                      <input
-                        type="text"
-                        value={editingProject.categories.join(', ')}
-                        onChange={(e) =>
-                          setEditingProject({
-                            ...editingProject,
-                            categories: e.target.value.split(',').map((s) => s.trim().toLowerCase()),
-                          })
-                        }
-                        className="w-full px-3 py-2 bg-background-alt border border-hairline text-foreground text-sm font-mono"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-mono uppercase text-foreground-muted mb-1.5">
-                        Role
-                      </label>
-                      <input
-                        type="text"
-                        value={editingProject.role}
-                        onChange={(e) => setEditingProject({ ...editingProject, role: e.target.value })}
-                        className="w-full px-3 py-2 bg-background-alt border border-hairline text-foreground text-sm"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-mono uppercase text-foreground-muted mb-1.5">
-                        Badge (NEW / 1st place / empty)
-                      </label>
-                      <input
-                        type="text"
-                        value={editingProject.badge || ''}
-                        onChange={(e) => setEditingProject({ ...editingProject, badge: e.target.value })}
-                        className="w-full px-3 py-2 bg-background-alt border border-hairline text-foreground text-sm"
-                      />
-                    </div>
-
-                    <div className="md:col-span-2">
-                      <label className="block text-xs font-mono uppercase text-foreground-muted mb-1.5">
-                        Description
-                      </label>
-                      <textarea
-                        rows={3}
-                        value={editingProject.description}
-                        onChange={(e) =>
-                          setEditingProject({ ...editingProject, description: e.target.value })
-                        }
-                        className="w-full px-3 py-2 bg-background-alt border border-hairline text-foreground text-sm"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="flex justify-end space-x-3 pt-4 border-t border-hairline">
-                    <button
-                      type="button"
-                      onClick={() => setEditingProject(null)}
-                      className="px-4 py-2 border border-hairline text-xs font-mono uppercase"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => handleSaveProjectForm(editingProject)}
-                      className="px-6 py-2 bg-foreground text-background hover:bg-accent text-xs font-mono uppercase font-semibold"
-                    >
-                      Save Specimen
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {/* Projects Archive Table */}
-              <div className="border border-hairline divide-y divide-hairline bg-background">
-                {data.projects.map((proj, idx) => (
-                  <div
-                    key={proj.id}
-                    className="p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 hover:bg-background-alt transition-colors"
-                  >
-                    <div className="flex items-center space-x-4 min-w-0">
-                      <span className="text-xs font-mono text-foreground-muted w-6">
-                        {String(idx + 1).padStart(2, '0')}
-                      </span>
-                      <div className="w-14 h-10 relative bg-background-alt border border-hairline overflow-hidden shrink-0">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={proj.image_url}
-                          alt={proj.title}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <div className="min-w-0">
-                        <p className="text-sm font-semibold text-foreground truncate">
-                          {proj.card_title || proj.title}
-                        </p>
-                        <p className="text-xs font-mono text-foreground-muted">
-                          {proj.category_label} {proj.badge && `[${proj.badge}]`} {proj.images && proj.images.length > 1 && `(${proj.images.length} images)`}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center space-x-2 shrink-0 self-end sm:self-center">
-                      <button
-                        type="button"
-                        onClick={() => handleToggleProjectVisibility(proj.id)}
-                        title={proj.visible === false ? 'Hidden' : 'Visible'}
-                        className={`p-1.5 border border-hairline ${
-                          proj.visible === false ? 'text-foreground-muted' : 'text-accent'
-                        }`}
-                      >
-                        {proj.visible === false ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => handleMoveProject(idx, 'up')}
-                        disabled={idx === 0}
-                        title="Move Up"
-                        className="p-1.5 border border-hairline disabled:opacity-25"
-                      >
-                        <MoveUp className="w-3.5 h-3.5" />
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleMoveProject(idx, 'down')}
-                        disabled={idx === data.projects.length - 1}
-                        title="Move Down"
-                        className="p-1.5 border border-hairline disabled:opacity-25"
-                      >
-                        <MoveDown className="w-3.5 h-3.5" />
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => setEditingProject(proj)}
-                        className="px-3 py-1 border border-hairline text-xs font-mono uppercase bg-background hover:bg-background-subtle"
-                      >
-                        Edit
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => handleDeleteProject(proj.id)}
-                        className="p-1.5 border border-rose-500/30 text-rose-500 hover:bg-rose-500/10"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* TAB 3: CERTIFICATES */}
-          {activeTab === 'certificates' && (
-            <div className="space-y-6">
-              <div className="flex items-center justify-between pb-4 border-b border-hairline">
-                <div>
-                  <h1 className="text-2xl font-bold tracking-tight text-foreground">
-                    Certificates ({data.certificates.items.length})
-                  </h1>
-                  <p className="text-xs text-foreground-muted mt-1 font-mono">
-                    Add or update verified credentials and upload PDF assets.
-                  </p>
-                </div>
 
                 <button
                   type="button"
                   onClick={() => {
-                    const newCert: CertificateItem = {
+                    setActiveTab('certificates');
+                    setEditingCert({
                       id: 'cert-' + Date.now(),
                       order: data.certificates.items.length + 1,
                       title: 'New Certificate',
                       issuer: 'Institution Name',
                       year: '2026',
-                      pdf_url: '/img/Certificates/MINTESNOT LELISO.pdf',
+                      image_url: '',
+                      pdf_url: '',
                       visible: true,
-                    };
-                    const nextData = {
-                      ...data,
-                      certificates: {
-                        ...data.certificates,
-                        items: [...data.certificates.items, newCert],
-                      },
-                    };
-                    setData(nextData);
-                    handleSaveAll(nextData);
+                    });
                   }}
-                  className="inline-flex items-center space-x-1.5 px-4 py-2 text-xs font-mono uppercase tracking-wider text-background bg-foreground hover:bg-accent"
+                  className="min-h-[44px] px-4 py-2 rounded-md border border-border text-foreground text-xs font-medium inline-flex items-center space-x-1.5 hover:border-foreground transition-colors"
                 >
-                  <Plus className="w-3.5 h-3.5" />
-                  <span>Add Certificate</span>
+                  <Plus className="w-4 h-4" strokeWidth={1.5} />
+                  <span>Add New Certificate</span>
                 </button>
               </div>
+            </div>
+          </div>
+        )}
 
-              <div className="space-y-4">
-                {data.certificates.items.map((cert) => (
-                  <div key={cert.id} className="p-6 border border-hairline bg-background space-y-4 crosshair-corner">
-                    <div className="flex justify-between items-center">
-                      <span className="text-xs font-mono text-accent font-bold">
-                        VERIFIED CREDENTIAL
-                      </span>
+        {/* PROJECTS TAB */}
+        {activeTab === 'projects' && (
+          <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h1 className="text-2xl font-semibold tracking-tight text-foreground">
+                  Projects
+                </h1>
+                <p className="text-sm text-foreground-muted">
+                  Add, edit, reorder, or toggle visibility of portfolio work.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setEditingProject({
+                    id: 'proj-' + Date.now(),
+                    order: 1,
+                    title: '',
+                    card_title: '',
+                    categories: ['branding'],
+                    category_label: 'Branding',
+                    role: 'Role: Graphic Designer',
+                    year: '2026',
+                    description: '',
+                    card_desc: '',
+                    image_url: '/img/cover.jpg',
+                    images: ['/img/cover.jpg'],
+                    badge: 'None',
+                    visible: true,
+                  });
+                }}
+                className="min-h-[44px] px-4 py-2 rounded-md bg-foreground text-background text-xs font-medium inline-flex items-center space-x-1.5 hover:opacity-90 transition-opacity self-start"
+              >
+                <Plus className="w-4 h-4" strokeWidth={1.5} />
+                <span>Add Project</span>
+              </button>
+            </div>
+
+            {/* Project Edit/Add Modal or Form */}
+            {editingProject && (
+              <div className="p-6 rounded-md border border-border bg-surface/40 space-y-5">
+                <div className="flex items-center justify-between pb-3 border-b border-border">
+                  <h2 className="text-base font-semibold text-foreground">
+                    {editingProject.title ? `Edit: ${editingProject.title}` : 'Create New Project'}
+                  </h2>
+                  <button
+                    type="button"
+                    onClick={() => setEditingProject(null)}
+                    aria-label="Close project editor"
+                    className="p-1 rounded text-foreground-muted hover:text-foreground"
+                  >
+                    <X className="w-5 h-5" strokeWidth={1.5} />
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-medium text-foreground-muted mb-1">
+                      Project Title
+                    </label>
+                    <input
+                      type="text"
+                      value={editingProject.title}
+                      onChange={(e) =>
+                        setEditingProject({ ...editingProject, title: e.target.value })
+                      }
+                      className="w-full px-3 py-2 text-sm rounded-md border border-border bg-background text-foreground"
+                      placeholder="e.g. EAHF Booth Design"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-medium text-foreground-muted mb-1">
+                      Category Label
+                    </label>
+                    <input
+                      type="text"
+                      value={editingProject.category_label || ''}
+                      onChange={(e) =>
+                        setEditingProject({ ...editingProject, category_label: e.target.value })
+                      }
+                      className="w-full px-3 py-2 text-sm rounded-md border border-border bg-background text-foreground"
+                      placeholder="e.g. Event Design · Exhibition"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-medium text-foreground-muted mb-1">
+                      Role / Tools
+                    </label>
+                    <input
+                      type="text"
+                      value={editingProject.role || ''}
+                      onChange={(e) =>
+                        setEditingProject({ ...editingProject, role: e.target.value })
+                      }
+                      className="w-full px-3 py-2 text-sm rounded-md border border-border bg-background text-foreground"
+                      placeholder="e.g. Role: Graphic designer · Photoshop"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-medium text-foreground-muted mb-1">
+                      Badge
+                    </label>
+                    <select
+                      value={editingProject.badge || 'None'}
+                      onChange={(e) =>
+                        setEditingProject({ ...editingProject, badge: e.target.value })
+                      }
+                      className="w-full px-3 py-2 text-sm rounded-md border border-border bg-background text-foreground"
+                    >
+                      <option value="None">None</option>
+                      <option value="NEW">NEW</option>
+                      <option value="1st place">1st place</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-medium text-foreground-muted mb-1">
+                    Description
+                  </label>
+                  <textarea
+                    rows={4}
+                    value={editingProject.description || ''}
+                    onChange={(e) =>
+                      setEditingProject({ ...editingProject, description: e.target.value })
+                    }
+                    className="w-full px-3 py-2 text-sm rounded-md border border-border bg-background text-foreground resize-none"
+                    placeholder="Project details..."
+                  />
+                </div>
+
+                {/* Multiple Images Manager */}
+                <div className="pt-4 border-t border-border space-y-3">
+                  <label className="block text-xs font-semibold text-foreground">
+                    Project Images ({editingProject.images?.length || 1})
+                  </label>
+                  <p className="text-xs text-foreground-muted">
+                    The first image is used as the cover on the public grid. Additional images display in the lightbox gallery.
+                  </p>
+
+                  {/* Thumbnail gallery strip */}
+                  <div className="flex flex-wrap gap-3">
+                    {(editingProject.images || [editingProject.image_url]).map((img, iIdx) => (
+                      <div
+                        key={iIdx}
+                        className="p-2 rounded-md border border-border bg-background flex flex-col items-center space-y-1.5"
+                      >
+                        <div className="relative w-24 h-16 rounded border border-border overflow-hidden bg-surface">
+                          <Image src={img} alt="Thumbnail" fill className="object-cover" />
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          {iIdx === 0 ? (
+                            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-foreground text-background">
+                              COVER
+                            </span>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const current = [...(editingProject.images || [editingProject.image_url])];
+                                const selected = current.splice(iIdx, 1)[0];
+                                current.unshift(selected);
+                                setEditingProject({
+                                  ...editingProject,
+                                  images: current,
+                                  image_url: current[0],
+                                });
+                              }}
+                              className="text-[10px] text-foreground hover:underline"
+                            >
+                              Make Cover
+                            </button>
+                          )}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const current = [...(editingProject.images || [editingProject.image_url])];
+                              current.splice(iIdx, 1);
+                              setEditingProject({
+                                ...editingProject,
+                                images: current,
+                                image_url: current[0] || '/img/cover.jpg',
+                              });
+                            }}
+                            className="text-xs text-foreground-muted hover:text-foreground px-1"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Add Image Controls */}
+                  <div className="flex flex-wrap items-center gap-2 pt-2">
+                    <input
+                      type="text"
+                      placeholder="Image URL (e.g. /img/filename.jpg)"
+                      value={newImageUrl}
+                      onChange={(e) => setNewImageUrl(e.target.value)}
+                      className="flex-1 min-w-[200px] px-3 py-2 text-xs rounded-md border border-border bg-background text-foreground"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (!newImageUrl.trim()) return;
+                        const current = editingProject.images ? [...editingProject.images] : [editingProject.image_url];
+                        setEditingProject({
+                          ...editingProject,
+                          images: [...current, newImageUrl.trim()],
+                        });
+                        setNewImageUrl('');
+                      }}
+                      className="min-h-[44px] px-3 py-2 text-xs rounded-md border border-border hover:border-foreground text-foreground"
+                    >
+                      Add URL
+                    </button>
+                    <label className="min-h-[44px] px-3 py-2 text-xs rounded-md border border-border hover:border-foreground text-foreground cursor-pointer inline-flex items-center space-x-1.5">
+                      <Upload className="w-3.5 h-3.5" strokeWidth={1.5} />
+                      <span>{uploading ? 'Uploading...' : 'Upload Image'}</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={async (e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            const url = await handleFileUpload(file);
+                            if (url) {
+                              const current = editingProject.images ? [...editingProject.images] : [editingProject.image_url];
+                              setEditingProject({
+                                ...editingProject,
+                                images: [...current, url],
+                              });
+                            }
+                          }
+                        }}
+                      />
+                    </label>
+                  </div>
+                </div>
+
+                <div className="flex justify-end space-x-3 pt-4 border-t border-border">
+                  <button
+                    type="button"
+                    onClick={() => setEditingProject(null)}
+                    className="min-h-[44px] px-4 py-2 text-xs rounded-md border border-border hover:border-foreground text-foreground"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleSaveProject(editingProject)}
+                    className="min-h-[44px] px-5 py-2 text-xs font-medium rounded-md bg-foreground text-background hover:opacity-90"
+                  >
+                    Save Project
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Search Filter */}
+            <div className="relative">
+              <Search className="w-4 h-4 absolute left-3 top-3.5 text-foreground-muted" strokeWidth={1.5} />
+              <input
+                type="text"
+                placeholder="Search projects..."
+                value={projectSearch}
+                onChange={(e) => setProjectSearch(e.target.value)}
+                className="w-full pl-9 pr-4 py-2.5 text-sm rounded-md border border-border bg-background text-foreground"
+              />
+            </div>
+
+            {/* Projects List */}
+            <div className="space-y-3">
+              {data.projects
+                .filter((p) =>
+                  p.title.toLowerCase().includes(projectSearch.toLowerCase()) ||
+                  p.categories.some((c) => c.toLowerCase().includes(projectSearch.toLowerCase()))
+                )
+                .map((project, idx) => (
+                  <div
+                    key={project.id}
+                    className="p-4 rounded-md border border-border bg-surface/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+                  >
+                    <div className="flex items-center space-x-4 min-w-0">
+                      <div className="relative w-14 h-12 rounded border border-border overflow-hidden bg-surface flex-shrink-0">
+                        <Image src={project.image_url} alt={project.title} fill className="object-cover" />
+                      </div>
+                      <div className="min-w-0">
+                        <h3 className="text-sm font-semibold text-foreground truncate">
+                          {project.title}
+                        </h3>
+                        <p className="text-xs text-foreground-muted truncate">
+                          {project.category_label || project.categories.join(' · ')}
+                          {project.images && project.images.length > 1 && ` · ${project.images.length} images`}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center space-x-2 self-end sm:self-center">
+                      {/* Reorder */}
                       <button
                         type="button"
-                        onClick={() => {
-                          if (!confirm('Delete certificate?')) return;
-                          const filtered = data.certificates.items.filter((c) => c.id !== cert.id);
-                          const nextData = {
-                            ...data,
-                            certificates: { ...data.certificates, items: filtered },
-                          };
-                          setData(nextData);
-                          handleSaveAll(nextData);
-                        }}
-                        className="text-xs text-rose-500 font-mono"
+                        onClick={() => handleMoveProject(idx, 'up')}
+                        disabled={idx === 0}
+                        aria-label="Move project up"
+                        className="p-2 rounded border border-border text-foreground disabled:opacity-30 hover:border-foreground"
                       >
-                        Delete
+                        <ArrowUp className="w-3.5 h-3.5" strokeWidth={1.5} />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleMoveProject(idx, 'down')}
+                        disabled={idx === data.projects.length - 1}
+                        aria-label="Move project down"
+                        className="p-2 rounded border border-border text-foreground disabled:opacity-30 hover:border-foreground"
+                      >
+                        <ArrowDown className="w-3.5 h-3.5" strokeWidth={1.5} />
+                      </button>
+
+                      {/* Visibility */}
+                      <button
+                        type="button"
+                        onClick={() => handleToggleProjectVisibility(project.id)}
+                        aria-label={project.visible === false ? 'Make visible' : 'Hide project'}
+                        className="p-2 rounded border border-border text-foreground hover:border-foreground"
+                      >
+                        {project.visible === false ? (
+                          <EyeOff className="w-3.5 h-3.5 text-foreground-muted" strokeWidth={1.5} />
+                        ) : (
+                          <Eye className="w-3.5 h-3.5 text-foreground" strokeWidth={1.5} />
+                        )}
+                      </button>
+
+                      {/* Edit */}
+                      <button
+                        type="button"
+                        onClick={() => setEditingProject(project)}
+                        className="min-h-[36px] px-3 py-1.5 rounded text-xs font-medium border border-border hover:border-foreground text-foreground"
+                      >
+                        Edit
+                      </button>
+
+                      {/* Delete */}
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteProject(project.id)}
+                        aria-label="Delete project"
+                        className="p-2 rounded border border-border text-foreground-muted hover:text-foreground hover:border-foreground"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" strokeWidth={1.5} />
                       </button>
                     </div>
+                  </div>
+                ))}
+            </div>
+          </div>
+        )}
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div>
-                        <label className="block text-xs font-mono uppercase text-foreground-muted mb-1">
-                          Certificate Title
-                        </label>
-                        <input
-                          type="text"
-                          value={cert.title}
-                          onChange={(e) => {
-                            const updated = data.certificates.items.map((c) =>
-                              c.id === cert.id ? { ...c, title: e.target.value } : c
-                            );
-                            setData({
-                              ...data,
-                              certificates: { ...data.certificates, items: updated },
-                            });
-                          }}
-                          className="w-full px-3 py-2 bg-background-alt border border-hairline text-foreground text-sm"
-                        />
-                      </div>
+        {/* CERTIFICATES TAB (Supports TWO uploads: JPEG + PDF) */}
+        {activeTab === 'certificates' && (
+          <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h1 className="text-2xl font-semibold tracking-tight text-foreground">
+                  Certificates
+                </h1>
+                <p className="text-sm text-foreground-muted">
+                  Supports two file uploads per certificate: a JPEG preview image and a full PDF document.
+                </p>
+              </div>
 
-                      <div>
-                        <label className="block text-xs font-mono uppercase text-foreground-muted mb-1">
-                          Issuer
-                        </label>
-                        <input
-                          type="text"
-                          value={cert.issuer}
-                          onChange={(e) => {
-                            const updated = data.certificates.items.map((c) =>
-                              c.id === cert.id ? { ...c, issuer: e.target.value } : c
-                            );
-                            setData({
-                              ...data,
-                              certificates: { ...data.certificates, items: updated },
-                            });
-                          }}
-                          className="w-full px-3 py-2 bg-background-alt border border-hairline text-foreground text-sm"
-                        />
-                      </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setEditingCert({
+                    id: 'cert-' + Date.now(),
+                    order: data.certificates.items.length + 1,
+                    title: '',
+                    issuer: '',
+                    year: '2026',
+                    image_url: '',
+                    pdf_url: '',
+                    visible: true,
+                  });
+                }}
+                className="min-h-[44px] px-4 py-2 rounded-md bg-foreground text-background text-xs font-medium inline-flex items-center space-x-1.5 hover:opacity-90 transition-opacity self-start"
+              >
+                <Plus className="w-4 h-4" strokeWidth={1.5} />
+                <span>Add Certificate</span>
+              </button>
+            </div>
 
-                      <div>
-                        <label className="block text-xs font-mono uppercase text-foreground-muted mb-1">
-                          Year
-                        </label>
-                        <input
-                          type="text"
-                          value={cert.year}
-                          onChange={(e) => {
-                            const updated = data.certificates.items.map((c) =>
-                              c.id === cert.id ? { ...c, year: e.target.value } : c
-                            );
-                            setData({
-                              ...data,
-                              certificates: { ...data.certificates, items: updated },
-                            });
-                          }}
-                          className="w-full px-3 py-2 bg-background-alt border border-hairline text-foreground text-sm"
-                        />
+            {/* Certificate Add / Edit Form */}
+            {editingCert && (
+              <div className="p-6 rounded-md border border-border bg-surface/40 space-y-5">
+                <div className="flex items-center justify-between pb-3 border-b border-border">
+                  <h2 className="text-base font-semibold text-foreground">
+                    {editingCert.title ? `Edit Certificate: ${editingCert.title}` : 'Add New Certificate'}
+                  </h2>
+                  <button
+                    type="button"
+                    onClick={() => setEditingCert(null)}
+                    aria-label="Close certificate editor"
+                    className="p-1 rounded text-foreground-muted hover:text-foreground"
+                  >
+                    <X className="w-5 h-5" strokeWidth={1.5} />
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-xs font-medium text-foreground-muted mb-1">
+                      Certificate Title
+                    </label>
+                    <input
+                      type="text"
+                      value={editingCert.title}
+                      onChange={(e) =>
+                        setEditingCert({ ...editingCert, title: e.target.value })
+                      }
+                      className="w-full px-3 py-2 text-sm rounded-md border border-border bg-background text-foreground"
+                      placeholder="e.g. Medical Volunteer Service"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-medium text-foreground-muted mb-1">
+                      Issuer
+                    </label>
+                    <input
+                      type="text"
+                      value={editingCert.issuer}
+                      onChange={(e) =>
+                        setEditingCert({ ...editingCert, issuer: e.target.value })
+                      }
+                      className="w-full px-3 py-2 text-sm rounded-md border border-border bg-background text-foreground"
+                      placeholder="e.g. St. Paul's Hospital"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-medium text-foreground-muted mb-1">
+                      Year
+                    </label>
+                    <input
+                      type="text"
+                      value={editingCert.year}
+                      onChange={(e) =>
+                        setEditingCert({ ...editingCert, year: e.target.value })
+                      }
+                      className="w-full px-3 py-2 text-sm rounded-md border border-border bg-background text-foreground"
+                      placeholder="e.g. 2025"
+                    />
+                  </div>
+                </div>
+
+                {/* File Option 1: JPEG Preview Image */}
+                <div className="p-4 rounded-md border border-border bg-background space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label className="block text-xs font-semibold text-foreground">
+                      1. Preview Image (JPEG / PNG / WebP)
+                    </label>
+                    {editingCert.image_url && (
+                      <span className="text-[10px] text-foreground-muted">Image attached</span>
+                    )}
+                  </div>
+                  <p className="text-xs text-foreground-muted">
+                    This image is displayed on the certificate card and opens in the zoomable viewer.
+                  </p>
+
+                  <div className="flex flex-wrap items-center gap-2 pt-1">
+                    <input
+                      type="text"
+                      value={editingCert.image_url || ''}
+                      onChange={(e) =>
+                        setEditingCert({ ...editingCert, image_url: e.target.value })
+                      }
+                      className="flex-1 min-w-[200px] px-3 py-2 text-xs rounded-md border border-border bg-surface text-foreground font-mono"
+                      placeholder="e.g. /img/Certificates/preview.jpg"
+                    />
+                    <label className="min-h-[44px] px-3 py-2 text-xs rounded-md border border-border hover:border-foreground text-foreground cursor-pointer inline-flex items-center space-x-1.5">
+                      <Upload className="w-3.5 h-3.5" strokeWidth={1.5} />
+                      <span>{uploading ? 'Uploading...' : 'Upload JPEG'}</span>
+                      <input
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp"
+                        className="hidden"
+                        onChange={async (e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            const url = await handleFileUpload(file);
+                            if (url) {
+                              setEditingCert({ ...editingCert, image_url: url });
+                            }
+                          }
+                        }}
+                      />
+                    </label>
+                  </div>
+
+                  {editingCert.image_url && (
+                    <div className="pt-2">
+                      <div className="relative w-32 h-20 rounded border border-border overflow-hidden bg-surface">
+                        <Image src={editingCert.image_url} alt="Preview" fill className="object-cover" />
                       </div>
                     </div>
+                  )}
+                </div>
 
+                {/* File Option 2: PDF Document */}
+                <div className="p-4 rounded-md border border-border bg-background space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label className="block text-xs font-semibold text-foreground">
+                      2. Document File (PDF)
+                    </label>
+                    {editingCert.pdf_url && (
+                      <span className="text-[10px] text-foreground-muted">PDF attached</span>
+                    )}
+                  </div>
+                  <p className="text-xs text-foreground-muted">
+                    This document enables the &ldquo;View PDF&rdquo; and &ldquo;Download PDF&rdquo; actions in the viewer.
+                  </p>
+
+                  <div className="flex flex-wrap items-center gap-2 pt-1">
+                    <input
+                      type="text"
+                      value={editingCert.pdf_url || ''}
+                      onChange={(e) =>
+                        setEditingCert({ ...editingCert, pdf_url: e.target.value })
+                      }
+                      className="flex-1 min-w-[200px] px-3 py-2 text-xs rounded-md border border-border bg-surface text-foreground font-mono"
+                      placeholder="e.g. /img/Certificates/document.pdf"
+                    />
+                    <label className="min-h-[44px] px-3 py-2 text-xs rounded-md border border-border hover:border-foreground text-foreground cursor-pointer inline-flex items-center space-x-1.5">
+                      <Upload className="w-3.5 h-3.5" strokeWidth={1.5} />
+                      <span>{uploading ? 'Uploading...' : 'Upload PDF'}</span>
+                      <input
+                        type="file"
+                        accept="application/pdf"
+                        className="hidden"
+                        onChange={async (e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            const url = await handleFileUpload(file);
+                            if (url) {
+                              setEditingCert({ ...editingCert, pdf_url: url });
+                            }
+                          }
+                        }}
+                      />
+                    </label>
+                  </div>
+                </div>
+
+                <div className="flex justify-end space-x-3 pt-3 border-t border-border">
+                  <button
+                    type="button"
+                    onClick={() => setEditingCert(null)}
+                    className="min-h-[44px] px-4 py-2 text-xs rounded-md border border-border hover:border-foreground text-foreground"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleSaveCert(editingCert)}
+                    className="min-h-[44px] px-5 py-2 text-xs font-medium rounded-md bg-foreground text-background hover:opacity-90"
+                  >
+                    Save Certificate
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Certificate List */}
+            <div className="space-y-3">
+              {data.certificates.items.map((cert, idx) => (
+                <div
+                  key={cert.id}
+                  className="p-4 rounded-md border border-border bg-surface/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+                >
+                  <div className="flex items-center space-x-4 min-w-0">
+                    <div className="relative w-14 h-12 rounded border border-border overflow-hidden bg-surface flex items-center justify-center flex-shrink-0">
+                      {cert.image_url ? (
+                        <Image src={cert.image_url} alt={cert.title} fill className="object-cover" />
+                      ) : (
+                        <FileText className="w-5 h-5 text-foreground-muted" strokeWidth={1.5} />
+                      )}
+                    </div>
+                    <div className="min-w-0">
+                      <h3 className="text-sm font-semibold text-foreground truncate">
+                        {cert.title}
+                      </h3>
+                      <p className="text-xs text-foreground-muted truncate">
+                        {cert.issuer} · {cert.year}
+                        {cert.pdf_url && ' · PDF'}
+                        {cert.image_url && ' · JPEG'}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center space-x-2 self-end sm:self-center">
+                    <button
+                      type="button"
+                      onClick={() => handleMoveCert(idx, 'up')}
+                      disabled={idx === 0}
+                      aria-label="Move certificate up"
+                      className="p-2 rounded border border-border text-foreground disabled:opacity-30 hover:border-foreground"
+                    >
+                      <ArrowUp className="w-3.5 h-3.5" strokeWidth={1.5} />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleMoveCert(idx, 'down')}
+                      disabled={idx === data.certificates.items.length - 1}
+                      aria-label="Move certificate down"
+                      className="p-2 rounded border border-border text-foreground disabled:opacity-30 hover:border-foreground"
+                    >
+                      <ArrowDown className="w-3.5 h-3.5" strokeWidth={1.5} />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setEditingCert(cert)}
+                      className="min-h-[36px] px-3 py-1.5 rounded text-xs font-medium border border-border hover:border-foreground text-foreground"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteCert(cert.id)}
+                      aria-label="Delete certificate"
+                      className="p-2 rounded border border-border text-foreground-muted hover:text-foreground hover:border-foreground"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" strokeWidth={1.5} />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* SKILLS & EDUCATION TAB */}
+        {activeTab === 'content' && (
+          <div className="space-y-10">
+            {/* Skills */}
+            <div className="space-y-4">
+              <h1 className="text-2xl font-semibold tracking-tight text-foreground">
+                Toolkit & Skills
+              </h1>
+              <p className="text-sm text-foreground-muted">
+                Edit skill groups and skills list (Design, Development, Workflow, Learning).
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {data.skills.groups.map((group, gIdx) => (
+                  <div key={group.id} className="p-4 rounded-md border border-border bg-surface/30 space-y-3">
                     <div>
-                      <label className="block text-xs font-mono uppercase text-foreground-muted mb-1">
-                        PDF Document File Path
+                      <label className="block text-xs font-medium text-foreground-muted mb-1">
+                        Group Name
                       </label>
-                      <div className="flex gap-2">
-                        <input
-                          type="text"
-                          value={cert.pdf_url}
-                          onChange={(e) => {
-                            const updated = data.certificates.items.map((c) =>
-                              c.id === cert.id ? { ...c, pdf_url: e.target.value } : c
-                            );
-                            setData({
-                              ...data,
-                              certificates: { ...data.certificates, items: updated },
-                            });
-                          }}
-                          className="flex-1 px-3 py-2 bg-background-alt border border-hairline text-foreground text-sm font-mono"
-                        />
-                        <label className="px-3 py-2 border border-hairline bg-background-alt hover:bg-background-subtle cursor-pointer text-xs font-mono uppercase flex items-center space-x-1">
-                          <Upload className="w-3.5 h-3.5" />
-                          <span>Upload PDF</span>
-                          <input
-                            type="file"
-                            accept="application/pdf"
-                            className="hidden"
-                            onChange={async (e) => {
-                              const f = e.target.files?.[0];
-                              if (f) {
-                                const url = await handleFileUpload(f);
-                                if (url) {
-                                  const updated = data.certificates.items.map((c) =>
-                                    c.id === cert.id ? { ...c, pdf_url: url } : c
-                                  );
-                                  setData({
-                                    ...data,
-                                    certificates: { ...data.certificates, items: updated },
-                                  });
-                                }
-                              }
-                            }}
-                          />
-                        </label>
-                      </div>
+                      <input
+                        type="text"
+                        value={group.name}
+                        onChange={(e) => {
+                          const updated = data.skills.groups.map((g) =>
+                            g.id === group.id ? { ...g, name: e.target.value } : g
+                          );
+                          setData({ ...data, skills: { ...data.skills, groups: updated } });
+                        }}
+                        className="w-full px-3 py-1.5 text-sm rounded-md border border-border bg-background text-foreground"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-foreground-muted mb-1">
+                        Skills (separated by · or commas)
+                      </label>
+                      <input
+                        type="text"
+                        value={group.skills}
+                        onChange={(e) => {
+                          const updated = data.skills.groups.map((g) =>
+                            g.id === group.id ? { ...g, skills: e.target.value } : g
+                          );
+                          setData({ ...data, skills: { ...data.skills, groups: updated } });
+                        }}
+                        className="w-full px-3 py-1.5 text-sm rounded-md border border-border bg-background text-foreground"
+                      />
                     </div>
                   </div>
                 ))}
               </div>
+
+              <button
+                type="button"
+                onClick={() => handleSaveData(data)}
+                className="min-h-[44px] px-5 py-2 text-xs font-medium rounded-md bg-foreground text-background hover:opacity-90"
+              >
+                Save Skills
+              </button>
             </div>
-          )}
 
-          {/* TAB 4: SKILLS */}
-          {activeTab === 'skills' && (
-            <div className="space-y-6">
-              <div className="pb-4 border-b border-hairline">
-                <h1 className="text-2xl font-bold tracking-tight text-foreground">
-                  Skills Inventory
-                </h1>
-                <p className="text-xs text-foreground-muted mt-1 font-mono">
-                  Manage the 4 capability pods and listed tools.
-                </p>
-              </div>
-
-              <div className="space-y-4">
-                {data.skills.groups.map((group) => (
-                  <div key={group.id} className="p-6 border border-hairline bg-background space-y-4 crosshair-corner">
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                      <div>
-                        <label className="block text-xs font-mono uppercase text-foreground-muted mb-1">
-                          Pod Name
-                        </label>
-                        <input
-                          type="text"
-                          value={group.name}
-                          onChange={(e) => {
-                            const updated = data.skills.groups.map((g) =>
-                              g.id === group.id ? { ...g, name: e.target.value } : g
-                            );
-                            setData({ ...data, skills: { ...data.skills, groups: updated } });
-                          }}
-                          className="w-full px-3 py-2 bg-background-alt border border-hairline text-foreground text-sm font-semibold"
-                        />
-                      </div>
-
-                      <div className="md:col-span-3">
-                        <label className="block text-xs font-mono uppercase text-foreground-muted mb-1">
-                          Skills Listed (separated by ·)
-                        </label>
-                        <input
-                          type="text"
-                          value={group.skills}
-                          onChange={(e) => {
-                            const updated = data.skills.groups.map((g) =>
-                              g.id === group.id ? { ...g, skills: e.target.value } : g
-                            );
-                            setData({ ...data, skills: { ...data.skills, groups: updated } });
-                          }}
-                          className="w-full px-3 py-2 bg-background-alt border border-hairline text-foreground text-sm"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* TAB 5: EDUCATION & CV */}
-          {activeTab === 'education' && (
-            <div className="space-y-6">
-              <div className="pb-4 border-b border-hairline">
-                <h1 className="text-2xl font-bold tracking-tight text-foreground">
-                  Education &amp; Official CV
-                </h1>
-                <p className="text-xs text-foreground-muted mt-1 font-mono">
-                  Manage degrees, chronology, and the downloadable PDF file.
-                </p>
-              </div>
-
-              {/* CV File Manager */}
-              <div className="p-6 border border-hairline bg-background-alt space-y-4 crosshair-corner">
-                <h3 className="text-xs font-mono font-bold uppercase text-foreground">
-                  Official CV File Path
-                </h3>
-                <div className="flex gap-2">
+            {/* Education & CV */}
+            <div className="pt-8 border-t border-border space-y-4">
+              <h2 className="text-xl font-semibold tracking-tight text-foreground">
+                Education & CV File
+              </h2>
+              <div className="p-4 rounded-md border border-border bg-surface/30 space-y-3">
+                <label className="block text-xs font-medium text-foreground-muted">
+                  CV PDF File Path or URL
+                </label>
+                <div className="flex flex-wrap items-center gap-2">
                   <input
                     type="text"
-                    value={data.education.cv.file_url}
-                    onChange={(e) =>
+                    value={data.education.cv?.file_url || '/doc/resume-mntsnt.pdf'}
+                    onChange={(e) => {
                       setData({
                         ...data,
                         education: {
                           ...data.education,
                           cv: { ...data.education.cv, file_url: e.target.value },
                         },
-                      })
-                    }
-                    className="flex-1 px-3 py-2 bg-background border border-hairline text-foreground text-sm font-mono"
+                      });
+                    }}
+                    className="flex-1 min-w-[200px] px-3 py-2 text-xs rounded-md border border-border bg-background text-foreground font-mono"
                   />
-                  <label className="px-4 py-2 border border-hairline bg-foreground text-background hover:bg-accent cursor-pointer text-xs font-mono uppercase flex items-center space-x-1.5">
-                    <Upload className="w-3.5 h-3.5" />
+                  <label className="min-h-[44px] px-3 py-2 text-xs rounded-md border border-border hover:border-foreground text-foreground cursor-pointer inline-flex items-center space-x-1.5">
+                    <Upload className="w-3.5 h-3.5" strokeWidth={1.5} />
                     <span>Upload New CV</span>
                     <input
                       type="file"
                       accept="application/pdf"
                       className="hidden"
                       onChange={async (e) => {
-                        const f = e.target.files?.[0];
-                        if (f) {
-                          const url = await handleFileUpload(f);
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          const url = await handleFileUpload(file);
                           if (url) {
-                            setData({
+                            const next = {
                               ...data,
                               education: {
                                 ...data.education,
                                 cv: { ...data.education.cv, file_url: url },
                               },
-                            });
+                            };
+                            setData(next);
+                            handleSaveData(next);
                           }
                         }
                       }}
                     />
                   </label>
+                  <button
+                    type="button"
+                    onClick={() => handleSaveData(data)}
+                    className="min-h-[44px] px-4 py-2 text-xs font-medium rounded-md bg-foreground text-background hover:opacity-90"
+                  >
+                    Save CV Link
+                  </button>
                 </div>
               </div>
+            </div>
+          </div>
+        )}
 
-              {/* Chronology entries */}
-              <div className="space-y-4">
-                {data.education.items.map((edu) => (
-                  <div key={edu.id} className="p-6 border border-hairline bg-background space-y-4 crosshair-corner">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div>
-                        <label className="block text-xs font-mono uppercase text-foreground-muted mb-1">
-                          Degree / Title
-                        </label>
-                        <input
-                          type="text"
-                          value={edu.degree}
-                          onChange={(e) => {
-                            const updated = data.education.items.map((item) =>
-                              item.id === edu.id ? { ...item, degree: e.target.value } : item
-                            );
-                            setData({ ...data, education: { ...data.education, items: updated } });
-                          }}
-                          className="w-full px-3 py-2 bg-background-alt border border-hairline text-foreground text-sm font-semibold"
-                        />
-                      </div>
+        {/* MESSAGES TAB */}
+        {activeTab === 'messages' && (
+          <div className="space-y-6">
+            <div>
+              <h1 className="text-2xl font-semibold tracking-tight text-foreground">
+                Messages Inbox ({messages.length})
+              </h1>
+              <p className="text-sm text-foreground-muted">
+                Direct submissions from the public site contact form.
+              </p>
+            </div>
 
-                      <div>
-                        <label className="block text-xs font-mono uppercase text-foreground-muted mb-1">
-                          Institution
-                        </label>
-                        <input
-                          type="text"
-                          value={edu.institution || ''}
-                          onChange={(e) => {
-                            const updated = data.education.items.map((item) =>
-                              item.id === edu.id ? { ...item, institution: e.target.value } : item
-                            );
-                            setData({ ...data, education: { ...data.education, items: updated } });
-                          }}
-                          className="w-full px-3 py-2 bg-background-alt border border-hairline text-foreground text-sm"
-                        />
+            {messages.length === 0 ? (
+              <div className="p-12 text-center rounded-md border border-border bg-surface/30 text-foreground-muted">
+                <Mail className="w-8 h-8 mx-auto mb-2 opacity-50" strokeWidth={1.5} />
+                <p className="text-sm">No messages yet.</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {messages.map((msg) => (
+                  <div
+                    key={msg.id}
+                    className={`p-5 rounded-md border transition-colors ${
+                      msg.read
+                        ? 'border-border bg-background'
+                        : 'border-foreground/30 bg-surface/50'
+                    }`}
+                  >
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-border">
+                      <div className="flex items-center space-x-2">
+                        {!msg.read && (
+                          <span className="w-2 h-2 rounded-full bg-foreground" aria-hidden="true" />
+                        )}
+                        <h3 className="text-sm font-semibold text-foreground">
+                          {msg.name}
+                        </h3>
+                        <span className="text-xs text-foreground-muted">
+                          &lt;{msg.email}&gt;
+                        </span>
                       </div>
+                      <span className="text-xs font-mono text-foreground-muted">
+                        {new Date(msg.created_at).toLocaleDateString()}
+                      </span>
+                    </div>
 
-                      <div>
-                        <label className="block text-xs font-mono uppercase text-foreground-muted mb-1">
-                          Dates
-                        </label>
-                        <input
-                          type="text"
-                          value={edu.dates || ''}
-                          onChange={(e) => {
-                            const updated = data.education.items.map((item) =>
-                              item.id === edu.id ? { ...item, dates: e.target.value } : item
-                            );
-                            setData({ ...data, education: { ...data.education, items: updated } });
-                          }}
-                          className="w-full px-3 py-2 bg-background-alt border border-hairline text-foreground text-sm"
-                        />
-                      </div>
+                    <p className="text-xs font-medium text-foreground mt-2">
+                      Subject: {msg.subject}
+                    </p>
+                    <p className="text-sm text-foreground-muted mt-2 leading-relaxed whitespace-pre-line">
+                      {msg.message}
+                    </p>
 
-                      <div className="md:col-span-3">
-                        <label className="block text-xs font-mono uppercase text-foreground-muted mb-1">
-                          Description
-                        </label>
-                        <textarea
-                          rows={2}
-                          value={edu.description || ''}
-                          onChange={(e) => {
-                            const updated = data.education.items.map((item) =>
-                              item.id === edu.id ? { ...item, description: e.target.value } : item
-                            );
-                            setData({ ...data, education: { ...data.education, items: updated } });
-                          }}
-                          className="w-full px-3 py-2 bg-background-alt border border-hairline text-foreground text-sm"
-                        />
-                      </div>
+                    <div className="mt-4 pt-3 border-t border-border flex items-center justify-end space-x-3">
+                      <a
+                        href={`mailto:${msg.email}?subject=Re: ${encodeURIComponent(msg.subject)}`}
+                        className="text-xs font-medium text-foreground hover:underline"
+                      >
+                        Reply via Email
+                      </a>
+                      {!msg.read && (
+                        <button
+                          type="button"
+                          onClick={() => handleMarkMessageRead(msg.id)}
+                          className="text-xs text-foreground-muted hover:text-foreground"
+                        >
+                          Mark as read
+                        </button>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteMessage(msg.id)}
+                        className="text-xs text-foreground-muted hover:text-foreground"
+                      >
+                        Delete
+                      </button>
                     </div>
                   </div>
                 ))}
               </div>
-            </div>
-          )}
-
-          {/* TAB 6: LAB & CURRENTLY */}
-          {activeTab === 'lab-currently' && (
-            <div className="space-y-8">
-              <div className="pb-4 border-b border-hairline">
-                <h1 className="text-2xl font-bold tracking-tight text-foreground">
-                  Lab &amp; Telemetry
-                </h1>
-                <p className="text-xs text-foreground-muted mt-1 font-mono">
-                  Modify the 3 Lab experiments and the 4 Currently monitor nodes.
-                </p>
-              </div>
-
-              {/* Currently Items */}
-              <div className="space-y-4">
-                <h2 className="text-base font-bold font-mono text-foreground">Currently Nodes</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {data.currently.items.map((item, idx) => (
-                    <div key={idx} className="p-4 border border-hairline bg-background crosshair-corner">
-                      <label className="block text-xs font-mono uppercase text-accent font-bold mb-1">
-                        {item.kicker}
-                      </label>
-                      <input
-                        type="text"
-                        value={item.text}
-                        onChange={(e) => {
-                          const updated = [...data.currently.items];
-                          updated[idx] = { ...updated[idx], text: e.target.value };
-                          setData({ ...data, currently: { ...data.currently, items: updated } });
-                        }}
-                        className="w-full px-3 py-2 bg-background-alt border border-hairline text-foreground text-sm"
-                      />
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Lab experiments */}
-              <div className="space-y-4">
-                <h2 className="text-base font-bold font-mono text-foreground">Lab Experiment Cards</h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {data.lab.items.map((item, idx) => (
-                    <div key={item.id} className="p-4 border border-hairline bg-background space-y-3 crosshair-corner">
-                      <div>
-                        <label className="block text-xs font-mono uppercase text-foreground-muted mb-1">
-                          Kicker
-                        </label>
-                        <input
-                          type="text"
-                          value={item.kicker}
-                          onChange={(e) => {
-                            const updated = [...data.lab.items];
-                            updated[idx] = { ...updated[idx], kicker: e.target.value };
-                            setData({ ...data, lab: { ...data.lab, items: updated } });
-                          }}
-                          className="w-full px-3 py-2 bg-background-alt border border-hairline text-foreground text-sm"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-mono uppercase text-foreground-muted mb-1">
-                          Title
-                        </label>
-                        <input
-                          type="text"
-                          value={item.title}
-                          onChange={(e) => {
-                            const updated = [...data.lab.items];
-                            updated[idx] = { ...updated[idx], title: e.target.value };
-                            setData({ ...data, lab: { ...data.lab, items: updated } });
-                          }}
-                          className="w-full px-3 py-2 bg-background-alt border border-hairline text-foreground text-sm font-semibold"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-mono uppercase text-foreground-muted mb-1">
-                          Description
-                        </label>
-                        <textarea
-                          rows={3}
-                          value={item.description}
-                          onChange={(e) => {
-                            const updated = [...data.lab.items];
-                            updated[idx] = { ...updated[idx], description: e.target.value };
-                            setData({ ...data, lab: { ...data.lab, items: updated } });
-                          }}
-                          className="w-full px-3 py-2 bg-background-alt border border-hairline text-foreground text-sm"
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* TAB 7: PROFILE & SETTINGS */}
-          {activeTab === 'profile' && (
-            <div className="space-y-8">
-              <div className="pb-4 border-b border-hairline">
-                <h1 className="text-2xl font-bold tracking-tight text-foreground">
-                  Profile &amp; SEO Configuration
-                </h1>
-                <p className="text-xs text-foreground-muted mt-1 font-mono">
-                  Manage display name, lead text, About copy, quote, stats, and socials.
-                </p>
-              </div>
-
-              {/* Hero & Identity */}
-              <div className="p-6 border border-hairline bg-background space-y-4 crosshair-corner">
-                <h2 className="text-base font-bold font-mono text-foreground">Hero Section</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-mono uppercase text-foreground-muted mb-1">
-                      Display Name
-                    </label>
-                    <input
-                      type="text"
-                      value={data.hero.name}
-                      onChange={(e) =>
-                        setData({ ...data, hero: { ...data.hero, name: e.target.value } })
-                      }
-                      className="w-full px-3 py-2 bg-background-alt border border-hairline text-foreground text-sm font-bold"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-mono uppercase text-foreground-muted mb-1">
-                      Discipline Tagline
-                    </label>
-                    <input
-                      type="text"
-                      value={data.hero.discipline}
-                      onChange={(e) =>
-                        setData({ ...data, hero: { ...data.hero, discipline: e.target.value } })
-                      }
-                      className="w-full px-3 py-2 bg-background-alt border border-hairline text-foreground text-sm"
-                    />
-                  </div>
-
-                  <div className="md:col-span-2">
-                    <label className="block text-xs font-mono uppercase text-foreground-muted mb-1">
-                      Hero Lead
-                    </label>
-                    <textarea
-                      rows={2}
-                      value={data.hero.lead}
-                      onChange={(e) =>
-                        setData({ ...data, hero: { ...data.hero, lead: e.target.value } })
-                      }
-                      className="w-full px-3 py-2 bg-background-alt border border-hairline text-foreground text-sm"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* About & Quote */}
-              <div className="p-6 border border-hairline bg-background space-y-4 crosshair-corner">
-                <h2 className="text-base font-bold font-mono text-foreground">About &amp; Theological Quote</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-mono uppercase text-foreground-muted mb-1">
-                      Body Paragraph 1
-                    </label>
-                    <textarea
-                      rows={3}
-                      value={data.about.body_1}
-                      onChange={(e) =>
-                        setData({ ...data, about: { ...data.about, body_1: e.target.value } })
-                      }
-                      className="w-full px-3 py-2 bg-background-alt border border-hairline text-foreground text-sm"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-mono uppercase text-foreground-muted mb-1">
-                      Body Paragraph 2
-                    </label>
-                    <textarea
-                      rows={3}
-                      value={data.about.body_2}
-                      onChange={(e) =>
-                        setData({ ...data, about: { ...data.about, body_2: e.target.value } })
-                      }
-                      className="w-full px-3 py-2 bg-background-alt border border-hairline text-foreground text-sm"
-                    />
-                  </div>
-
-                  <div className="md:col-span-2">
-                    <label className="block text-xs font-mono uppercase text-foreground-muted mb-1">
-                      Bible Verse (Colossians 3:17)
-                    </label>
-                    <input
-                      type="text"
-                      value={data.about.quote}
-                      onChange={(e) =>
-                        setData({ ...data, about: { ...data.about, quote: e.target.value } })
-                      }
-                      className="w-full px-3 py-2 bg-background-alt border border-hairline text-foreground text-sm"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* TAB 8: INBOUND INQUIRIES */}
-          {activeTab === 'messages' && (
-            <div className="space-y-6">
-              <div className="pb-4 border-b border-hairline">
-                <h1 className="text-2xl font-bold tracking-tight text-foreground">
-                  Inbound Inquiries ({messages.length})
-                </h1>
-                <p className="text-xs text-foreground-muted mt-1 font-mono">
-                  Messages submitted through the public consultation terminal.
-                </p>
-              </div>
-
-              {messages.length === 0 ? (
-                <div className="p-12 text-center border border-hairline bg-background text-foreground-muted font-mono text-sm">
-                  No transmissions recorded yet.
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  {messages.map((msg) => (
-                    <div
-                      key={msg.id}
-                      className={`p-6 border border-hairline bg-background crosshair-corner ${
-                        !msg.read ? 'border-l-4 border-l-accent' : ''
-                      }`}
-                    >
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-hairline mb-4">
-                        <div>
-                          <p className="text-sm font-bold text-foreground">{msg.name}</p>
-                          <a
-                            href={`mailto:${msg.email}`}
-                            className="text-xs text-accent hover:underline font-mono"
-                          >
-                            {msg.email}
-                          </a>
-                        </div>
-                        <div className="flex items-center space-x-3 text-xs font-mono text-foreground-muted">
-                          <time>{new Date(msg.created_at).toLocaleString()}</time>
-                          <button
-                            type="button"
-                            onClick={async () => {
-                              const nextRead = !msg.read;
-                              await fetch('/api/admin/messages', {
-                                method: 'PATCH',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ id: msg.id, read: nextRead }),
-                              });
-                              setMessages(
-                                messages.map((m) => (m.id === msg.id ? { ...m, read: nextRead } : m))
-                              );
-                            }}
-                            className="underline"
-                          >
-                            {msg.read ? 'Mark Unread' : 'Mark Read'}
-                          </button>
-                          <button
-                            type="button"
-                            onClick={async () => {
-                              if (!confirm('Delete this message?')) return;
-                              await fetch(`/api/admin/messages?id=${msg.id}`, { method: 'DELETE' });
-                              setMessages(messages.filter((m) => m.id !== msg.id));
-                            }}
-                            className="text-rose-500 hover:underline"
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      </div>
-
-                      <p className="text-sm font-semibold text-foreground mb-2">
-                        Subject: {msg.subject}
-                      </p>
-                      <p className="text-sm text-foreground-muted leading-relaxed whitespace-pre-line mb-4">
-                        {msg.message}
-                      </p>
-
-                      <a
-                        href={`mailto:${msg.email}?subject=Re: ${encodeURIComponent(msg.subject)}`}
-                        className="inline-flex items-center space-x-1.5 px-3 py-1.5 border border-hairline text-xs font-mono uppercase bg-background-alt hover:bg-background-subtle text-foreground"
-                      >
-                        <Mail className="w-3.5 h-3.5" />
-                        <span>Reply via Email</span>
-                      </a>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* TAB 9: CUSTOM SECTIONS */}
-          {activeTab === 'custom' && (
-            <div className="space-y-6">
-              <div className="flex items-center justify-between pb-4 border-b border-hairline">
-                <div>
-                  <h1 className="text-2xl font-bold tracking-tight text-foreground">
-                    Custom Sections
-                  </h1>
-                  <p className="text-xs text-foreground-muted mt-1 font-mono">
-                    Inject brand-new sections into the live site with zero code changes.
-                  </p>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    const newSection: CustomSection = {
-                      id: 'custom-' + Date.now(),
-                      order: (data.custom_sections || []).length + 1,
-                      title: 'New Section Title',
-                      items: [
-                        {
-                          id: 'item-1',
-                          title: 'Entry Title',
-                          description: 'Description of this entry...',
-                          image_url: '',
-                          link: '',
-                        },
-                      ],
-                    };
-                    const nextSections = [...(data.custom_sections || []), newSection];
-                    const nextData = { ...data, custom_sections: nextSections };
-                    setData(nextData);
-                    handleSaveAll(nextData);
-                  }}
-                  className="inline-flex items-center space-x-1.5 px-4 py-2 text-xs font-mono uppercase tracking-wider text-background bg-foreground hover:bg-accent"
-                >
-                  <Plus className="w-3.5 h-3.5" />
-                  <span>Add Section</span>
-                </button>
-              </div>
-
-              {(data.custom_sections || []).length === 0 ? (
-                <div className="p-8 border border-hairline bg-background text-center text-xs font-mono text-foreground-muted">
-                  No custom sections deployed. Click &ldquo;Add Section&rdquo; to create one.
-                </div>
-              ) : (
-                <div className="space-y-6">
-                  {data.custom_sections.map((section, sIdx) => (
-                    <div key={section.id} className="p-6 border border-hairline bg-background space-y-4 crosshair-corner">
-                      <div className="flex justify-between items-center">
-                        <input
-                          type="text"
-                          value={section.title}
-                          onChange={(e) => {
-                            const updated = [...data.custom_sections];
-                            updated[sIdx] = { ...updated[sIdx], title: e.target.value };
-                            setData({ ...data, custom_sections: updated });
-                          }}
-                          className="px-3 py-1.5 bg-background-alt border border-hairline font-bold text-base text-foreground font-mono"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => {
-                            if (!confirm('Delete this section?')) return;
-                            const filtered = data.custom_sections.filter((s) => s.id !== section.id);
-                            const nextData = { ...data, custom_sections: filtered };
-                            setData(nextData);
-                            handleSaveAll(nextData);
-                          }}
-                          className="text-xs text-rose-500 font-mono"
-                        >
-                          Delete Section
-                        </button>
-                      </div>
-
-                      <div className="space-y-3 pt-2">
-                        {section.items.map((item, iIdx) => (
-                          <div
-                            key={item.id}
-                            className="p-4 border border-hairline bg-background-alt space-y-2"
-                          >
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                              <input
-                                type="text"
-                                placeholder="Item Title"
-                                value={item.title}
-                                onChange={(e) => {
-                                  const updated = [...data.custom_sections];
-                                  const items = [...updated[sIdx].items];
-                                  items[iIdx] = { ...items[iIdx], title: e.target.value };
-                                  updated[sIdx] = { ...updated[sIdx], items };
-                                  setData({ ...data, custom_sections: updated });
-                                }}
-                                className="px-3 py-1.5 bg-background border border-hairline text-sm text-foreground"
-                              />
-                              <input
-                                type="text"
-                                placeholder="Link URL"
-                                value={item.link || ''}
-                                onChange={(e) => {
-                                  const updated = [...data.custom_sections];
-                                  const items = [...updated[sIdx].items];
-                                  items[iIdx] = { ...items[iIdx], link: e.target.value };
-                                  updated[sIdx] = { ...updated[sIdx], items };
-                                  setData({ ...data, custom_sections: updated });
-                                }}
-                                className="px-3 py-1.5 bg-background border border-hairline text-sm text-foreground"
-                              />
-                            </div>
-                            <textarea
-                              rows={2}
-                              placeholder="Description"
-                              value={item.description || ''}
-                              onChange={(e) => {
-                                const updated = [...data.custom_sections];
-                                const items = [...updated[sIdx].items];
-                                items[iIdx] = { ...items[iIdx], description: e.target.value };
-                                updated[sIdx] = { ...updated[sIdx], items };
-                                setData({ ...data, custom_sections: updated });
-                              }}
-                              className="w-full px-3 py-1.5 bg-background border border-hairline text-sm text-foreground"
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-        </main>
-      </div>
+            )}
+          </div>
+        )}
+      </main>
     </div>
   );
 }

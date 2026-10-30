@@ -3,18 +3,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import Image from 'next/image';
 import { ProjectItem, PortfolioData, SocialLinks } from '@/types/portfolio';
-import { SmartCollage } from '@/components/SmartCollage';
-import {
-  ArrowUpRight,
-  X,
-  ChevronLeft,
-  ChevronRight,
-  Layers,
-  Sparkles,
-  Share2,
-  Check,
-} from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { X, ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
 
 interface WorkProps {
   header: PortfolioData['work_header'];
@@ -37,9 +26,8 @@ export function Work({ header, projects, socials }: WorkProps) {
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [activeModalIndex, setActiveModalIndex] = useState<number | null>(null);
   const [activeGalleryImageIdx, setActiveGalleryImageIdx] = useState<number>(0);
-  const [shareCopied, setShareCopied] = useState(false);
 
-  // Filter projects (also ensure visible !== false)
+  // Filter projects
   const filteredProjects = useMemo(() => {
     return projects
       .filter((p) => p.visible !== false)
@@ -54,7 +42,16 @@ export function Work({ header, projects, socials }: WorkProps) {
 
   const activeProject = activeModalIndex !== null ? filteredProjects[activeModalIndex] : null;
 
-  // Check URL param on mount for deep linking (?project=proj-id)
+  // Active gallery list
+  const currentImages = useMemo(() => {
+    if (!activeProject) return [];
+    if (activeProject.images && activeProject.images.length > 0) {
+      return activeProject.images;
+    }
+    return [activeProject.image_url];
+  }, [activeProject]);
+
+  // Deep linking ?project=proj-id
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const projectId = params.get('project');
@@ -62,23 +59,16 @@ export function Work({ header, projects, socials }: WorkProps) {
       const idx = filteredProjects.findIndex((p) => p.id === projectId);
       if (idx !== -1) {
         setActiveModalIndex(idx);
-        document.body.classList.add('modal-open');
+        setActiveGalleryImageIdx(0);
       }
     }
   }, [filteredProjects]);
 
-  // Keyboard navigation & Esc handler for Lightbox
   const handleNext = useCallback(() => {
     if (activeModalIndex !== null) {
       const nextIdx = (activeModalIndex + 1) % filteredProjects.length;
       setActiveModalIndex(nextIdx);
       setActiveGalleryImageIdx(0);
-      const nextProj = filteredProjects[nextIdx];
-      if (nextProj) {
-        const url = new URL(window.location.href);
-        url.searchParams.set('project', nextProj.id);
-        window.history.replaceState({}, '', url.toString());
-      }
     }
   }, [activeModalIndex, filteredProjects]);
 
@@ -87,36 +77,18 @@ export function Work({ header, projects, socials }: WorkProps) {
       const prevIdx = (activeModalIndex - 1 + filteredProjects.length) % filteredProjects.length;
       setActiveModalIndex(prevIdx);
       setActiveGalleryImageIdx(0);
-      const prevProj = filteredProjects[prevIdx];
-      if (prevProj) {
-        const url = new URL(window.location.href);
-        url.searchParams.set('project', prevProj.id);
-        window.history.replaceState({}, '', url.toString());
-      }
     }
   }, [activeModalIndex, filteredProjects]);
 
   const closeModal = useCallback(() => {
     setActiveModalIndex(null);
     setActiveGalleryImageIdx(0);
-    document.body.classList.remove('modal-open');
     const url = new URL(window.location.href);
     url.searchParams.delete('project');
-    window.history.replaceState({}, '', url.toString());
+    window.history.replaceState({}, '', url.pathname + url.hash);
   }, []);
 
-  const openModal = (index: number) => {
-    setActiveModalIndex(index);
-    setActiveGalleryImageIdx(0);
-    document.body.classList.add('modal-open');
-    const proj = filteredProjects[index];
-    if (proj) {
-      const url = new URL(window.location.href);
-      url.searchParams.set('project', proj.id);
-      window.history.replaceState({}, '', url.toString());
-    }
-  };
-
+  // Keyboard navigation: Esc and arrow keys
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (activeModalIndex === null) return;
@@ -124,12 +96,23 @@ export function Work({ header, projects, socials }: WorkProps) {
       if (e.key === 'ArrowRight') handleNext();
       if (e.key === 'ArrowLeft') handlePrev();
     };
-
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [activeModalIndex, closeModal, handleNext, handlePrev]);
 
-  // Touch swipe support
+  // Prevent background scroll when modal is open
+  useEffect(() => {
+    if (activeModalIndex !== null) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [activeModalIndex]);
+
+  // Touch swipe support on modal
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const handleTouchStart = (e: React.TouchEvent) => {
     setTouchStart(e.targetTouches[0].clientX);
@@ -139,42 +122,28 @@ export function Work({ header, projects, socials }: WorkProps) {
     const touchEnd = e.changedTouches[0].clientX;
     const diff = touchStart - touchEnd;
     if (diff > 50) handleNext();
-    if (diff < -50) handlePrev();
+    else if (diff < -50) handlePrev();
     setTouchStart(null);
   };
 
-  const copyShareLink = () => {
-    navigator.clipboard.writeText(window.location.href);
-    setShareCopied(true);
-    setTimeout(() => setShareCopied(false), 2000);
-  };
-
   return (
-    <section aria-labelledby="work-title" className="py-24 md:py-36 border-b border-hairline" id="work">
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Specimen Index Header */}
-        <div className="flex items-center space-x-3 mb-10 text-xs font-mono">
-          <span className="text-accent font-bold">[{header.index_meta}]</span>
-          <span className="uppercase tracking-widest text-foreground-muted">{header.label}</span>
-          <span className="h-[1px] flex-1 bg-hairline" />
-          <span className="text-foreground-muted uppercase">ARCHIVE SPECIMENS</span>
-        </div>
-
-        <div className="max-w-3xl mb-14">
-          <h2 id="work-title" className="specimen-title text-foreground mb-4">
-            {header.title}
-          </h2>
-          <p className="body-reading text-foreground-muted">
+    <section aria-labelledby="work-title" id="work" className="py-16 sm:py-20 border-t border-border">
+      <div className="max-w-site mx-auto px-6">
+        {/* Section Header */}
+        <p className="text-xs uppercase tracking-wider text-foreground-muted font-medium mb-2">
+          {header.label}
+        </p>
+        <h2 id="work-title" className="text-2xl sm:text-3xl font-semibold tracking-tight text-foreground">
+          {header.title}
+        </h2>
+        {header.lede && (
+          <p className="mt-3 text-base text-foreground-muted max-w-[65ch]">
             {header.lede}
           </p>
-        </div>
+        )}
 
-        {/* Dynamic Filter Toolbar */}
-        <div
-          role="toolbar"
-          aria-label="Filter projects"
-          className="flex flex-wrap items-center gap-x-6 gap-y-3 pb-6 mb-16 border-b border-hairline overflow-x-auto text-xs font-mono uppercase tracking-wider"
-        >
+        {/* Filter Bar (Horizontally scrollable on mobile) */}
+        <div className="mt-8 flex items-center space-x-2 overflow-x-auto pb-2 scrollbar-none -mx-6 px-6 sm:mx-0 sm:px-0">
           {FILTERS.map((f) => {
             const isActive = selectedFilter === f.key;
             return (
@@ -182,109 +151,88 @@ export function Work({ header, projects, socials }: WorkProps) {
                 key={f.key}
                 type="button"
                 onClick={() => setSelectedFilter(f.key)}
-                aria-pressed={isActive}
-                className={`py-1.5 relative transition-colors duration-200 whitespace-nowrap ${
+                className={`min-h-[44px] px-3.5 py-1.5 rounded-md text-xs font-medium whitespace-nowrap transition-colors duration-150 border ${
                   isActive
-                    ? 'text-foreground font-bold'
-                    : 'text-foreground-muted hover:text-foreground'
+                    ? 'bg-foreground text-background border-foreground font-semibold'
+                    : 'border-border text-foreground-muted hover:text-foreground hover:border-foreground/40 bg-surface/30'
                 }`}
               >
-                <span>{f.label}</span>
-                {isActive && (
-                  <motion.span
-                    layoutId="workFilterUnderline"
-                    className="absolute bottom-0 left-0 right-0 h-[2px] bg-accent"
-                  />
-                )}
+                {f.label}
               </button>
             );
           })}
         </div>
 
-        {/* Animated Work Grid */}
-        <motion.div
-          layout
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24"
-        >
-          <AnimatePresence>
-            {filteredProjects.map((project, index) => {
-              const projectImages = project.images && project.images.length > 0
-                ? project.images
-                : [project.image_url];
+        {/* Projects Grid: 1 col phones, 2 cols tablets, 3 cols desktop */}
+        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredProjects.map((project, idx) => {
+            const isNew = project.badge?.toLowerCase().includes('new');
+            const isFirstPlace = project.award?.toLowerCase().includes('1st') || project.badge?.toLowerCase().includes('1st');
 
-              return (
-                <motion.article
-                  layout
-                  initial={{ opacity: 0, scale: 0.96 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.96 }}
-                  transition={{ duration: 0.3 }}
-                  key={project.id || index}
-                  className="group flex flex-col border border-hairline bg-background p-4 crosshair-corner cursor-pointer hover:border-foreground/30 transition-all shadow-sm"
-                  onClick={() => openModal(index)}
-                >
-                  {/* Smart Collage Frame */}
-                  <div className="relative border border-hairline overflow-hidden mb-4 bg-background-alt">
-                    <SmartCollage
-                      images={projectImages}
-                      title={project.title}
-                      layout={project.collage_layout || 'auto'}
-                    />
+            return (
+              <button
+                key={project.id}
+                type="button"
+                onClick={() => {
+                  setActiveModalIndex(idx);
+                  setActiveGalleryImageIdx(0);
+                }}
+                className="group text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground rounded-md"
+              >
+                {/* Single Cover Image */}
+                <div className="aspect-[4/3] relative rounded-md border border-border overflow-hidden bg-surface">
+                  <Image
+                    src={project.image_url}
+                    alt={project.title}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-cover group-hover:scale-[1.02] transition-transform duration-200"
+                  />
 
-                    {/* Quiet Specimen Badges */}
-                    <div className="absolute top-3 left-3 flex items-center space-x-2 z-10">
-                      {project.badge && (
-                        <span className="px-2 py-0.5 text-[10px] font-mono tracking-widest uppercase bg-background/90 text-foreground border border-hairline backdrop-blur-sm">
-                          {project.badge}
+                  {/* Badges: Small, quiet tags */}
+                  {(isNew || isFirstPlace) && (
+                    <div className="absolute top-2.5 right-2.5 flex items-center space-x-1">
+                      {isNew && (
+                        <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded border border-border bg-background text-foreground">
+                          NEW
                         </span>
                       )}
-                      {project.award && (
-                        <span className="px-2 py-0.5 text-[10px] font-mono tracking-widest uppercase bg-foreground text-background">
-                          {project.award}
+                      {isFirstPlace && (
+                        <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded border border-border bg-background text-foreground">
+                          1st Place
                         </span>
                       )}
                     </div>
+                  )}
 
-                    {projectImages.length > 1 && (
-                      <div className="absolute top-3 right-3 px-1.5 py-0.5 text-[10px] font-mono bg-background/90 border border-hairline backdrop-blur-sm text-foreground-muted flex items-center space-x-1 z-10">
-                        <Layers className="w-3 h-3" />
-                        <span>{projectImages.length}</span>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Metadata */}
-                  <div className="flex flex-col flex-1 justify-between">
-                    <div>
-                      <p className="text-[11px] font-mono uppercase tracking-wider text-accent mb-1.5 font-semibold">
-                        {project.category_label}
-                      </p>
-                      <h3 className="text-lg font-bold text-foreground group-hover:text-accent transition-colors leading-snug">
-                        {project.card_title || project.title}
-                      </h3>
-                      {project.card_desc && (
-                        <p className="text-xs text-foreground-muted line-clamp-2 mt-2 leading-relaxed">
-                          {project.card_desc}
-                        </p>
-                      )}
+                  {/* Multi-image count indicator */}
+                  {project.images && project.images.length > 1 && (
+                    <div className="absolute bottom-2.5 left-2.5">
+                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded border border-border bg-background/90 text-foreground">
+                        {project.images.length} photos
+                      </span>
                     </div>
+                  )}
+                </div>
 
-                    <div className="pt-4 border-t border-hairline mt-4 flex items-center justify-between text-xs font-mono text-foreground-muted group-hover:text-foreground">
-                      <span>OPEN SPECIMEN</span>
-                      <ArrowUpRight className="w-3.5 h-3.5" />
-                    </div>
-                  </div>
-                </motion.article>
-              );
-            })}
-          </AnimatePresence>
-        </motion.div>
+                {/* Info below image */}
+                <div className="mt-3">
+                  <h3 className="text-sm font-semibold text-foreground group-hover:text-foreground line-clamp-1">
+                    {project.title}
+                  </h3>
+                  <p className="mt-0.5 text-xs text-foreground-muted">
+                    {project.category_label || project.categories.join(' · ')}
+                  </p>
+                </div>
+              </button>
+            );
+          })}
+        </div>
 
-        {/* Upwork Verified Banner */}
-        <div className="p-8 md:p-12 border border-hairline bg-background-alt crosshair-corner flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        {/* Upwork section below grid */}
+        <div className="mt-16 p-6 rounded-md border border-border bg-surface/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <span className="mono-tag text-accent font-bold mb-2 block">FREELANCE CLIENT WORK</span>
-            <p className="text-lg md:text-xl font-medium text-foreground">
+            <p className="text-sm text-foreground font-medium">
               {header.upwork_text}
             </p>
           </div>
@@ -292,177 +240,129 @@ export function Work({ header, projects, socials }: WorkProps) {
             href={socials.upwork}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center space-x-2 px-7 py-3.5 text-xs font-mono uppercase tracking-wider text-background bg-foreground hover:bg-accent transition-colors shrink-0"
+            className="min-h-[44px] px-4 py-2 rounded-md border border-border text-foreground hover:border-foreground text-xs font-medium inline-flex items-center space-x-1.5 transition-colors whitespace-nowrap"
           >
             <span>{header.upwork_btn_text}</span>
-            <ArrowUpRight className="w-4 h-4" />
+            <ExternalLink className="w-3.5 h-3.5" strokeWidth={1.5} />
           </a>
         </div>
       </div>
 
-      {/* Immersive Project Case Viewer Lightbox */}
-      <AnimatePresence>
-        {activeProject && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="modal-project-title"
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8 bg-black/85 backdrop-blur-md"
-            onClick={closeModal}
+      {/* Project Lightbox / Modal */}
+      {activeProject && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="modal-project-title"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/75 backdrop-blur-xs"
+          onClick={closeModal}
+        >
+          <div
+            className="w-full max-w-3xl max-h-[92vh] bg-background border border-border rounded-lg overflow-y-auto p-6 sm:p-8 space-y-6 relative"
+            onClick={(e) => e.stopPropagation()}
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
           >
-            <motion.div
-              initial={{ scale: 0.95, opacity: 0, y: 15 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.95, opacity: 0, y: 15 }}
-              transition={{ duration: 0.2 }}
-              className="relative max-w-5xl w-full max-h-[92vh] flex flex-col bg-background border border-hairline shadow-2xl overflow-hidden crosshair-corner"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Modal Header Bar */}
-              <div className="flex items-center justify-between px-6 py-4 border-b border-hairline bg-background">
-                <div className="flex items-center space-x-3 text-xs font-mono text-foreground-muted">
-                  <span className="text-accent font-bold">
-                    SPECIMEN {String(activeModalIndex! + 1).padStart(2, '0')} / {String(filteredProjects.length).padStart(2, '0')}
-                  </span>
-                </div>
-
-                <div className="flex items-center space-x-3">
-                  <button
-                    type="button"
-                    onClick={copyShareLink}
-                    title="Copy share link"
-                    className="p-1.5 text-foreground-muted hover:text-foreground border border-hairline text-xs font-mono flex items-center space-x-1"
-                  >
-                    {shareCopied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Share2 className="w-3.5 h-3.5" />}
-                    <span className="hidden sm:inline">{shareCopied ? 'Copied' : 'Share'}</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={closeModal}
-                    aria-label="Close modal"
-                    className="p-1.5 text-foreground-muted hover:text-foreground border border-hairline transition-colors"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Modal Scrollable Content */}
-              <div className="overflow-y-auto p-6 md:p-8 space-y-8">
-                {/* Active Image Spotlight */}
-                {(() => {
-                  const gallery = activeProject.images && activeProject.images.length > 0
-                    ? activeProject.images
-                    : [activeProject.image_url];
-                  const currentImg = gallery[activeGalleryImageIdx] || gallery[0];
-
-                  return (
-                    <div className="space-y-4">
-                      <div className="relative aspect-[16/10] w-full bg-background-alt border border-hairline overflow-hidden">
-                        <Image
-                          src={currentImg}
-                          alt={activeProject.title}
-                          fill
-                          sizes="100vw"
-                          className="object-contain"
-                          priority
-                        />
-                      </div>
-
-                      {/* Multi-Image Gallery Strip */}
-                      {gallery.length > 1 && (
-                        <div className="flex items-center space-x-3 overflow-x-auto pb-2">
-                          {gallery.map((gImg, gIdx) => (
-                            <button
-                              key={gIdx}
-                              type="button"
-                              onClick={() => setActiveGalleryImageIdx(gIdx)}
-                              className={`relative w-20 h-14 shrink-0 border overflow-hidden ${
-                                activeGalleryImageIdx === gIdx
-                                  ? 'border-accent ring-2 ring-accent/30'
-                                  : 'border-hairline opacity-60 hover:opacity-100'
-                              }`}
-                            >
-                              <Image
-                                src={gImg}
-                                alt={`thumb ${gIdx + 1}`}
-                                fill
-                                className="object-cover"
-                              />
-                            </button>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })()}
-
-                {/* Project Details */}
-                <div className="space-y-4">
-                  <div className="flex flex-wrap items-center gap-2">
-                    {activeProject.badge && (
-                      <span className="px-2 py-0.5 text-xs font-mono uppercase bg-accent text-white">
-                        {activeProject.badge}
-                      </span>
-                    )}
-                    {activeProject.award && (
-                      <span className="px-2 py-0.5 text-xs font-mono uppercase bg-foreground text-background">
-                        {activeProject.award}
-                      </span>
-                    )}
-                  </div>
-
-                  <h3
-                    id="modal-project-title"
-                    className="text-2xl md:text-3xl font-bold text-foreground"
-                  >
-                    {activeProject.title}
-                  </h3>
-
-                  <p className="text-xs md:text-sm font-mono text-accent uppercase tracking-wider">
-                    {activeProject.category_label} <span aria-hidden="true">·</span> {activeProject.role}
-                  </p>
-
-                  <p className="text-sm md:text-base leading-relaxed text-foreground-muted border-t border-hairline pt-4">
-                    {activeProject.description}
-                  </p>
-                </div>
-              </div>
-
-              {/* Modal Navigation Footer */}
-              <div className="flex items-center justify-between px-6 py-4 border-t border-hairline bg-background-alt text-xs font-mono uppercase">
+            {/* Modal Top Actions */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
                 <button
                   type="button"
                   onClick={handlePrev}
-                  className="inline-flex items-center space-x-2 text-foreground-muted hover:text-foreground"
+                  aria-label="Previous project"
+                  className="min-w-[44px] min-h-[44px] inline-flex items-center justify-center rounded-md border border-border hover:border-foreground text-foreground transition-colors"
                 >
-                  <ChevronLeft className="w-4 h-4" />
-                  <span>Previous</span>
+                  <ChevronLeft className="w-5 h-5" strokeWidth={1.5} />
                 </button>
-
-                <span className="hidden sm:inline text-foreground-muted text-[10px]">
-                  Use Arrow Keys or Swipe to Navigate
-                </span>
-
                 <button
                   type="button"
                   onClick={handleNext}
-                  className="inline-flex items-center space-x-2 text-foreground-muted hover:text-foreground"
+                  aria-label="Next project"
+                  className="min-w-[44px] min-h-[44px] inline-flex items-center justify-center rounded-md border border-border hover:border-foreground text-foreground transition-colors"
                 >
-                  <span>Next</span>
-                  <ChevronRight className="w-4 h-4" />
+                  <ChevronRight className="w-5 h-5" strokeWidth={1.5} />
                 </button>
+                <span className="text-xs font-mono text-foreground-muted ml-2">
+                  {(activeModalIndex ?? 0) + 1} / {filteredProjects.length}
+                </span>
               </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+
+              <button
+                type="button"
+                onClick={closeModal}
+                aria-label="Close modal"
+                className="min-w-[44px] min-h-[44px] inline-flex items-center justify-center rounded-md border border-border hover:border-foreground text-foreground transition-colors"
+              >
+                <X className="w-5 h-5" strokeWidth={1.5} />
+              </button>
+            </div>
+
+            {/* Large Image View */}
+            <div className="aspect-[16/10] sm:aspect-[16/9] relative rounded-md border border-border overflow-hidden bg-surface">
+              <Image
+                src={currentImages[activeGalleryImageIdx] || activeProject.image_url}
+                alt={activeProject.title}
+                fill
+                sizes="(max-width: 1024px) 100vw, 800px"
+                className="object-contain"
+                priority
+              />
+            </div>
+
+            {/* Thumbnail Strip (if multi-image project) */}
+            {currentImages.length > 1 && (
+              <div className="flex items-center space-x-3 overflow-x-auto pb-1 scrollbar-none">
+                {currentImages.map((imgUrl, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => setActiveGalleryImageIdx(i)}
+                    className={`relative w-20 h-14 rounded-md border overflow-hidden flex-shrink-0 transition-all ${
+                      activeGalleryImageIdx === i
+                        ? 'border-foreground ring-1 ring-foreground'
+                        : 'border-border opacity-60 hover:opacity-100'
+                    }`}
+                  >
+                    <Image
+                      src={imgUrl}
+                      alt={`Thumbnail ${i + 1}`}
+                      fill
+                      sizes="80px"
+                      className="object-cover"
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Title, Category · Role, and Description */}
+            <div className="space-y-3 pt-2 border-t border-border">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <h3
+                  id="modal-project-title"
+                  className="text-xl sm:text-2xl font-semibold text-foreground tracking-tight"
+                >
+                  {activeProject.title}
+                </h3>
+                {activeProject.year && (
+                  <span className="text-xs font-mono text-foreground-muted">
+                    {activeProject.year}
+                  </span>
+                )}
+              </div>
+
+              <p className="text-xs font-mono text-foreground-muted">
+                {activeProject.category_label || activeProject.categories.join(' · ')}
+                {activeProject.role && ` · ${activeProject.role}`}
+              </p>
+
+              <p className="text-sm sm:text-base text-foreground leading-relaxed pt-2 max-w-[65ch]">
+                {activeProject.description}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

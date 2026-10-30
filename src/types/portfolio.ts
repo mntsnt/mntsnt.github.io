@@ -75,7 +75,8 @@ export interface CertificateItem {
   title: string;
   issuer: string;
   year: string;
-  pdf_url: string;
+  image_url?: string;
+  pdf_url?: string;
   credential_url?: string;
   visible: boolean;
 }

@@ -528,6 +528,7 @@ export const initialPortfolioData: PortfolioData = {
         title: 'Medical Volunteer Service',
         issuer: 'St. Paul Hospital Millennium Medical College',
         year: '2025',
+        image_url: '/img/Certificates/cert-sphmmc.jpg',
         pdf_url: '/img/Certificates/MINTESNOT LELISO.pdf',
         visible: true,
       },
