@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { PortfolioData, SocialLinks } from '@/types/portfolio';
-import { ArrowUp, Command, Mail, MapPin } from 'lucide-react';
+import { ArrowUp } from 'lucide-react';
 
 interface FooterProps {
   footer: PortfolioData['footer'];
@@ -12,10 +12,6 @@ interface FooterProps {
 export function Footer({ footer, socials }: FooterProps) {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const openCommandPalette = () => {
-    window.dispatchEvent(new CustomEvent('open-command-palette'));
   };
 
   return (
@@ -28,7 +24,7 @@ export function Footer({ footer, socials }: FooterProps) {
               {footer.name || 'Mintesnot Leliso'}
             </p>
             <p className="text-xs text-foreground-muted leading-relaxed">
-              Medical student, graphic designer, and web developer. Living and building in Addis Ababa, Ethiopia.
+              Medical student, graphic designer, and web developer based in Addis Ababa, Ethiopia.
             </p>
             <p className="text-[11px] font-mono text-foreground-muted pt-1">
               Medicine × Design × Technology
@@ -41,14 +37,14 @@ export function Footer({ footer, socials }: FooterProps) {
               <span className="font-mono uppercase tracking-wider text-foreground text-[10px] font-semibold">
                 Navigation
               </span>
+              <a href="#work" className="hover:text-foreground transition-colors">
+                Selected Work
+              </a>
               <a href="#about" className="hover:text-foreground transition-colors">
                 About & Story
               </a>
               <a href="#practice" className="hover:text-foreground transition-colors">
                 Focus Matrix
-              </a>
-              <a href="#work" className="hover:text-foreground transition-colors">
-                Selected Work
               </a>
               <a href="#certificates" className="hover:text-foreground transition-colors">
                 Certificates
@@ -111,17 +107,8 @@ export function Footer({ footer, socials }: FooterProps) {
 
         {/* Bottom bar */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-foreground-muted">
-          <div className="flex items-center space-x-3">
+          <div>
             <span>© {new Date().getFullYear()} Mintesnot Leliso. All rights reserved.</span>
-            <span className="hidden sm:inline">·</span>
-            <button
-              type="button"
-              onClick={openCommandPalette}
-              className="hidden sm:inline-flex items-center space-x-1 hover:text-foreground transition-colors font-mono text-[11px]"
-            >
-              <Command className="w-3 h-3" />
-              <span>⌘K</span>
-            </button>
           </div>
 
           <button

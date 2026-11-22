@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { ThemeToggle } from './ThemeToggle';
-import { Menu, X, Search } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 
 const NAV_LINKS = [
   { label: 'Work', href: '#work', id: 'work' },
@@ -50,10 +50,6 @@ export function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const openCommandPalette = () => {
-    window.dispatchEvent(new CustomEvent('open-command-palette'));
-  };
-
   const closeMenu = () => setMobileMenuOpen(false);
 
   return (
@@ -74,7 +70,7 @@ export function Header() {
           Mintesnot Leliso
         </a>
 
-        {/* Right: Clean, Minimal Navigation (Only essential links) */}
+        {/* Right: Clean, Minimal Navigation */}
         <nav aria-label="Primary" className="hidden sm:flex items-center space-x-6">
           {NAV_LINKS.map((link) => {
             const isActive = activeSection === link.id;
@@ -93,17 +89,6 @@ export function Header() {
             );
           })}
 
-          {/* Quick Search / Command Palette Pill */}
-          <button
-            type="button"
-            onClick={openCommandPalette}
-            aria-label="Search or open command palette (⌘K)"
-            className="min-h-[32px] px-2.5 py-1 rounded-md border border-border hover:border-foreground bg-surface/40 hover:bg-surface text-foreground-muted hover:text-foreground text-xs inline-flex items-center space-x-1.5 transition-colors whitespace-nowrap"
-          >
-            <Search className="w-3.5 h-3.5" strokeWidth={1.5} />
-            <span className="text-[11px] font-mono text-foreground-muted">⌘K</span>
-          </button>
-
           <div className="pl-1 border-l border-border">
             <ThemeToggle />
           </div>
@@ -111,14 +96,6 @@ export function Header() {
 
         {/* Mobile Controls */}
         <div className="flex items-center space-x-1.5 sm:hidden">
-          <button
-            type="button"
-            onClick={openCommandPalette}
-            aria-label="Search projects and sections"
-            className="min-w-[40px] min-h-[40px] inline-flex items-center justify-center rounded-md border border-border text-foreground hover:border-foreground transition-colors"
-          >
-            <Search className="w-4 h-4" strokeWidth={1.5} />
-          </button>
           <ThemeToggle />
           <button
             type="button"

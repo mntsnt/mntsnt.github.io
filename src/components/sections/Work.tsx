@@ -8,7 +8,6 @@ import {
   ChevronLeft,
   ChevronRight,
   ExternalLink,
-  Search,
   Award,
   Layers,
   ArrowUpRight,
@@ -32,7 +31,6 @@ const CATEGORY_MAP: { [key: string]: string } = {
 
 export function Work({ header, projects, socials }: WorkProps) {
   const [selectedFilter, setSelectedFilter] = useState('all');
-  const [searchQuery, setSearchQuery] = useState('');
   const [activeModalIndex, setActiveModalIndex] = useState<number | null>(null);
   const [activeGalleryImageIdx, setActiveGalleryImageIdx] = useState<number>(0);
 
@@ -51,34 +49,18 @@ export function Work({ header, projects, socials }: WorkProps) {
     return counts;
   }, [projects]);
 
-  // Filter projects by category and search query
+  // Filter projects by category
   const filteredProjects = useMemo(() => {
-    const q = searchQuery.toLowerCase().trim();
-
     return projects
       .filter((p) => p.visible !== false)
       .filter((p) => {
-        // Category check
-        if (selectedFilter !== 'all') {
-          const normalized = selectedFilter.toLowerCase().replace(/-/g, '');
-          const matchesCat = p.categories.some((c) =>
-            c.toLowerCase().replace(/-/g, '').includes(normalized)
-          );
-          if (!matchesCat) return false;
-        }
-
-        // Search query check
-        if (q) {
-          const inTitle = p.title.toLowerCase().includes(q);
-          const inDesc = p.card_desc?.toLowerCase().includes(q) || p.description?.toLowerCase().includes(q);
-          const inCat = p.categories.some((c) => c.toLowerCase().includes(q));
-          const inBadge = p.badge?.toLowerCase().includes(q) || p.award?.toLowerCase().includes(q);
-          if (!inTitle && !inDesc && !inCat && !inBadge) return false;
-        }
-
-        return true;
+        if (selectedFilter === 'all') return true;
+        const normalized = selectedFilter.toLowerCase().replace(/-/g, '');
+        return p.categories.some((c) =>
+          c.toLowerCase().replace(/-/g, '').includes(normalized)
+        );
       });
-  }, [projects, selectedFilter, searchQuery]);
+  }, [projects, selectedFilter]);
 
   const activeProject = activeModalIndex !== null ? filteredProjects[activeModalIndex] : null;
 
@@ -90,23 +72,6 @@ export function Work({ header, projects, socials }: WorkProps) {
     }
     return [activeProject.image_url];
   }, [activeProject]);
-
-  // Deep linking and custom event listener for CommandPalette
-  useEffect(() => {
-    const handleOpenProject = (e: Event) => {
-      const customEvent = e as CustomEvent<{ id: string }>;
-      if (customEvent.detail?.id) {
-        const idx = filteredProjects.findIndex((p) => p.id === customEvent.detail.id);
-        if (idx !== -1) {
-          setActiveModalIndex(idx);
-          setActiveGalleryImageIdx(0);
-        }
-      }
-    };
-
-    window.addEventListener('open-project-modal', handleOpenProject);
-    return () => window.removeEventListener('open-project-modal', handleOpenProject);
-  }, [filteredProjects]);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -172,7 +137,7 @@ export function Work({ header, projects, socials }: WorkProps) {
     <section aria-labelledby="work-title" id="work" className="py-20 sm:py-24 border-t border-border">
       <div className="max-w-site mx-auto px-6">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
           <div>
             <p className="text-xs uppercase tracking-widest text-foreground-muted font-mono font-medium mb-2">
               04 · Portfolio Showcase
@@ -198,148 +163,107 @@ export function Work({ header, projects, socials }: WorkProps) {
           )}
         </div>
 
-        {/* Search Bar & Filter Controls */}
-        <div className="space-y-4 mb-8">
-          {/* Live Search Input */}
-          <div className="relative max-w-md">
-            <Search className="w-4 h-4 text-foreground-muted absolute left-3.5 top-1/2 -translate-y-1/2" strokeWidth={1.5} />
-            <input
-              type="text"
-              placeholder="Search by keyword, client, or topic (e.g. Dawit, SPHMMC, thumbnail)..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-8 py-2 rounded-md border border-border bg-surface/40 focus:bg-surface focus:outline-none focus:border-foreground text-xs text-foreground placeholder-foreground-muted transition-colors min-h-[38px]"
-            />
-            {searchQuery && (
+        {/* Category Filter Pills */}
+        <div className="flex items-center space-x-2 overflow-x-auto pb-2 mb-8 scrollbar-none -mx-6 px-6 sm:mx-0 sm:px-0">
+          {Object.entries(CATEGORY_MAP).map(([key, label]) => {
+            const isActive = selectedFilter === key;
+            const count = categoryCounts[key] || 0;
+            if (key !== 'all' && count === 0) return null;
+
+            return (
               <button
+                key={key}
                 type="button"
-                onClick={() => setSearchQuery('')}
-                aria-label="Clear search"
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-foreground-muted hover:text-foreground"
+                onClick={() => setSelectedFilter(key)}
+                className={`min-h-[36px] px-3.5 py-1.5 rounded-md text-xs font-medium whitespace-nowrap transition-colors duration-150 border flex items-center space-x-1.5 ${
+                  isActive
+                    ? 'bg-foreground text-background border-foreground font-semibold shadow-2xs'
+                    : 'border-border text-foreground-muted hover:text-foreground hover:border-foreground/40 bg-surface/30'
+                }`}
               >
-                <X className="w-3.5 h-3.5" />
-              </button>
-            )}
-          </div>
-
-          {/* Category Filter Pills */}
-          <div className="flex items-center space-x-2 overflow-x-auto pb-2 scrollbar-none -mx-6 px-6 sm:mx-0 sm:px-0">
-            {Object.entries(CATEGORY_MAP).map(([key, label]) => {
-              const isActive = selectedFilter === key;
-              const count = categoryCounts[key] || 0;
-              if (key !== 'all' && count === 0) return null;
-
-              return (
-                <button
-                  key={key}
-                  type="button"
-                  onClick={() => setSelectedFilter(key)}
-                  className={`min-h-[36px] px-3 py-1 rounded-md text-xs font-medium whitespace-nowrap transition-colors duration-150 border flex items-center space-x-1.5 ${
-                    isActive
-                      ? 'bg-foreground text-background border-foreground font-semibold shadow-2xs'
-                      : 'border-border text-foreground-muted hover:text-foreground hover:border-foreground/40 bg-surface/30'
+                <span>{label}</span>
+                <span
+                  className={`text-[10px] font-mono px-1.5 py-0.2 rounded ${
+                    isActive ? 'bg-background/20 text-background' : 'bg-surface text-foreground-muted'
                   }`}
                 >
-                  <span>{label}</span>
-                  <span
-                    className={`text-[10px] font-mono px-1.5 py-0.2 rounded ${
-                      isActive ? 'bg-background/20 text-background' : 'bg-surface text-foreground-muted'
-                    }`}
-                  >
-                    {count}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
+                  {count}
+                </span>
+              </button>
+            );
+          })}
         </div>
 
         {/* Projects Grid: 1 col phones, 2 cols tablets, 3 cols desktop */}
-        {filteredProjects.length === 0 ? (
-          <div className="py-16 text-center border border-dashed border-border rounded-lg bg-surface/20">
-            <p className="text-sm text-foreground-muted">No projects found matching your search.</p>
-            <button
-              type="button"
-              onClick={() => {
-                setSelectedFilter('all');
-                setSearchQuery('');
-              }}
-              className="mt-3 text-xs font-medium text-foreground underline"
-            >
-              Reset filters
-            </button>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProjects.map((project, idx) => {
-              const isNew = project.badge?.toLowerCase().includes('new');
-              const isFirstPlace =
-                project.award?.toLowerCase().includes('1st') ||
-                project.badge?.toLowerCase().includes('1st');
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredProjects.map((project, idx) => {
+            const isNew = project.badge?.toLowerCase().includes('new');
+            const isFirstPlace =
+              project.award?.toLowerCase().includes('1st') ||
+              project.badge?.toLowerCase().includes('1st');
 
-              return (
-                <button
-                  key={project.id}
-                  type="button"
-                  onClick={() => {
-                    setActiveModalIndex(idx);
-                    setActiveGalleryImageIdx(0);
-                  }}
-                  className="group text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground rounded-lg transition-transform duration-150"
-                >
-                  {/* Image Container */}
-                  <div className="aspect-[4/3] relative rounded-lg border border-border overflow-hidden bg-surface">
-                    <Image
-                      src={project.image_url}
-                      alt={project.title}
-                      fill
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      className="object-cover group-hover:scale-[1.03] transition-transform duration-300"
-                    />
+            return (
+              <button
+                key={project.id}
+                type="button"
+                onClick={() => {
+                  setActiveModalIndex(idx);
+                  setActiveGalleryImageIdx(0);
+                }}
+                className="group text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground rounded-lg transition-transform duration-150"
+              >
+                {/* Image Container */}
+                <div className="aspect-[4/3] relative rounded-lg border border-border overflow-hidden bg-surface">
+                  <Image
+                    src={project.image_url}
+                    alt={project.title}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-cover group-hover:scale-[1.03] transition-transform duration-300"
+                  />
 
-                    {/* Format Badges */}
-                    <div className="absolute top-2.5 right-2.5 flex items-center space-x-1">
-                      {isFirstPlace && (
-                        <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded border border-amber-500/30 bg-amber-500/10 text-amber-500 backdrop-blur-xs flex items-center space-x-1">
-                          <Award className="w-3 h-3" />
-                          <span>1st Place</span>
-                        </span>
-                      )}
-                      {isNew && !isFirstPlace && (
-                        <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded border border-border bg-background/90 text-foreground backdrop-blur-xs">
-                          NEW
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Multi-photo indicator */}
-                    {project.images && project.images.length > 1 && (
-                      <div className="absolute bottom-2.5 left-2.5">
-                        <span className="text-[10px] font-mono px-2 py-0.5 rounded border border-border bg-background/90 text-foreground backdrop-blur-xs flex items-center space-x-1">
-                          <Layers className="w-3 h-3" />
-                          <span>{project.images.length} photos</span>
-                        </span>
-                      </div>
+                  {/* Format Badges */}
+                  <div className="absolute top-2.5 right-2.5 flex items-center space-x-1">
+                    {isFirstPlace && (
+                      <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded border border-amber-500/30 bg-amber-500/10 text-amber-500 backdrop-blur-xs flex items-center space-x-1">
+                        <Award className="w-3 h-3" />
+                        <span>1st Place</span>
+                      </span>
+                    )}
+                    {isNew && !isFirstPlace && (
+                      <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded border border-border bg-background/90 text-foreground backdrop-blur-xs">
+                        NEW
+                      </span>
                     )}
                   </div>
 
-                  {/* Metadata below image */}
-                  <div className="mt-3">
-                    <div className="flex items-center justify-between gap-2">
-                      <h3 className="text-sm font-semibold text-foreground group-hover:text-foreground line-clamp-1">
-                        {project.title}
-                      </h3>
-                      <ArrowUpRight className="w-3.5 h-3.5 text-foreground-muted group-hover:text-foreground opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
+                  {/* Multi-photo indicator */}
+                  {project.images && project.images.length > 1 && (
+                    <div className="absolute bottom-2.5 left-2.5">
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded border border-border bg-background/90 text-foreground backdrop-blur-xs flex items-center space-x-1">
+                        <Layers className="w-3 h-3" />
+                        <span>{project.images.length} photos</span>
+                      </span>
                     </div>
-                    <p className="mt-0.5 text-xs text-foreground-muted line-clamp-1">
-                      {project.card_desc || project.category_label || project.categories.join(' · ')}
-                    </p>
+                  )}
+                </div>
+
+                {/* Metadata below image */}
+                <div className="mt-3">
+                  <div className="flex items-center justify-between gap-2">
+                    <h3 className="text-sm font-semibold text-foreground group-hover:text-foreground line-clamp-1">
+                      {project.title}
+                    </h3>
+                    <ArrowUpRight className="w-3.5 h-3.5 text-foreground-muted group-hover:text-foreground opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
                   </div>
-                </button>
-              );
-            })}
-          </div>
-        )}
+                  <p className="mt-0.5 text-xs text-foreground-muted line-clamp-1">
+                    {project.card_desc || project.category_label || project.categories.join(' · ')}
+                  </p>
+                </div>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* Lightbox / Project Viewer Modal */}

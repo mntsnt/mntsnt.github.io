@@ -9,7 +9,6 @@ import { Skills } from '@/components/sections/Skills';
 import { Education } from '@/components/sections/Education';
 import { Contact } from '@/components/sections/Contact';
 import { Footer } from '@/components/Footer';
-import { CommandPalette } from '@/components/CommandPalette';
 import { CustomSections } from '@/components/sections/CustomSections';
 
 export const revalidate = 60; // ISR revalidation
@@ -30,7 +29,7 @@ export default async function HomePage() {
         {/* 03 Story & Background */}
         <About data={data.about} stats={data.stats} />
 
-        {/* 04 Curated Selected Work with Live Search & Category Counts */}
+        {/* 04 Curated Selected Work */}
         <Work
           header={data.work_header}
           projects={data.projects}
@@ -52,12 +51,6 @@ export default async function HomePage() {
         {/* Optional Custom Sections created via /admin */}
         <CustomSections sections={data.custom_sections} />
       </main>
-
-      {/* Global Command Palette (⌘K) with Project Search */}
-      <CommandPalette
-        projects={data.projects}
-        certificates={data.certificates.items}
-      />
 
       {/* Footer */}
       <Footer footer={data.footer} socials={data.socials} />

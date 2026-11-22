@@ -11,7 +11,6 @@ import {
   Copy,
   Check,
   ArrowDown,
-  Command,
 } from 'lucide-react';
 
 interface HeroProps {
@@ -57,10 +56,6 @@ export function Hero({ data, socials }: HeroProps) {
     setTimeout(() => setCopied(false), 2200);
   };
 
-  const openCommandPalette = () => {
-    window.dispatchEvent(new CustomEvent('open-command-palette'));
-  };
-
   return (
     <section aria-labelledby="hero-title" id="top" className="py-20 sm:py-28 md:py-32">
       <div className="max-w-site mx-auto px-6">
@@ -77,26 +72,22 @@ export function Hero({ data, socials }: HeroProps) {
           <AddisAbabaClock />
         </div>
 
-        {/* Name & Dual-Role Heading */}
-        <div className="space-y-4">
-          <p className="text-xs uppercase tracking-widest text-foreground-muted font-mono font-medium">
-            Mintesnot Leliso · Portfolio 2026
-          </p>
+        {/* Name & Core Focus */}
+        <div className="space-y-3">
           <h1
             id="hero-title"
-            className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground leading-[1.1]"
+            className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground leading-[1.1]"
           >
-            Medical student by day.
-            <br />
-            <span className="text-foreground-muted font-normal">
-              Designer & developer by craft.
-            </span>
+            Mintesnot Leliso
           </h1>
+          <p className="text-lg sm:text-2xl text-foreground font-medium">
+            Medicine · Graphic Design · Web Development
+          </p>
         </div>
 
         {/* Plain English Subhead */}
-        <p className="mt-6 text-base sm:text-lg text-foreground-muted leading-relaxed max-w-[62ch]">
-          I study medicine at St. Paul&apos;s (SPHMMC) in Addis Ababa, design brand identities and editorial visuals, and build clean software tools for real-world impact.
+        <p className="mt-5 text-base sm:text-lg text-foreground-muted leading-relaxed max-w-[62ch]">
+          I am a medical student at St. Paul&apos;s Hospital (SPHMMC) in Addis Ababa, designing brand identities and building clean web tools.
         </p>
 
         {/* Primary Actions */}
@@ -140,69 +131,53 @@ export function Hero({ data, socials }: HeroProps) {
           </a>
         </div>
 
-        {/* Social Links & Command Menu Trigger */}
-        <div className="mt-10 pt-6 border-t border-border flex flex-wrap items-center justify-between gap-4">
-          <div className="flex flex-wrap items-center gap-2">
-            {socials.github && (
-              <a
-                href={socials.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="GitHub Profile"
-                className="min-w-[40px] min-h-[40px] inline-flex items-center justify-center rounded-md border border-border text-foreground-muted hover:text-foreground hover:border-foreground transition-colors"
-              >
-                <Github className="w-4 h-4" strokeWidth={1.5} />
-              </a>
-            )}
-            {socials.linkedin && (
-              <a
-                href={socials.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="LinkedIn Profile"
-                className="min-w-[40px] min-h-[40px] inline-flex items-center justify-center rounded-md border border-border text-foreground-muted hover:text-foreground hover:border-foreground transition-colors"
-              >
-                <Linkedin className="w-4 h-4" strokeWidth={1.5} />
-              </a>
-            )}
-            {socials.upwork && (
-              <a
-                href={socials.upwork}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Upwork Freelancer Profile"
-                className="min-h-[40px] px-3 inline-flex items-center space-x-1.5 rounded-md border border-border text-xs font-medium text-foreground-muted hover:text-foreground hover:border-foreground transition-colors"
-              >
-                <span>Upwork</span>
-                <ExternalLink className="w-3 h-3" strokeWidth={1.5} />
-              </a>
-            )}
-            {socials.telegram && (
-              <a
-                href={socials.telegram}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Telegram Profile"
-                className="min-w-[40px] min-h-[40px] inline-flex items-center justify-center rounded-md border border-border text-foreground-muted hover:text-foreground hover:border-foreground transition-colors"
-              >
-                <Send className="w-4 h-4" strokeWidth={1.5} />
-              </a>
-            )}
-          </div>
-
-          {/* Quick Keyboard hint */}
-          <button
-            type="button"
-            onClick={openCommandPalette}
-            className="text-xs text-foreground-muted hover:text-foreground inline-flex items-center space-x-1.5 transition-colors"
-          >
-            <Command className="w-3.5 h-3.5" />
-            <span>Press</span>
-            <kbd className="font-mono text-[10px] px-1.5 py-0.5 rounded border border-border bg-surface text-foreground">
-              ⌘K
-            </kbd>
-            <span>for quick menu</span>
-          </button>
+        {/* Social Links Row */}
+        <div className="mt-10 pt-6 border-t border-border flex items-center gap-2">
+          {socials.github && (
+            <a
+              href={socials.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="GitHub Profile"
+              className="min-w-[40px] min-h-[40px] inline-flex items-center justify-center rounded-md border border-border text-foreground-muted hover:text-foreground hover:border-foreground transition-colors"
+            >
+              <Github className="w-4 h-4" strokeWidth={1.5} />
+            </a>
+          )}
+          {socials.linkedin && (
+            <a
+              href={socials.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn Profile"
+              className="min-w-[40px] min-h-[40px] inline-flex items-center justify-center rounded-md border border-border text-foreground-muted hover:text-foreground hover:border-foreground transition-colors"
+            >
+              <Linkedin className="w-4 h-4" strokeWidth={1.5} />
+            </a>
+          )}
+          {socials.upwork && (
+            <a
+              href={socials.upwork}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Upwork Freelancer Profile"
+              className="min-h-[40px] px-3 inline-flex items-center space-x-1.5 rounded-md border border-border text-xs font-medium text-foreground-muted hover:text-foreground hover:border-foreground transition-colors"
+            >
+              <span>Upwork</span>
+              <ExternalLink className="w-3 h-3" strokeWidth={1.5} />
+            </a>
+          )}
+          {socials.telegram && (
+            <a
+              href={socials.telegram}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Telegram Profile"
+              className="min-w-[40px] min-h-[40px] inline-flex items-center justify-center rounded-md border border-border text-foreground-muted hover:text-foreground hover:border-foreground transition-colors"
+            >
+              <Send className="w-4 h-4" strokeWidth={1.5} />
+            </a>
+          )}
         </div>
       </div>
     </section>
