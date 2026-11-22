@@ -66,6 +66,7 @@ export interface ProjectItem {
   focal_point?: string;
   badge?: string;
   award?: string;
+  external_url?: string;
   visible: boolean;
 }
 

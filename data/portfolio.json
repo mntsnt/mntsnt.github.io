@@ -3,24 +3,24 @@
     "city_meta": "Addis Ababa, ET",
     "year_meta": "Portfolio / 2026",
     "index_meta": "01 — Identity",
-    "eyebrow": "Medical Student · Graphic Designer · Developer",
+    "eyebrow": "Medical Student · Visual Designer · Developer",
     "name": "MINTESNOT",
     "discipline": "Medicine × Design × Technology",
-    "lead": "I am a medical student who loves to design and code. I learn software development by building real projects.",
-    "status": "Open for design projects & collaboration",
-    "explore_btn_text": "Explore my work",
-    "contact_btn_text": "Let’s work together"
+    "lead": "I study medicine at St. Paul's (SPHMMC) in Addis Ababa, design brand identities and editorial visuals, and build modern web applications.",
+    "status": "Available for new projects & collaborations",
+    "explore_btn_text": "Explore selected work",
+    "contact_btn_text": "Let's talk"
   },
   "about": {
     "index_meta": "02",
     "label": "About",
-    "title": "Medical student.\nDesigner.\nDeveloper.",
+    "title": "Connecting visual clarity\nwith digital tools.",
     "portrait_url": "/img/profile-img.png",
     "portrait_alt": "Portrait of Mintesnot Leliso",
     "portrait_caption": "Mintesnot Leliso — Addis Ababa",
-    "body_1": "I am a medical student exploring graphic design and software development. My work connects visual design with digital tools.",
-    "body_2": "I study medicine, create designs, and build simple digital tools. I aim to make complex ideas clear and easy to use.",
-    "quote": "And whatever you do, in word or deed, do everything in the name of the Lord Jesus, giving thanks to God the Father through him.",
+    "body_1": "I am an Ethiopian medical student with a deep passion for visual design and software engineering. I believe that good design makes complex health knowledge intuitive, and simple code makes everyday human work effortless.",
+    "body_2": "Whether designing an exhibition booth for a regional healthcare federation or building a responsive web app, I focus on honest aesthetics, accessibility, and real-world utility.",
+    "quote": "Whatever you do, work at it with all your heart.",
     "quote_cite": "Colossians 3:17"
   },
   "stats": [
@@ -91,8 +91,8 @@
   "work_header": {
     "index_meta": "05",
     "label": "Selected work",
-    "title": "Projects built to communicate.",
-    "lede": "Campaigns, identities, thumbnails, and print work. I design each piece to be clear and engaging.",
+    "title": "Selected Work",
+    "lede": "Curated visual identities, event booths, YouTube thumbnails, and editorial designs shipped for healthcare, education, and creators.",
     "upwork_text": "More client work is on my Upwork profile — same quality, just more of it.",
     "upwork_btn_text": "View projects on Upwork"
   },
@@ -614,7 +614,7 @@
         "year": "2025",
         "pdf_url": "/img/Certificates/MINTESNOT LELISO.pdf",
         "visible": true,
-        "image_url": "/img/Certificates/cert-sphmmc.jpg"
+        "image_url": "/img/Certificates/cert-mintesnot-leliso.jpg"
       },
       {
         "id": "cert-2",
@@ -632,6 +632,16 @@
         "issuer": "Udacity",
         "year": "2025",
         "pdf_url": "/img/Certificates/Learn the Latest Tech Skills; Advance Your Career _ Udacity.pdf",
+        "visible": true
+      },
+      {
+        "id": "cert-4",
+        "order": 4,
+        "title": "Summer Volunteerism & Digital Outreach",
+        "issuer": "St. Paul's Hospital Millennium Medical College",
+        "year": "2026",
+        "pdf_url": "/img/Certificates/summer-volunteer.pdf",
+        "image_url": "/img/Certificates/summer-volunteer.jpg",
         "visible": true
       }
     ]

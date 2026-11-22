@@ -3,7 +3,16 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import Image from 'next/image';
 import { ProjectItem, PortfolioData, SocialLinks } from '@/types/portfolio';
-import { X, ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
+import {
+  X,
+  ChevronLeft,
+  ChevronRight,
+  ExternalLink,
+  Search,
+  Award,
+  Layers,
+  ArrowUpRight,
+} from 'lucide-react';
 
 interface WorkProps {
   header: PortfolioData['work_header'];
@@ -11,34 +20,65 @@ interface WorkProps {
   socials: SocialLinks;
 }
 
-const FILTERS = [
-  { key: 'all', label: 'All' },
-  { key: 'youtube-thumbnails', label: 'YouTube Thumbnails' },
-  { key: 'posters', label: 'Posters' },
-  { key: 'banners', label: 'Banners' },
-  { key: 'branding', label: 'Branding' },
-  { key: 'event-design', label: 'Event Design' },
-  { key: 'exhibition-design', label: 'Exhibition / Booth Design' },
-  { key: 'product-designs', label: 'Product Designs' },
-];
+const CATEGORY_MAP: { [key: string]: string } = {
+  all: 'All',
+  'youtube-thumbnails': 'Thumbnails',
+  posters: 'Posters',
+  branding: 'Branding',
+  'event-design': 'Events',
+  'exhibition-design': 'Exhibition / Booths',
+  banners: 'Banners',
+};
 
 export function Work({ header, projects, socials }: WorkProps) {
   const [selectedFilter, setSelectedFilter] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
   const [activeModalIndex, setActiveModalIndex] = useState<number | null>(null);
   const [activeGalleryImageIdx, setActiveGalleryImageIdx] = useState<number>(0);
 
-  // Filter projects
+  // Compute category counts
+  const categoryCounts = useMemo(() => {
+    const counts: { [key: string]: number } = { all: 0 };
+    projects
+      .filter((p) => p.visible !== false)
+      .forEach((p) => {
+        counts.all++;
+        p.categories?.forEach((c) => {
+          const norm = c.toLowerCase().trim();
+          counts[norm] = (counts[norm] || 0) + 1;
+        });
+      });
+    return counts;
+  }, [projects]);
+
+  // Filter projects by category and search query
   const filteredProjects = useMemo(() => {
+    const q = searchQuery.toLowerCase().trim();
+
     return projects
       .filter((p) => p.visible !== false)
       .filter((p) => {
-        if (selectedFilter === 'all') return true;
-        const normalized = selectedFilter.toLowerCase().replace(/-/g, '');
-        return p.categories.some((c) =>
-          c.toLowerCase().replace(/-/g, '').includes(normalized)
-        );
+        // Category check
+        if (selectedFilter !== 'all') {
+          const normalized = selectedFilter.toLowerCase().replace(/-/g, '');
+          const matchesCat = p.categories.some((c) =>
+            c.toLowerCase().replace(/-/g, '').includes(normalized)
+          );
+          if (!matchesCat) return false;
+        }
+
+        // Search query check
+        if (q) {
+          const inTitle = p.title.toLowerCase().includes(q);
+          const inDesc = p.card_desc?.toLowerCase().includes(q) || p.description?.toLowerCase().includes(q);
+          const inCat = p.categories.some((c) => c.toLowerCase().includes(q));
+          const inBadge = p.badge?.toLowerCase().includes(q) || p.award?.toLowerCase().includes(q);
+          if (!inTitle && !inDesc && !inCat && !inBadge) return false;
+        }
+
+        return true;
       });
-  }, [projects, selectedFilter]);
+  }, [projects, selectedFilter, searchQuery]);
 
   const activeProject = activeModalIndex !== null ? filteredProjects[activeModalIndex] : null;
 
@@ -51,7 +91,23 @@ export function Work({ header, projects, socials }: WorkProps) {
     return [activeProject.image_url];
   }, [activeProject]);
 
-  // Deep linking ?project=proj-id
+  // Deep linking and custom event listener for CommandPalette
+  useEffect(() => {
+    const handleOpenProject = (e: Event) => {
+      const customEvent = e as CustomEvent<{ id: string }>;
+      if (customEvent.detail?.id) {
+        const idx = filteredProjects.findIndex((p) => p.id === customEvent.detail.id);
+        if (idx !== -1) {
+          setActiveModalIndex(idx);
+          setActiveGalleryImageIdx(0);
+        }
+      }
+    };
+
+    window.addEventListener('open-project-modal', handleOpenProject);
+    return () => window.removeEventListener('open-project-modal', handleOpenProject);
+  }, [filteredProjects]);
+
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const projectId = params.get('project');
@@ -88,19 +144,19 @@ export function Work({ header, projects, socials }: WorkProps) {
     window.history.replaceState({}, '', url.pathname + url.hash);
   }, []);
 
-  // Keyboard navigation: Esc and arrow keys
+  // Keyboard controls
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (activeModalIndex === null) return;
+      if (!activeProject) return;
       if (e.key === 'Escape') closeModal();
       if (e.key === 'ArrowRight') handleNext();
       if (e.key === 'ArrowLeft') handlePrev();
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [activeModalIndex, closeModal, handleNext, handlePrev]);
+  }, [activeProject, closeModal, handleNext, handlePrev]);
 
-  // Prevent background scroll when modal is open
+  // Lock background scroll
   useEffect(() => {
     if (activeModalIndex !== null) {
       document.body.style.overflow = 'hidden';
@@ -112,253 +168,297 @@ export function Work({ header, projects, socials }: WorkProps) {
     };
   }, [activeModalIndex]);
 
-  // Touch swipe support on modal
-  const [touchStart, setTouchStart] = useState<number | null>(null);
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStart(e.targetTouches[0].clientX);
-  };
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (touchStart === null) return;
-    const touchEnd = e.changedTouches[0].clientX;
-    const diff = touchStart - touchEnd;
-    if (diff > 50) handleNext();
-    else if (diff < -50) handlePrev();
-    setTouchStart(null);
-  };
-
   return (
-    <section aria-labelledby="work-title" id="work" className="py-16 sm:py-20 border-t border-border">
+    <section aria-labelledby="work-title" id="work" className="py-20 sm:py-24 border-t border-border">
       <div className="max-w-site mx-auto px-6">
-        {/* Section Header */}
-        <p className="text-xs uppercase tracking-wider text-foreground-muted font-medium mb-2">
-          {header.label}
-        </p>
-        <h2 id="work-title" className="text-2xl sm:text-3xl font-semibold tracking-tight text-foreground">
-          {header.title}
-        </h2>
-        {header.lede && (
-          <p className="mt-3 text-base text-foreground-muted max-w-[65ch]">
-            {header.lede}
-          </p>
-        )}
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
+          <div>
+            <p className="text-xs uppercase tracking-widest text-foreground-muted font-mono font-medium mb-2">
+              04 · Portfolio Showcase
+            </p>
+            <h2 id="work-title" className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
+              Selected Work
+            </h2>
+            <p className="mt-2 text-sm sm:text-base text-foreground-muted max-w-[62ch]">
+              Curated visual identities, event booths, YouTube thumbnails, and editorial designs shipped for healthcare, education, and creators.
+            </p>
+          </div>
 
-        {/* Filter Bar (Horizontally scrollable on mobile) */}
-        <div className="mt-8 flex items-center space-x-2 overflow-x-auto pb-2 scrollbar-none -mx-6 px-6 sm:mx-0 sm:px-0">
-          {FILTERS.map((f) => {
-            const isActive = selectedFilter === f.key;
-            return (
+          {socials.upwork && (
+            <a
+              href={socials.upwork}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs font-mono text-foreground-muted hover:text-foreground inline-flex items-center space-x-1.5 self-start sm:self-end"
+            >
+              <span>Available on Upwork</span>
+              <ExternalLink className="w-3.5 h-3.5" />
+            </a>
+          )}
+        </div>
+
+        {/* Search Bar & Filter Controls */}
+        <div className="space-y-4 mb-8">
+          {/* Live Search Input */}
+          <div className="relative max-w-md">
+            <Search className="w-4 h-4 text-foreground-muted absolute left-3.5 top-1/2 -translate-y-1/2" strokeWidth={1.5} />
+            <input
+              type="text"
+              placeholder="Search by keyword, client, or topic (e.g. Dawit, SPHMMC, thumbnail)..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-9 pr-8 py-2 rounded-md border border-border bg-surface/40 focus:bg-surface focus:outline-none focus:border-foreground text-xs text-foreground placeholder-foreground-muted transition-colors min-h-[38px]"
+            />
+            {searchQuery && (
               <button
-                key={f.key}
                 type="button"
-                onClick={() => setSelectedFilter(f.key)}
-                className={`min-h-[44px] px-3.5 py-1.5 rounded-md text-xs font-medium whitespace-nowrap transition-colors duration-150 border ${
-                  isActive
-                    ? 'bg-foreground text-background border-foreground font-semibold'
-                    : 'border-border text-foreground-muted hover:text-foreground hover:border-foreground/40 bg-surface/30'
-                }`}
+                onClick={() => setSearchQuery('')}
+                aria-label="Clear search"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-foreground-muted hover:text-foreground"
               >
-                {f.label}
+                <X className="w-3.5 h-3.5" />
               </button>
-            );
-          })}
+            )}
+          </div>
+
+          {/* Category Filter Pills */}
+          <div className="flex items-center space-x-2 overflow-x-auto pb-2 scrollbar-none -mx-6 px-6 sm:mx-0 sm:px-0">
+            {Object.entries(CATEGORY_MAP).map(([key, label]) => {
+              const isActive = selectedFilter === key;
+              const count = categoryCounts[key] || 0;
+              if (key !== 'all' && count === 0) return null;
+
+              return (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => setSelectedFilter(key)}
+                  className={`min-h-[36px] px-3 py-1 rounded-md text-xs font-medium whitespace-nowrap transition-colors duration-150 border flex items-center space-x-1.5 ${
+                    isActive
+                      ? 'bg-foreground text-background border-foreground font-semibold shadow-2xs'
+                      : 'border-border text-foreground-muted hover:text-foreground hover:border-foreground/40 bg-surface/30'
+                  }`}
+                >
+                  <span>{label}</span>
+                  <span
+                    className={`text-[10px] font-mono px-1.5 py-0.2 rounded ${
+                      isActive ? 'bg-background/20 text-background' : 'bg-surface text-foreground-muted'
+                    }`}
+                  >
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         {/* Projects Grid: 1 col phones, 2 cols tablets, 3 cols desktop */}
-        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredProjects.map((project, idx) => {
-            const isNew = project.badge?.toLowerCase().includes('new');
-            const isFirstPlace = project.award?.toLowerCase().includes('1st') || project.badge?.toLowerCase().includes('1st');
+        {filteredProjects.length === 0 ? (
+          <div className="py-16 text-center border border-dashed border-border rounded-lg bg-surface/20">
+            <p className="text-sm text-foreground-muted">No projects found matching your search.</p>
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedFilter('all');
+                setSearchQuery('');
+              }}
+              className="mt-3 text-xs font-medium text-foreground underline"
+            >
+              Reset filters
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredProjects.map((project, idx) => {
+              const isNew = project.badge?.toLowerCase().includes('new');
+              const isFirstPlace =
+                project.award?.toLowerCase().includes('1st') ||
+                project.badge?.toLowerCase().includes('1st');
 
-            return (
-              <button
-                key={project.id}
-                type="button"
-                onClick={() => {
-                  setActiveModalIndex(idx);
-                  setActiveGalleryImageIdx(0);
-                }}
-                className="group text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground rounded-md"
-              >
-                {/* Single Cover Image */}
-                <div className="aspect-[4/3] relative rounded-md border border-border overflow-hidden bg-surface">
-                  <Image
-                    src={project.image_url}
-                    alt={project.title}
-                    fill
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    className="object-cover group-hover:scale-[1.02] transition-transform duration-200"
-                  />
+              return (
+                <button
+                  key={project.id}
+                  type="button"
+                  onClick={() => {
+                    setActiveModalIndex(idx);
+                    setActiveGalleryImageIdx(0);
+                  }}
+                  className="group text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground rounded-lg transition-transform duration-150"
+                >
+                  {/* Image Container */}
+                  <div className="aspect-[4/3] relative rounded-lg border border-border overflow-hidden bg-surface">
+                    <Image
+                      src={project.image_url}
+                      alt={project.title}
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      className="object-cover group-hover:scale-[1.03] transition-transform duration-300"
+                    />
 
-                  {/* Badges: Small, quiet tags */}
-                  {(isNew || isFirstPlace) && (
+                    {/* Format Badges */}
                     <div className="absolute top-2.5 right-2.5 flex items-center space-x-1">
-                      {isNew && (
-                        <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded border border-border bg-background text-foreground">
+                      {isFirstPlace && (
+                        <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded border border-amber-500/30 bg-amber-500/10 text-amber-500 backdrop-blur-xs flex items-center space-x-1">
+                          <Award className="w-3 h-3" />
+                          <span>1st Place</span>
+                        </span>
+                      )}
+                      {isNew && !isFirstPlace && (
+                        <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded border border-border bg-background/90 text-foreground backdrop-blur-xs">
                           NEW
                         </span>
                       )}
-                      {isFirstPlace && (
-                        <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded border border-border bg-background text-foreground">
-                          1st Place
+                    </div>
+
+                    {/* Multi-photo indicator */}
+                    {project.images && project.images.length > 1 && (
+                      <div className="absolute bottom-2.5 left-2.5">
+                        <span className="text-[10px] font-mono px-2 py-0.5 rounded border border-border bg-background/90 text-foreground backdrop-blur-xs flex items-center space-x-1">
+                          <Layers className="w-3 h-3" />
+                          <span>{project.images.length} photos</span>
                         </span>
-                      )}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Metadata below image */}
+                  <div className="mt-3">
+                    <div className="flex items-center justify-between gap-2">
+                      <h3 className="text-sm font-semibold text-foreground group-hover:text-foreground line-clamp-1">
+                        {project.title}
+                      </h3>
+                      <ArrowUpRight className="w-3.5 h-3.5 text-foreground-muted group-hover:text-foreground opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
                     </div>
-                  )}
-
-                  {/* Multi-image count indicator */}
-                  {project.images && project.images.length > 1 && (
-                    <div className="absolute bottom-2.5 left-2.5">
-                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded border border-border bg-background/90 text-foreground">
-                        {project.images.length} photos
-                      </span>
-                    </div>
-                  )}
-                </div>
-
-                {/* Info below image */}
-                <div className="mt-3">
-                  <h3 className="text-sm font-semibold text-foreground group-hover:text-foreground line-clamp-1">
-                    {project.title}
-                  </h3>
-                  <p className="mt-0.5 text-xs text-foreground-muted">
-                    {project.category_label || project.categories.join(' · ')}
-                  </p>
-                </div>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Upwork section below grid */}
-        <div className="mt-16 p-6 rounded-md border border-border bg-surface/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div>
-            <p className="text-sm text-foreground font-medium">
-              {header.upwork_text}
-            </p>
+                    <p className="mt-0.5 text-xs text-foreground-muted line-clamp-1">
+                      {project.card_desc || project.category_label || project.categories.join(' · ')}
+                    </p>
+                  </div>
+                </button>
+              );
+            })}
           </div>
-          <a
-            href={socials.upwork}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="min-h-[44px] px-4 py-2 rounded-md border border-border text-foreground hover:border-foreground text-xs font-medium inline-flex items-center space-x-1.5 transition-colors whitespace-nowrap"
-          >
-            <span>{header.upwork_btn_text}</span>
-            <ExternalLink className="w-3.5 h-3.5" strokeWidth={1.5} />
-          </a>
-        </div>
+        )}
       </div>
 
-      {/* Project Lightbox / Modal */}
+      {/* Lightbox / Project Viewer Modal */}
       {activeProject && (
         <div
           role="dialog"
           aria-modal="true"
           aria-labelledby="modal-project-title"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/75 backdrop-blur-xs"
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-sm"
           onClick={closeModal}
         >
           <div
-            className="w-full max-w-3xl max-h-[92vh] bg-background border border-border rounded-lg overflow-y-auto p-6 sm:p-8 space-y-6 relative"
+            className="w-full max-w-4xl max-h-[92vh] bg-background border border-border rounded-xl overflow-y-auto p-5 sm:p-7 space-y-6 relative shadow-2xl"
             onClick={(e) => e.stopPropagation()}
-            onTouchStart={handleTouchStart}
-            onTouchEnd={handleTouchEnd}
           >
-            {/* Modal Top Actions */}
-            <div className="flex items-center justify-between">
+            {/* Top Bar */}
+            <div className="flex items-start justify-between gap-4 border-b border-border pb-4">
+              <div>
+                <span className="text-xs font-mono uppercase tracking-wider text-foreground-muted">
+                  {activeProject.category_label || activeProject.categories.join(' · ')}
+                </span>
+                <h3
+                  id="modal-project-title"
+                  className="text-xl sm:text-2xl font-bold tracking-tight text-foreground mt-0.5"
+                >
+                  {activeProject.title}
+                </h3>
+              </div>
+
               <div className="flex items-center space-x-2">
                 <button
                   type="button"
                   onClick={handlePrev}
-                  aria-label="Previous project"
-                  className="min-w-[44px] min-h-[44px] inline-flex items-center justify-center rounded-md border border-border hover:border-foreground text-foreground transition-colors"
+                  aria-label="Previous project (Left arrow)"
+                  className="min-w-[36px] min-h-[36px] inline-flex items-center justify-center rounded-md border border-border hover:border-foreground text-foreground transition-colors"
                 >
-                  <ChevronLeft className="w-5 h-5" strokeWidth={1.5} />
+                  <ChevronLeft className="w-4 h-4" />
                 </button>
                 <button
                   type="button"
                   onClick={handleNext}
-                  aria-label="Next project"
-                  className="min-w-[44px] min-h-[44px] inline-flex items-center justify-center rounded-md border border-border hover:border-foreground text-foreground transition-colors"
+                  aria-label="Next project (Right arrow)"
+                  className="min-w-[36px] min-h-[36px] inline-flex items-center justify-center rounded-md border border-border hover:border-foreground text-foreground transition-colors"
                 >
-                  <ChevronRight className="w-5 h-5" strokeWidth={1.5} />
+                  <ChevronRight className="w-4 h-4" />
                 </button>
-                <span className="text-xs font-mono text-foreground-muted ml-2">
-                  {(activeModalIndex ?? 0) + 1} / {filteredProjects.length}
-                </span>
+                <button
+                  type="button"
+                  onClick={closeModal}
+                  aria-label="Close modal (Escape)"
+                  className="min-w-[36px] min-h-[36px] inline-flex items-center justify-center rounded-md border border-border hover:border-foreground text-foreground transition-colors"
+                >
+                  <X className="w-4 h-4" />
+                </button>
               </div>
-
-              <button
-                type="button"
-                onClick={closeModal}
-                aria-label="Close modal"
-                className="min-w-[44px] min-h-[44px] inline-flex items-center justify-center rounded-md border border-border hover:border-foreground text-foreground transition-colors"
-              >
-                <X className="w-5 h-5" strokeWidth={1.5} />
-              </button>
             </div>
 
-            {/* Large Image View */}
-            <div className="aspect-[16/10] sm:aspect-[16/9] relative rounded-md border border-border overflow-hidden bg-surface">
+            {/* Main Image Display */}
+            <div className="aspect-[16/10] relative rounded-lg border border-border overflow-hidden bg-surface">
               <Image
                 src={currentImages[activeGalleryImageIdx] || activeProject.image_url}
-                alt={activeProject.title}
+                alt={`${activeProject.title} preview`}
                 fill
-                sizes="(max-width: 1024px) 100vw, 800px"
+                sizes="(max-width: 1024px) 100vw, 900px"
                 className="object-contain"
                 priority
               />
             </div>
 
-            {/* Thumbnail Strip (if multi-image project) */}
+            {/* Thumbnail Strip (if multi-image) */}
             {currentImages.length > 1 && (
-              <div className="flex items-center space-x-3 overflow-x-auto pb-1 scrollbar-none">
-                {currentImages.map((imgUrl, i) => (
+              <div className="flex items-center space-x-2 overflow-x-auto pb-1 scrollbar-none">
+                {currentImages.map((img, idx) => (
                   <button
-                    key={i}
+                    key={idx}
                     type="button"
-                    onClick={() => setActiveGalleryImageIdx(i)}
-                    className={`relative w-20 h-14 rounded-md border overflow-hidden flex-shrink-0 transition-all ${
-                      activeGalleryImageIdx === i
-                        ? 'border-foreground ring-1 ring-foreground'
+                    onClick={() => setActiveGalleryImageIdx(idx)}
+                    className={`relative w-20 h-14 rounded-md overflow-hidden border flex-shrink-0 transition-opacity ${
+                      activeGalleryImageIdx === idx
+                        ? 'border-foreground ring-1 ring-foreground opacity-100'
                         : 'border-border opacity-60 hover:opacity-100'
                     }`}
                   >
-                    <Image
-                      src={imgUrl}
-                      alt={`Thumbnail ${i + 1}`}
-                      fill
-                      sizes="80px"
-                      className="object-cover"
-                    />
+                    <Image src={img} alt={`thumb ${idx}`} fill className="object-cover" />
                   </button>
                 ))}
               </div>
             )}
 
-            {/* Title, Category · Role, and Description */}
-            <div className="space-y-3 pt-2 border-t border-border">
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <h3
-                  id="modal-project-title"
-                  className="text-xl sm:text-2xl font-semibold text-foreground tracking-tight"
-                >
-                  {activeProject.title}
-                </h3>
-                {activeProject.year && (
-                  <span className="text-xs font-mono text-foreground-muted">
-                    {activeProject.year}
-                  </span>
+            {/* Project Details & Client Description */}
+            <div className="pt-4 border-t border-border flex flex-col sm:flex-row sm:items-start justify-between gap-6">
+              <div className="max-w-[65ch] space-y-2">
+                <h4 className="text-xs font-mono uppercase tracking-wider text-foreground-muted">
+                  Project Background
+                </h4>
+                <p className="text-sm text-foreground-muted leading-relaxed">
+                  {activeProject.description || activeProject.card_desc || 'No description provided.'}
+                </p>
+                {activeProject.award && (
+                  <div className="pt-2">
+                    <span className="text-xs font-semibold px-2 py-1 rounded bg-amber-500/10 border border-amber-500/30 text-amber-500 inline-flex items-center space-x-1.5">
+                      <Award className="w-3.5 h-3.5" />
+                      <span>{activeProject.award}</span>
+                    </span>
+                  </div>
                 )}
               </div>
 
-              <p className="text-xs font-mono text-foreground-muted">
-                {activeProject.category_label || activeProject.categories.join(' · ')}
-                {activeProject.role && ` · ${activeProject.role}`}
-              </p>
-
-              <p className="text-sm sm:text-base text-foreground leading-relaxed pt-2 max-w-[65ch]">
-                {activeProject.description}
-              </p>
+              {activeProject.external_url && (
+                <a
+                  href={activeProject.external_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="min-h-[40px] px-4 py-2 rounded-md bg-foreground text-background text-xs font-medium inline-flex items-center space-x-1.5 hover:opacity-90 transition-opacity self-start"
+                >
+                  <span>View Project</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              )}
             </div>
           </div>
         </div>
